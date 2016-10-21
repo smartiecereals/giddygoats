@@ -1,0 +1,14 @@
+npm install
+brew update
+brew doctor
+brew install postgresql
+initdb /usr/local/var/postgres -E utf8
+gem install lunchy
+mkdir -p ~/Library/LaunchAgents
+cp /usr/local/Cellar/postgresql/YOUR_VERSION/homebrew.mxcl.postgresql.plist ~/Library/LaunchAgents/
+launchctl load -w ~/Library/LaunchAgents/homebrew.mxcl.postgresql.plist
+
+lunchy start postgres
+lunchy stop postgres
+
+createdb dangerDB
