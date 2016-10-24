@@ -8,11 +8,12 @@ var Danger = require('./database/models/Danger');
 var app = express();
 
 app.set('view engine', 'ejs');
+app.set('port', (process.env.PORT || 5000));
 //app.use(express.static(__dirname + '/build'));
 
 app.get('/dangerData', function(req, res) {
   var dangerArray = []; 
-  /*
+/*
   Danger.findAll().then(function(dangers) {
     var i = 0;
     while (dangers[i]) {
@@ -89,7 +90,7 @@ app.post('/dangerData', function(req, res) {
 });
 
 
-app.listen(port, function() {
+app.listen(app.get('port'), function() {
   console.log('Listening in on http://' + ip + ':' + port);
 });
 
