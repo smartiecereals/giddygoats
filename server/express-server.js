@@ -1,6 +1,7 @@
 var http = require('http');
 var port = 80;
 var ip = 'safehipposerver.herokuapp.com';
+var bodyParser = require('body-parser');
 var path = require('path');
 var express = require('express');
 var db = require('./database/config');
@@ -10,6 +11,8 @@ var app = express();
 app.set('view engine', 'ejs');
 app.set('port', (process.env.PORT || 5000));
 //app.use(express.static(__dirname + '/build'));
+app.use(bodyParser.urlencoded({ extended: true  }));
+app.use(bodyParser.json());
 
 app.get('/dangerData', function(req, res) {
   var dangerArray = []; 
