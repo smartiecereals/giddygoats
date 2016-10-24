@@ -1,26 +1,14 @@
 var http = require('http');
-var port = 3000;
+var port = 80;
 var ip = 'safehipposerver.herokuapp.com';
 var path = require('path');
 var express = require('express');
-var session = require('express-session');
-var bodyParser = require('body-parser');
 var db = require('./database/config');
 var Danger = require('./database/models/Danger');
 var app = express();
 
 app.set('view engine', 'ejs');
 //app.use(express.static(__dirname + '/build'));
-
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
-
-app.use(session({
-  secret: 'SecretString!',
-  resave: false,
-  saveUninitialized: false
-}));
-
 
 app.get('/dangerData', function(req, res) {
   var dangerArray = []; 
@@ -34,7 +22,7 @@ app.get('/dangerData', function(req, res) {
   }); */
 
   console.log(req.query);
-  var latRange = getRange(parseInt(req.query.lat));
+var latRange = getRange(parseInt(req.query.lat));
   var lonRange = getRange(parseInt(req.query.lon));
   Danger.findAll( {
     where: {
