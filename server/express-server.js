@@ -54,7 +54,7 @@ var getRange = function(latOrLon) {
 };
 
 app.post('/dangerData', function(req, res) {
-  console.log('this is the req body', req.body);
+  console.log('this is the req', req);
   /*
   Danger.sync().then(function () {
     return Danger.bulkCreate(req.body.storage);
