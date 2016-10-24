@@ -1,6 +1,6 @@
 var http = require('http');
 var port = 3000;
-var ip = '127.0.0.1';
+var ip = 'safehipposerver.herokuapp.com';
 var path = require('path');
 var express = require('express');
 var session = require('express-session');
