@@ -3,12 +3,29 @@
 <head>
   <meta charset="UTF-8" />
   <title>Safe Hippo</title>
-
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.4/css/bootstrap.min.css" integrity="sha384-2hfp1SzUoho7/TsGGGDaFdsuuDL0LX2hnUp6VkX3CUQ2K4K+xjboZdsXyp4oUHZj" crossorigin="anonymous">
   <link rel="stylesheet" type="text/css" href="styles/main.css">
 </head>
 <body>
-  <div id="map"></div>
+  <div id="app">
+	  <form class="directions">
+  	  <h2>Safe Hippo</h2>
+  	  	<div class="dirInput">
+	  	  	<div>From</div>
+		  	<input type="text" from="San Francisco">
+  	  	</div>
+  	  	<div class="dirInput">
+	  	  	<div>To</div>
+		  	<input type="text" name="The Tenderloin, San Francisco">
+  	  	</div>
+	  	<input type="submit" name="submit">
+	  </form>
+	  <div class="directionResults">
+	  </div>
+	  <div id="map">
+	  </div>
+  </div>
   <script src="./query.js"></script>
   <script src="./getData.js"></script>
   <script src="./map.js"></script>

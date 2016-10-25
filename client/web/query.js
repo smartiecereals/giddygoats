@@ -26,7 +26,7 @@ function time (time, timePeriod) {
     windowTimes.push(padTime(convertIrregularTime(i)))
   }
 
-  //Add the syntax for the web query
+  //Add the syntax for the web query i.e. (time like '00:%25' or time like '01:%25' or time like '02:%25')
   var timeQuery = windowTimes.join(":%25' or time like '")
   timeQuery = "(time like '" + timeQuery + ":%25')"
 

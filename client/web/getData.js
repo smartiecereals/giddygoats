@@ -16,7 +16,6 @@ function getCrimeAPI (long, lat) {
     return data.json();
   })
   .then(function(records) {
-    console.log(records)
     return records;
   })
 }

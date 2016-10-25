@@ -8,6 +8,17 @@ var userLong = -122.444586;
 
 var map, heatmap;
 
+function renderHeat(long, lat) {
+  getPoints(long, lat)
+  .then(function(mapPoints) {
+    console.log('About to create heatmap')
+    heatmap = new google.maps.visualization.HeatmapLayer({
+      data: mapPoints,
+      map: map
+    });
+  })
+}
+
 function initMap() {
   console.log('time', time)
   map = new google.maps.Map(document.getElementById('map'), {
@@ -34,19 +45,10 @@ function initMap() {
       //TODO: Run the query for this location??
 
       infoWindow.setPosition(pos);
-      infoWindow.setContent('Location found.');
+      infoWindow.setContent('You are here');
       map.setCenter(pos);
-
-      //TODO: Move this back out of the if else statement so it can be called by loading the map or moving the target location
-      getPoints(userLong, userLat)
-      .then(function(mapPoints) {
-        console.log('About to create heatmap')
-        heatmap = new google.maps.visualization.HeatmapLayer({
-          data: mapPoints,
-          map: map
-        });
-      })
-
+      
+      renderHeat(position.coords.longitude, position.coords.latitude);
 
 
     }, function() {
