@@ -10,7 +10,7 @@ var createCrimeQuery = require('./queryCrime')
 
 app.set('view engine', 'ejs');
 app.set('port', (process.env.PORT || 5000));
-//app.use(express.static(__dirname + '/build'));
+app.use(express.static(__dirname + '/../client/web'));
 app.use(bodyParser.urlencoded({ extended: true  }));
 app.use(bodyParser.json());
 
@@ -46,11 +46,12 @@ app.get('/shortestRoute', function(req, res) {
 
 app.get('/testDanger', function(req, res) {
   console.log('testDanger recieved')
+  console.log('req.query', req.query);
   var queryUrl = createCrimeQuery(req.query.long, req.query.lat)
-
+  console.log('queryUrl', queryUrl);
   request(queryUrl, function(err, response, body){
     var data = JSON.parse(body);
-    console.log('data', data)
+    console.log('the data that is apparently broken is', data)
     var newArr = data.map(function(item) {
       return item.location.coordinates;
     });
