@@ -45,34 +45,6 @@ app.get('/shortestRoute', function(req, res) {
   });
 });
 
-app.get('/populateDB', function(req, res) {
-  var url = 'http://data.sfgov.org/resource/cuks-n6tp.json?category=ASSAULT';
-
-  request(url, function(err, response, body) {
-    var data = JSON.parse(body);
-    for (var i = 0; i < data.length; i++) {
-      Danger.sync().then(function() {
-        console.log(data[i].location.coordinates);
-        return Danger.create({
-          lat: data[i].location.coordinates[0],
-          lon: data[i].location.coordinates[1]
-
-        });
-
-      })
-        .then(function() {
-          res.sendStatus(201);
-
-        }); 
-
-    }
-
-  });
-
-});
-
-
-
 app.get('/testDanger', function(req, res) {
   var url = 'http://data.sfgov.org/resource/cuks-n6tp.json?category=ASSAULT&$where=';
   var queryUrl = 
@@ -101,55 +73,6 @@ app.get('/testDanger', function(req, res) {
 });
 
 
-app.get('/dangerData', function(req, res) {
-  var dangerArray = []; 
-
-  console.log(req.query);
-  var latRange = getRange(parseInt(req.query.lat));
-  var lonRange = getRange(parseInt(req.query.lon));
-  Danger.findAll( {
-    where: {
-      lat: {
-        between: latRange
-      },
-      lon: {
-        between: lonRange
-      }
-    }
-  })
-    .then(function(dangers) {
-      var i = 0;
-      while (dangers[i]) {
-        console.log(dangers[i].dataValues);
-        dangerArray.push(dangers[i].dataValues);
-        i += 1;
-      }
-      console.log(dangerArray);
-      res.send(dangerArray);
-    });
-});
-
-var getRange = function(latOrLon) { 
-  //use this to get range
-  var results = [latOrLon - 50, latOrLon + 50];
-  return results;
-};
-
-app.post('/dangerData', function(req, res) {
-  console.log('this is the req', req.body);
-
-  Danger.sync().then(function () {
-    // Table created
-    return Danger.create({
-      lat: req.body.lat,
-      lon: req.body.lon,
-      count: req.body.count
-    });
-  })
-    .then(function() {
-      res.sendStatus(201);
-    }); 
-});
 
 
 app.listen(app.get('port'), function() {
