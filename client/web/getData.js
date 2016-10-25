@@ -17,9 +17,6 @@ function getCrimeAPI (long, lat) {
   .then(function(data){
     return data.json();
   })
-  .then(function(records) {
-    return records;
-  })
 }
 
 function getPoints(long, lat) {
@@ -31,7 +28,6 @@ function getPoints(long, lat) {
   })
   .then(function(crimes) {
     for (let i = 0; i < crimes.length; i++) {
-      console.log(crimes[i].y, crimes[i].x, crimes[i].date)
           mapPoints.push(new google.maps.LatLng(crimes[i].y, crimes[i].x));
     }
     console.log('finished creating points')
