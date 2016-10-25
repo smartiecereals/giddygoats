@@ -8,16 +8,6 @@ var userLong = -122.444586;
 
 var map, heatmap;
 
-function renderHeat(long, lat) {
-  getPoints(long, lat)
-  .then(function(mapPoints) {
-    console.log('About to create heatmap')
-    heatmap = new google.maps.visualization.HeatmapLayer({
-      data: mapPoints,
-      map: map
-    });
-  })
-}
 
 function initMap() {
   console.log('time', time)
@@ -96,4 +86,15 @@ function changeGradient() {
 
 function changeOpacity() {
   heatmap.set('opacity', heatmap.get('opacity') ? null : 0.2);
+}
+
+function renderHeat(long, lat) {
+  getPoints(long, lat)
+  .then(function(mapPoints) {
+    console.log('About to create heatmap')
+    heatmap = new google.maps.visualization.HeatmapLayer({
+      data: mapPoints,
+      map: map
+    });
+  })
 }

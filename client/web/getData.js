@@ -3,7 +3,9 @@ function getCrimeAPI (long, lat) {
   var currHour = currDate.getHours()
 
   //Fetch from official api
-  var queryString = "https://data.sfgov.org/resource/cuks-n6tp.json?$limit=500&$where=category in('SEX OFFENSES, FORCIBLE','ASSAULT','ARSON','ROBBERY')"
+  var queryString = "https://data.sfgov.org/resource/cuks-n6tp.json?"
+  + "$limit=500&"
+  + "$where=category in('SEX OFFENSES, FORCIBLE','ASSAULT', 'LOITERING','LARCENY/THEFT','KIDNAPPING','WEAPON LAWS','DISORDERLY CONDUCT','DRUNKENNESS','DRUG/NARCOTIC')"
   + " AND " + time(currHour, 1)
   + " AND " + location(lat, long, 1000)
   + "&$order=date DESC";
