@@ -26,7 +26,7 @@ app.get('/testDanger', function(req, res) {
       + ' AND y > ' 
       + (parseFloat(req.query.lon) - 0.0005)
       + ' AND y < ' 
-      + (parseFloat(req.query.lon + 0.0005));
+      + (parseFloat(req.query.lon) + 0.0005);
     console.log(queryUrl);
     var dangerArray = [];
 
