@@ -14,19 +14,39 @@ app.set('port', (process.env.PORT || 5000));
 app.use(bodyParser.urlencoded({ extended: true  }));
 app.use(bodyParser.json());
 
+app.get('/testDanger', function(req, res) {
+    var url = 'http://data.sfgov.org/resource/cuks-n6tp.json?$where=';
+    var queryUrl = 
+        url 
+      + 'x > ' 
+      + (parseFloat(req.query.lat) - 0.0005)
+      + ' AND x < ' 
+      + (parseFloat(req.query.lat) + 0.0005)
+      + ' AND y > ' 
+      + (parseFloat(req.query.lon) - 0.0005)
+      + ' AND y < ' 
+      + (parseFloat(req.query.lon + 0.0005));
+    console.log(queryUrl);
+    var dangerArray = [];
+
+  request(queryUrl, function(err, response, body){
+        var data = JSON.parse(body);
+    var newArr = data.map(function(item) {
+            return item.location.coordinates;
+          
+    });
+        res.send(200, newArr);
+      
+  });
+
+});
+
+
 app.get('/dangerData', function(req, res) {
   var dangerArray = []; 
-/*
-  Danger.findAll().then(function(dangers) {
-    var i = 0;
-    while (dangers[i]) {
-      console.log(dangers[i].dataValues);
-      i += 1;
-    }
-  }); */
 
   console.log(req.query);
-var latRange = getRange(parseInt(req.query.lat));
+  var latRange = getRange(parseInt(req.query.lat));
   var lonRange = getRange(parseInt(req.query.lon));
   Danger.findAll( {
     where: {
@@ -58,27 +78,6 @@ var getRange = function(latOrLon) {
 
 app.post('/dangerData', function(req, res) {
   console.log('this is the req', req.body);
-  /*
-  Danger.sync().then(function () {
-    return Danger.bulkCreate(req.body.storage);
-  })
-    .then(function() {
-      res.sendStatus(201);
-    }); 
-
-  for (var i = 0; i < storage.length; i++) {
-  Danger.sync().then(function () {
-  // Table created
-    return Danger.create({
-      lat: req.body.lat,
-      lon: req.body.lon,
-      count: req.body.count
-    });
-  })
-    .then(function() {
-      res.sendStatus(201);
-    });
-  }  */
 
   Danger.sync().then(function () {
     // Table created
