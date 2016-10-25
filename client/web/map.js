@@ -36,9 +36,29 @@ function initMap() {
       infoWindow.setPosition(pos);
       infoWindow.setContent('You are here');
       map.setCenter(pos);
-      
-      renderHeat(position.coords.longitude, position.coords.latitude);
+      console.log('position.coords.longitude, position.coords.latitude', position.coords.longitude, position.coords.latitude)
+      //queryCrime
 
+      fetch('/testDanger' + "?long=" + position.coords.longitude + "&lat=" + position.coords.latitude)
+      .then(function(rawData) {
+        return rawData.json();
+      })
+      .then(function(crimePoints) {
+        var mapPoints = [];
+        for (let i = 0; i < crimePoints.length; i++) {
+              mapPoints.push(new google.maps.LatLng(crimePoints[i][1], crimePoints[i][0]));
+        }
+        console.log('crimePoints', crimePoints)
+
+        console.log('finished creating points')
+        return mapPoints
+      })
+      .then(function(mapPoints) {
+        heatmap = new google.maps.visualization.HeatmapLayer({
+          data: mapPoints,
+          map: map
+        });
+      })
 
     }, function() {
       handleLocationError(true, infoWindow, map.getCenter());

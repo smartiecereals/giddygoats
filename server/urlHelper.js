@@ -1,4 +1,4 @@
-function time (time, timePeriod) {
+exports.time = function (time, timePeriod) {
   var windowTimes = [];
   //Will convert a time such as 25, into 1. Or -2 into 22
   function convertIrregularTime(irrTime) {
@@ -33,6 +33,6 @@ function time (time, timePeriod) {
   return  timeQuery
 }
 
-function location (long, lat, radius) {
+exports.location = function (long, lat, radius) {
   return 'within_circle(location, ' + long + ', ' + lat + ', 1000)';
 }
