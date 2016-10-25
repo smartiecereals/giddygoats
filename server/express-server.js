@@ -4,6 +4,7 @@ var ip = 'safehipposerver.herokuapp.com';
 var bodyParser = require('body-parser');
 var path = require('path');
 var express = require('express');
+var request = require('request');
 var db = require('./database/config');
 var Danger = require('./database/models/Danger');
 var app = express();
