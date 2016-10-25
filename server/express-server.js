@@ -15,6 +15,36 @@ app.set('port', (process.env.PORT || 5000));
 app.use(bodyParser.urlencoded({ extended: true  }));
 app.use(bodyParser.json());
 
+
+app.get('/shortestRoute', function(req, res) {
+  var sourceLat = req.query.sourceLat;
+  var sourceLon = req.query.sourceLon;
+  var destLat = req.query.destLat;
+  var destLon = req.query.destLon;
+  var waypoints = [];
+
+
+  var url = 'https://maps.googleapis.com/maps/api/directions/json?'
+
+  var queryUrl = 
+    url +
+    'origin=' + sourceLon + ',' + sourceLat +
+    '&' +
+    'destination=' + destLon + ',' + destLat + 
+    '&' +
+    'mode=walking' +
+    '&' +
+    'alternatives=true' +
+    '&'
+    'key=AIzaSyBgXiNUqN5OlBHE7hAVxV9phqHQrfKldXw';
+  console.log(queryUrl);
+  request(queryUrl, function(err, response, body) {
+    var data = JSON.parse(body);
+    console.log(data);
+    res.send(200, data);
+  });
+});
+
 app.get('/populateDB', function(req, res) {
   var url = 'http://data.sfgov.org/resource/cuks-n6tp.json?category=ASSAULT';
 
