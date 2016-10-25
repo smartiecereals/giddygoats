@@ -1,28 +1,8 @@
-function getCrimeAPI (long, lat) {
-  var currDate = new Date()
-  var currHour = currDate.getHours()
-
-  //Fetch from official api
-  var queryString = "https://data.sfgov.org/resource/cuks-n6tp.json?"
-  + "$limit=500&"
-  + "$where=category in('SEX OFFENSES, FORCIBLE','ASSAULT', 'LOITERING','LARCENY/THEFT','KIDNAPPING','WEAPON LAWS','DISORDERLY CONDUCT','DRUNKENNESS','DRUG/NARCOTIC')"
-  + " AND " + time(currHour, 1)
-  + " AND " + location(lat, long, 1000)
-  + "&$order=date DESC";
-
-  console.log('queryString', queryString)
-  return new Promise(function(resolve, reject) {
-  resolve(fetch(queryString))
-  })
-  .then(function(data){
-    return data.json();
-  })
-}
-
+//Convert points from API into heatmap array
 function getPoints(long, lat) {
 
   var mapPoints = [];
-  
+  //TODO: Replace this with a get request to /testDanger
   return new Promise(function(resolve, reject) {
     resolve(getCrimeAPI(long, lat))
   })
@@ -33,5 +13,4 @@ function getPoints(long, lat) {
     console.log('finished creating points')
     return mapPoints
   })
-  //create an array for google maps coordinates
 }
