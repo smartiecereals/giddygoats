@@ -2,26 +2,14 @@
 // prompted by your browser. If you see the error "The Geolocation service
 // failed.", it means you probably did not give permission for the browser to
 // locate you.
-var lat = 37.782745;
-var long = -122.444586;
 
-function getCrimeAPI (lat, long, date, time) {
-  //Fetch from official api
-  return new Promise(function(resolve, reject) {
-  resolve(fetch('https://data.sfgov.org/resource/cuks-n6tp.json?date=2010-01-02T00:00:00.000'))
-  })
-  .then(function(data){
-    return data.json();
-  })
-  .then(function(records) {
-    return records;
-  })
-
-}
+var userLat = 37.782745;
+var userLong = -122.444586;
 
 var map, heatmap;
 
 function initMap() {
+  console.log('time', time)
   map = new google.maps.Map(document.getElementById('map'), {
     zoom: 13,
     center: {lat: 37.775, lng: -122.434},
@@ -31,7 +19,6 @@ function initMap() {
   var infoWindow = new google.maps.InfoWindow({map: map});
 
   // Try HTML5 geolocation.
-  console.log(navigator.geolocation)
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(function(position) {
       var pos = {
@@ -39,9 +26,29 @@ function initMap() {
         lng: position.coords.longitude
       };
 
+      //Update global variables to be query the API for relevant radius
+      console.log('set the window user location')
+      userLat = position.coords.latitude;
+      userLong = position.coords.longitude;
+
+      //TODO: Run the query for this location??
+
       infoWindow.setPosition(pos);
       infoWindow.setContent('Location found.');
       map.setCenter(pos);
+
+      //TODO: Move this back out of the if else statement so it can be called by loading the map or moving the target location
+      getPoints(userLong, userLat)
+      .then(function(mapPoints) {
+        console.log('About to create heatmap')
+        heatmap = new google.maps.visualization.HeatmapLayer({
+          data: mapPoints,
+          map: map
+        });
+      })
+
+
+
     }, function() {
       handleLocationError(true, infoWindow, map.getCenter());
     });
@@ -50,18 +57,7 @@ function initMap() {
     handleLocationError(false, infoWindow, map.getCenter());
   }
 
-  getPoints()
-  .then(function(mapPoints) {
-    console.log('About to create heatmap')
-    heatmap = new google.maps.visualization.HeatmapLayer({
-      data: mapPoints,
-      // data: ([new google.maps.LatLng(37.7778241673064,  -122.407999186749),
-      //        new google.maps.LatLng(-122.407999186749, 37.7778241673064)]),
-      map: map
-    });
-    console.log('heatmap.data', heatmap.data)
-    console.log('heatmap.map', heatmap.map)
-  })
+
 
 }
 
@@ -99,24 +95,3 @@ function changeGradient() {
 function changeOpacity() {
   heatmap.set('opacity', heatmap.get('opacity') ? null : 0.2);
 }
-
-// Heatmap data: 500 Points
-function getPoints() {
-
-  var mapPoints = [];
-  
-  return new Promise(function(resolve, reject) {
-    resolve(getCrimeAPI())
-  })
-  .then(function(crimes) {
-    for (let i = 0; i < crimes.length; i++) {
-          console.log('crimes[i]', crimes[i].x, crimes[i].y);
-          mapPoints.push(new google.maps.LatLng(crimes[i].y, crimes[i].x));
-    }
-    console.log('finished creating points')
-    return mapPoints
-  })
-  //create an array for google maps coordinates
-  }
-
-  window.getCrimeAPI = getCrimeAPI;
