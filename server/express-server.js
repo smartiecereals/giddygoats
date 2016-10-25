@@ -18,7 +18,7 @@ app.use(bodyParser.json());
 app.get('/populateDB', function(req, res) {
   var url = 'http://data.sfgov.org/resource/cuks-n6tp.json?category=ASSAULT';
 
-  request(queryUrl, function(err, response, body) {
+  request(url, function(err, response, body) {
     var data = JSON.parse(body);
     for (var i = 0; i < data.length; i++) {
       Danger.sync().then(function() {
