@@ -11,8 +11,9 @@ html, body {
 }
 
 #map {
-  width: 100%;
+  width: 75%;
   height: 100%;
+  display: inline-block;
 }
 
 .directions {
@@ -30,4 +31,17 @@ html, body {
 
 .directions .dirInput * {
   display: inline-block;
+}
+
+.form-panel {
+  display: inline-block;
+  width: 25%;
+  height: 100%;
+  background-image: linear-gradient(-225deg, #47CFEA 0%, #27A1AB 23%, #387B82 66%, #387A81 51%, #0F5866 100%);
+  float:right;
+}
+
+.hippo-logo {
+  margin-top:30px;
+  width:40%;
 }
