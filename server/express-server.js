@@ -22,7 +22,6 @@ app.get('/shortestRoute', function(req, res) {
   var destLon = req.query.destLon;
   var waypoints = [];
 
-
   var url = 'https://maps.googleapis.com/maps/api/directions/json?'
 
   var queryUrl = 
@@ -57,11 +56,7 @@ app.get('/testDanger', function(req, res) {
     });
     res.status(200).send(newArr);
   });
-
 });
-
-
-
 
 app.listen(app.get('port'), function() {
   console.log('Listening in on http://' + ip + ':' + port);

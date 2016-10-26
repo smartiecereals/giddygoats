@@ -11,23 +11,74 @@ html, body {
 }
 
 #map {
-  width: 100%;
+  width: 75%;
   height: 100%;
-}
-
-.directions {
-  position: absolute;
-  top: 0;
-  right: 0;
-  padding-top: 40px;
-  padding-right: 10px;
-  z-index: 10;
-}
-
-.directions * {
-  display: block;
-}
-
-.directions .dirInput * {
   display: inline-block;
+}
+
+
+
+.form-panel {
+  display: inline-block;
+  width: 25%;
+  height: 100%;
+  background-image: linear-gradient(-225deg, #47CFEA 0%, #27A1AB 23%, #387B82 66%, #387A81 51%, #0F5866 100%);
+  float:right;
+}
+
+.hippo-logo {
+  margin-top: 30px;
+  width: 57%;
+}
+
+.search-panel-heading {
+  font-family: 'Handlee', cursive;
+  color: white;
+  font-size: 26px;
+  margin-top: 27px;
+}
+
+.search-sub-heading {
+  color: white;
+  font-size: 17px;
+  margin-top: 15px;
+  font-weight: 100;
+  letter-spacing: 0.8px;
+}
+
+.search-current-location {
+  color: white;
+  font-size: 10px;
+  margin-top: 15px;
+  font-weight: 100;
+  letter-spacing: 0.8px;
+}
+
+.directions-field {
+  height: 41px;
+  width: 90%;
+  font-weight: 200;
+  padding-left: 11px;
+  margin-top: 4px;
+}
+
+.directions-field-bottom {
+  height:41px;
+  width: 90%;
+  margin-top: 15px;
+  font-weight:200;
+  padding-left: 11px;
+}
+
+
+.directions-field-submit {
+  font-family: 'Handlee', cursive;
+  font-size: 26px;
+  background-color: #4CCDB6;
+  color: white;
+  border: none;
+  margin-top: 30px;
+  padding-left: 11px;
+  width: 90%;
+  height: 41px;
 }
