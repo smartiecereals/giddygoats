@@ -1,0 +1,9 @@
+# Node
+node_modules/
+
+# MobileFiles
+client/mobile/__tests__/
+client/mobile/android/
+client/mobile/ios/
+client/mobile/node_modules/
+

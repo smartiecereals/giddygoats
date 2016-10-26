@@ -1,107 +1,64 @@
 var http = require('http');
-var port = 3000;
-var ip = '127.0.0.1';
+var port = 80;
+var ip = 'safehipposerver.herokuapp.com';
+var bodyParser = require('body-parser');
 var path = require('path');
 var express = require('express');
-var session = require('express-session');
-var bodyParser = require('body-parser');
-var db = require('./database/config');
-var Danger = require('./database/models/Danger');
+var request = require('request');
 var app = express();
+var createCrimeQuery = require('./queryCrime')
 
 app.set('view engine', 'ejs');
-//app.use(express.static(__dirname + '/build'));
-
-app.use(bodyParser.urlencoded({ extended: true }));
+app.set('port', (process.env.PORT || 5000));
+app.use(express.static(__dirname + '/../client/web'));
+app.use(bodyParser.urlencoded({ extended: true  }));
 app.use(bodyParser.json());
 
-app.use(session({
-  secret: 'SecretString!',
-  resave: false,
-  saveUninitialized: false
-}));
 
+app.get('/shortestRoute', function(req, res) {
+  var sourceLat = req.query.sourceLat;
+  var sourceLon = req.query.sourceLon;
+  var destLat = req.query.destLat;
+  var destLon = req.query.destLon;
+  var waypoints = [];
 
-app.get('/dangerData', function(req, res) {
-  var dangerArray = []; 
-  /*
-  Danger.findAll().then(function(dangers) {
-    var i = 0;
-    while (dangers[i]) {
-      console.log(dangers[i].dataValues);
-      i += 1;
-    }
-  }); */
+  var url = 'https://maps.googleapis.com/maps/api/directions/json?'
 
-  console.log(req.query);
-  var latRange = getRange(parseInt(req.query.lat));
-  var lonRange = getRange(parseInt(req.query.lon));
-  Danger.findAll( {
-    where: {
-      lat: {
-        between: latRange
-      },
-      lon: {
-        between: lonRange
-      }
-    }
-  })
-    .then(function(dangers) {
-      var i = 0;
-      while (dangers[i]) {
-        console.log(dangers[i].dataValues);
-        dangerArray.push(dangers[i].dataValues);
-        i += 1;
-      }
-      console.log(dangerArray);
-      res.send(dangerArray);
-    });
+  var queryUrl = 
+    url +
+    'origin=' + sourceLon + ',' + sourceLat +
+    '&' +
+    'destination=' + destLon + ',' + destLat + 
+    '&' +
+    'mode=walking' +
+    '&' +
+    'alternatives=true' +
+    '&'
+    'key=AIzaSyBgXiNUqN5OlBHE7hAVxV9phqHQrfKldXw';
+  console.log(queryUrl);
+  request(queryUrl, function(err, response, body) {
+    var data = JSON.parse(body);
+    console.log(data);
+    res.send(200, data);
+  });
 });
 
-var getRange = function(latOrLon) { 
-  //use this to get range
-  var results = [latOrLon - 50, latOrLon + 50];
-  return results;
-};
-
-app.post('/dangerData', function(req, res) {
-  /*
-  Danger.sync().then(function () {
-    return Danger.bulkCreate(req.body.storage);
-  })
-    .then(function() {
-      res.sendStatus(201);
-    }); 
-
-  for (var i = 0; i < storage.length; i++) {
-  Danger.sync().then(function () {
-  // Table created
-    return Danger.create({
-      lat: req.body.lat,
-      lon: req.body.lon,
-      count: req.body.count
+app.get('/testDanger', function(req, res) {
+  console.log('testDanger recieved')
+  console.log('req.query', req.query);
+  var queryUrl = createCrimeQuery(req.query.long, req.query.lat)
+  console.log('queryUrl', queryUrl);
+  request(queryUrl, function(err, response, body){
+    var data = JSON.parse(body);
+    console.log('the data that is apparently broken is', data)
+    var newArr = data.map(function(item) {
+      return item.location.coordinates;
     });
-  })
-    .then(function() {
-      res.sendStatus(201);
-    });
-  }  */
-
-  Danger.sync().then(function () {
-    // Table created
-    return Danger.create({
-      lat: req.body.lat,
-      lon: req.body.lon,
-      count: req.body.count
-    });
-  })
-    .then(function() {
-      res.sendStatus(201);
-    }); 
+    res.status(200).send(newArr);
+  });
 });
 
-
-app.listen(port, function() {
+app.listen(app.get('port'), function() {
   console.log('Listening in on http://' + ip + ':' + port);
 });
 
