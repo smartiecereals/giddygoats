@@ -57,11 +57,7 @@ app.get('/testDanger', function(req, res) {
     });
     res.status(200).send(newArr);
   });
-
 });
-
-
-
 
 app.listen(app.get('port'), function() {
   console.log('Listening in on http://' + ip + ':' + port);
