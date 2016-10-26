@@ -19,6 +19,8 @@ function initMap() {
         lng: position.coords.longitude
       };
 
+      angular.element(document.querySelector('[ng-controller="ViewController"]')).scope().setPos(pos);
+
       //Update global variables to be query the API for relevant radius
       console.log('set the window user location')
       userLat = position.coords.latitude;
@@ -26,7 +28,8 @@ function initMap() {
 
       //Center the map on the location and add marker
       infoWindow.setPosition(pos);
-      infoWindow.setContent('You are here');
+      infoWindow.setContent('<div class="map-panel"><img src="http://res.cloudinary.com/small-change/image/upload/v1477434563/hippi_mg7ts4.png" class="hippo-small-logo"/>YOU ARE HERE</div>');
+
       map.setCenter(pos);
 
       fetch('/testDanger' + "?long=" + position.coords.longitude + "&lat=" + position.coords.latitude)
@@ -49,6 +52,7 @@ function initMap() {
           data: mapPoints,
           map: map
         });
+        angular.element(document.querySelector('[ng-controller="ViewController"]')).scope().flipMapLoaded();
       })
 
     }, function() {

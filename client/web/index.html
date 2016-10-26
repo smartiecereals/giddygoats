@@ -10,9 +10,14 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.4/css/bootstrap.min.css" integrity="sha384-2hfp1SzUoho7/TsGGGDaFdsuuDL0LX2hnUp6VkX3CUQ2K4K+xjboZdsXyp4oUHZj" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/css?family=Handlee" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="styles/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+    
   </head>
   <body ng-app="app">
     <div id="app-container" ng-controller="ViewController">
+      <center ng-show="mapLoaded">
+        <i class="fa fa-circle-o-notch fa-spin fa-3x"></i>
+      </center>  
   	  <div id="map">
   	  </div>
       <div class='form-panel'>
@@ -20,7 +25,12 @@
           <img src='http://res.cloudinary.com/small-change/image/upload/v1477434563/hippi_mg7ts4.png' class='hippo-logo'/>
           <h1 class='search-panel-heading'>SAFE HIPPO</h1>
           <h3 class='search-sub-heading'>Find the safest way home</h3>
-          <p class='search-current-location'>from <b>Current Location</b></p>
+          <p class='search-current-location' ng-if='!pos'>
+            from <b>Current Location</b>
+          </p>
+          <p class='search-current-location' ng-if='pos'>
+            <i class="fa fa-pencil" aria-hidden="true"></i> <b>{{pos.address}}</b>
+          </p>
         </center>
         <form class="directions-form" ng-submit="submitHandler(destination, mobile)">
             <center>

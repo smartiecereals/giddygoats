@@ -9,8 +9,8 @@ GUY
 
 SAM
 
--
--
+- make address editable
+- make icon a hippo
 
 
 BEA
