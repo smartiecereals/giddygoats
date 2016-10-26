@@ -16,8 +16,6 @@ html, body {
   display: inline-block;
 }
 
-
-
 .form-panel {
   display: inline-block;
   width: 25%;
@@ -35,14 +33,22 @@ html, body {
   font-family: 'Handlee', cursive;
   color: white;
   font-size: 26px;
-  margin-top: 27px;
+  margin-top: 110px;
 }
 
 .search-sub-heading {
   color: white;
+  font-size: 15px;
+  margin-top: 25px;
+  font-weight: 200;
+  letter-spacing: 0.8px;
+}
+
+.search-sub-heading-crime {
+  color: white;
   font-size: 17px;
-  margin-top: 15px;
-  font-weight: 100;
+  margin-top: 25px;
+  font-weight: 200;
   letter-spacing: 0.8px;
 }
 
@@ -77,7 +83,7 @@ html, body {
   background-color: #4CCDB6;
   color: white;
   border: none;
-  margin-top: 30px;
+  margin-top: 20px;
   padding-left: 11px;
   width: 90%;
   height: 41px;
