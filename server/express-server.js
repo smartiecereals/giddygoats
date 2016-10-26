@@ -16,15 +16,17 @@ app.use(bodyParser.json());
 
 
 app.get('/shortestRoute', function(req, res) {
+  //retrieve source lat and lon and dest lat and lon of user
   var sourceLat = req.query.sourceLat;
   var sourceLon = req.query.sourceLon;
   var destLat = req.query.destLat;
   var destLon = req.query.destLon;
   var waypoints = [];
 
-
+  //url of api
   var url = 'https://maps.googleapis.com/maps/api/directions/json?'
 
+  //fill in query parameters for the google maps api
   var queryUrl = 
     url +
     'origin=' + sourceLon + ',' + sourceLat +
@@ -38,8 +40,10 @@ app.get('/shortestRoute', function(req, res) {
     'key=AIzaSyBgXiNUqN5OlBHE7hAVxV9phqHQrfKldXw';
   console.log(queryUrl);
   request(queryUrl, function(err, response, body) {
+    //parse the response body
     var data = JSON.parse(body);
     console.log(data);
+    //send back the directions information for the client
     res.send(200, data);
   });
 });
