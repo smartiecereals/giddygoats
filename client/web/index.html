@@ -1,41 +1,39 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <meta charset="UTF-8" />
-  <title>Safe Hippo</title>
-  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.4/css/bootstrap.min.css" integrity="sha384-2hfp1SzUoho7/TsGGGDaFdsuuDL0LX2hnUp6VkX3CUQ2K4K+xjboZdsXyp4oUHZj" crossorigin="anonymous">
-  <link href="https://fonts.googleapis.com/css?family=Handlee" rel="stylesheet">
-  <link rel="stylesheet" type="text/css" href="styles/main.css">
-</head>
-<body>
-  <div id="app">
-	  <div id="map">
-	  </div>
-    <div class='form-panel'>
-      <center>
-        <img src='http://res.cloudinary.com/small-change/image/upload/v1477434563/hippi_mg7ts4.png' class='hippo-logo'/>
-        <h1 class='search-panel-heading'>SAFE HIPPO</h1>
-        <h3 class='search-sub-heading'>find the safest way home</h3>
-        <p class='search-current-location'>from <b>Current Location</b></p>
-      </center>
-      <form class="directions-form">
-          <div class="dirInput">
-<!--             <div>From</div>
-          <input type="text" name="origin" placeholder="Hack Reactor, San Francisco" class='directions-field'> -->
-          </div>
-          <center>
-            <div class="dirInput">
-              <input type="text" name="destination" placeholder="Destination" class='directions-field'>
-              <input type="tel" name="destination" placeholder="Mobile" class='directions-field-bottom'>
-            </div>
-            <input type="submit" value="Go" class='directions-field-submit'>
-          </center>
-      </form>
-    </div>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Safe Hippo</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
+    <script src="./app/app.js"></script>
+    <script src='./app/viewer.js'></script>
 
-  </div>
-  <script src="./map.js"></script>
-  <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBgXiNUqN5OlBHE7hAVxV9phqHQrfKldXw&libraries=visualization&callback=initMap"></script>
-</body>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.4/css/bootstrap.min.css" integrity="sha384-2hfp1SzUoho7/TsGGGDaFdsuuDL0LX2hnUp6VkX3CUQ2K4K+xjboZdsXyp4oUHZj" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Handlee" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="styles/main.css">
+  </head>
+  <body ng-app="app">
+    <div id="app-container" ng-controller="ViewController">
+  	  <div id="map">
+  	  </div>
+      <div class='form-panel'>
+        <center>
+          <img src='http://res.cloudinary.com/small-change/image/upload/v1477434563/hippi_mg7ts4.png' class='hippo-logo'/>
+          <h1 class='search-panel-heading'>SAFE HIPPO</h1>
+          <h3 class='search-sub-heading'>Find the safest way home</h3>
+          <p class='search-current-location'>from <b>Current Location</b></p>
+        </center>
+        <form class="directions-form" ng-submit="submitHandler(destination, mobile)">
+            <center>
+              <div class="dirInput">
+                <input type="text" name="destination" placeholder="Destination" class='directions-field' ng-model='destination'>
+                <input type="tel" name="mobile" placeholder="Mobile" class='directions-field-bottom' ng-model='mobile'>
+              </div>
+              <input type="submit" value="Go" class='directions-field-submit'>
+            </center>
+        </form>
+      </div>
+    </div>
+    <script src="./map.js"></script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBgXiNUqN5OlBHE7hAVxV9phqHQrfKldXw&libraries=visualization&callback=initMap"></script>
+  </body>
 </html>

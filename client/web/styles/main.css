@@ -4,7 +4,7 @@ html, body {
   padding: 0;
 }
 
-#app {
+#app-container {
   width: 100%;
   height: 100%;
   position: relative;
@@ -15,8 +15,6 @@ html, body {
   height: 100%;
   display: inline-block;
 }
-
-
 
 .form-panel {
   display: inline-block;
@@ -45,6 +43,8 @@ html, body {
   font-weight: 100;
   letter-spacing: 0.8px;
 }
+
+
 
 .search-current-location {
   color: white;
