@@ -14,7 +14,6 @@ app.use(express.static(__dirname + '/../client/web'));
 app.use(bodyParser.urlencoded({ extended: true  }));
 app.use(bodyParser.json());
 
-
 app.get('/shortestRoute', function(req, res) {
   //retrieve source lat and lon and dest lat and lon of user
   var sourceLat = req.query.sourceLat;
@@ -38,25 +37,22 @@ app.get('/shortestRoute', function(req, res) {
     'alternatives=true' +
     '&'
     'key=AIzaSyBgXiNUqN5OlBHE7hAVxV9phqHQrfKldXw';
-  console.log(queryUrl);
   request(queryUrl, function(err, response, body) {
     //parse the response body
     var data = JSON.parse(body);
-    console.log(data);
     //send back the directions information for the client
     res.send(200, data);
   });
 });
 
 app.get('/testDanger', function(req, res) {
-  console.log('testDanger recieved')
-  console.log('req.query', req.query);
+  //Create the URL to query the Crime API with based on co-ordinates
   var queryUrl = createCrimeQuery(req.query.long, req.query.lat)
-  console.log('queryUrl', queryUrl);
+
   request(queryUrl, function(err, response, body){
     var data = JSON.parse(body);
-    console.log('the data that is apparently broken is', data)
     var newArr = data.map(function(item) {
+      //Create newArr so that it is an array of tuples with the coordinates in them
       return item.location.coordinates;
     });
     res.status(200).send(newArr);
