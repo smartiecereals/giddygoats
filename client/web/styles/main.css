@@ -11,14 +11,14 @@ html, body {
 }
 
 #map {
-  width: 75%;
+  width: 70%;
   height: 100%;
   display: inline-block;
 }
 
 .form-panel {
   display: inline-block;
-  width: 25%;
+  width: 30%;
   height: 100%;
   background-image: linear-gradient(-225deg, #47CFEA 0%, #27A1AB 23%, #387B82 66%, #387A81 51%, #0F5866 100%);
   float:right;
@@ -46,19 +46,24 @@ html, body {
   color: white;
   font-size: 17px;
   margin-top: 15px;
+  margin-bottom:26px;
   font-weight: 100;
   letter-spacing: 0.8px;
 }
-
 
 
 .search-current-location {
   color: white;
   font-size: 10px;
-  margin-top: 15px;
+  margin-top: 22px;
   font-weight: 100;
   letter-spacing: 0.8px;
 }
+
+.search-current-location:hover {
+  cursor:pointer;
+}
+
 
 .directions-field {
   height: 41px;
@@ -128,4 +133,31 @@ html, body {
 .map-panel {
   font-size: 10px;
   font-weight: 800;
+}
+
+.shine {
+      background: white -webkit-gradient(linear, left top, right top, from(white), to(white), color-stop(0.5, black)) 0 0 no-repeat;
+      -webkit-background-size: 30px;
+      
+      color: rgba(255, 255, 255, 0.7);
+      -webkit-background-clip: text;
+      
+      -webkit-animation-name: shine;
+      -webkit-animation-duration: 5s;
+      -webkit-animation-iteration-count: infinite;
+}
+
+@-webkit-keyframes shine {
+    0%
+    {
+        background-position:-250px;
+    50%
+    {
+        background-position: center;
+    }
+    }
+    100%
+    {
+      background-position:350px;
+    }
 }

@@ -9,6 +9,7 @@ GUY
 
 SAM
 
+- pass address through in form
 - make address editable
 - make icon a hippo
 
