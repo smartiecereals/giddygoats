@@ -14,7 +14,7 @@ const GoogleURL = require('google-url');
 
 module.exports.shortenURL = function (longUrl, callback) {
 	googleUrl = new GoogleURL( { key: 'AIzaSyBgXiNUqN5OlBHE7hAVxV9phqHQrfKldXw' })
-	googleUrl.shorten( 'http://bluerival.com/', function( err, shortUrl ) {
+	googleUrl.shorten( longUrl, function( err, shortUrl ) {
 		console.log('shortUrl', shortUrl)
 	  callback(shortUrl);
 	});
