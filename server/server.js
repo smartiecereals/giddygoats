@@ -25,11 +25,13 @@ app.get('/safestRoute', function(req, res) {
     if (reply !== null) {
       res.send(200, reply);
     } else {
-      console.log('Not In cache')
       const googleQueryString = utils.queryStringGoogle(sourceLat, sourceLon, destLat, destLon);
       console.log('googleQueryString', googleQueryString)
       utils.getSafestRoute(redisKey, googleQueryString, function(safestRoute) {
-        res.send(200, safestRoute);
+        utils.shortenURL(safestRoute, function(shortURL) {
+          res.send(200, shortURL);
+        })
+
       });
     }
   });
