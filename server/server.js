@@ -28,8 +28,10 @@ app.get('/safestRoute', function(req, res) {
       const googleQueryString = utils.queryStringGoogle(sourceLat, sourceLon, destLat, destLon);
       console.log('googleQueryString', googleQueryString)
       utils.getSafestRoute(redisKey, googleQueryString, function(safestRoute) {
-        utils.shortenURL(safestRoute, function(shortURL) {
-          res.send(200, shortURL);
+        console.log('safestRoute', safestRoute)
+        utils.shortenURL(safestRoute.url, function(shortURL) {
+          safestRoute.shortURL = shortURL
+          res.send(200, JSON.stringify(safestRoute));
         })
 
       });
@@ -47,7 +49,7 @@ app.get('/testDanger', function(req, res) {
        //Create newArr so that it is an array of tuples with the coordinates in them   
        return item.location.coordinates;   
      });   
-     console.log(newArr)
+
      res.status(200).send(newArr);   
    });   
  });

@@ -16,7 +16,7 @@ module.exports.shortenURL = function (longUrl, callback) {
 	googleUrl = new GoogleURL( { key: 'AIzaSyBgXiNUqN5OlBHE7hAVxV9phqHQrfKldXw' })
 	googleUrl.shorten( longUrl, function( err, shortUrl ) {
 		console.log('shortUrl', shortUrl)
-	  callback(shortUrl);
+		callback(shortUrl);
 	});
 }
 
@@ -27,10 +27,10 @@ const sortByKey = function(array, key) {
 	});
 }
 
-const getMinimum = function(arr, field) {
+const getMinimum = function(arr) {
 	var routes = sortByKey(arr, 'score');
 	console.log('sorted routes', JSON.stringify(routes))
-	return routes[0][field];
+	return routes[0];
 }
 
 const getDangersInArea = function(lat, lon, callback) {
@@ -105,12 +105,13 @@ module.exports.getSafestRoute = function(redisKey, googleQueryString, callback) 
 	  		obj['waypoints'] = routes[key].waypoints
 	  		scores.push(obj);
 	  		if (routesLength === scores.length) {
-	        // client.set(redisKey, getMinimum(scores,polyline));
-	        //This callback will send the result back to the client.
-	        //TODO: This needs to be changed to a link.
-	        //TODO: This link will be created with my function, provided an array of all the waypoints
-	        var shareableURL = createShareableURL(getMinimum(scores, 'waypoints'))
-	        callback(shareableURL);
+	        // client.set(redisKey, getMinimum(scores,polyline)); //This was breaking the code. Took out for testing
+
+	        var bestRoute = getMinimum(scores)
+	        var shareableURL = createShareableURL(bestRoute.waypoints)
+	        var bestPoly = bestRoute.polyline;
+	        
+	        callback({url:shareableURL, polyline: bestPoly});
 	    }
 	});
 	  });
