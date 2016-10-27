@@ -41,7 +41,12 @@ app.get('/shortestRoute', function(req, res) {
     //parse the response body
     var data = JSON.parse(body);
     //send back the directions information for the client
-    res.send(200, data);
+    res.send(200, JSON.stringify([
+          {lat: 37.772, lng: -122.214},
+          {lat: 21.291, lng: -157.821},
+          {lat: -18.142, lng: 178.431},
+          {lat: -27.467, lng: 153.027}
+        ]));
   });
 });
 

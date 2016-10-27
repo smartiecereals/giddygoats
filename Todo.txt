@@ -5,14 +5,14 @@ GUY
 
 - create input field for origin
 - allow query location to be moved by draggable marker
+- determine the best way to convert polyline into a google link
 
 
 SAM
 
-- pass address through in form
-- make address editable
-- make icon a hippo
-
+- step 0: return long,lat pairs from /shortestRoute endpoint and render new polyline on map
+- step 1: convert address to (lat,long)
+- step 2: send long, lat (for origin and destination) and phone to server
 
 BEA
 

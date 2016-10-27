@@ -14,9 +14,7 @@ angular.module('app.controllers', [])
   };
 
   $scope.editHandler = function() {
-    console.log('$scope.showOriginField: ', $scope.showOriginField);
     $scope.showOriginField = !$scope.showOriginField;
-    console.log('$scope.showOriginField: ', $scope.showOriginField);
   };
 
   // setPos converts user's (lon,lat) to street address and append's 
@@ -45,6 +43,28 @@ angular.module('app.controllers', [])
     console.log('destination: ', destination);
     console.log('mobile: ', mobile);
     console.log('origin: ', origin);
+
+    // if user entered an address i.e. they do NOT want to depart
+    // from their current location
+
+    var url = '/shortestRoute?sourceLat=' + origin.lat + '&sourceLon=' + origin.lng + '&destLat=' + destination.lat + '&destLon=' + destination.lng; 
+
+    fetch(url)
+    .then(function(data) {
+      console.log('data', data);
+      var flightPath = new google.maps.Polyline({
+        path: JSON.parse(data),
+        geodesic: true,
+        strokeColor: '#FF0000',
+        strokeOpacity: 1.0,
+        strokeWeight: 2
+      }); 
+
+      flightPath.setMap(map);
+    })
+    // if (typeof(origin)==="string") {
+    //   //
+    // }
 
     // navigator.geolocation.getCurrentPosition(function(location) {
     //   console.log('location in the "then" callback: ', location);
