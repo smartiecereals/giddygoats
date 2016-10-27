@@ -6,6 +6,7 @@ const bodyParser = require('body-parser');
 const david = require('./algorithm.js');
 const polyline = require('polyline');
 const async = require('async');
+const createShareableURL = require('../shareableURL')
 
 const url = 'https://maps.googleapis.com/maps/api/directions/json?'
 
@@ -16,9 +17,10 @@ const sortByKey = function(array, key) {
     });
 }
 
-const getMinimumPolyline = function(arr) {
+const getMinimum = function(arr, field) {
   var routes = sortByKey(arr, 'score');
-  return routes[0].polyline;
+  console.log('sorted routes', JSON.stringify(routes))
+  return routes[0][field];
 }
 
 const getDangersInArea = function(lat, lon, callback) {
@@ -33,9 +35,9 @@ const getDangersInArea = function(lat, lon, callback) {
 module.exports.queryStringGoogle = function(sourceLat, sourceLon, destLat, destLon) {
 	return (
 		url +
-		'origin=' + sourceLon + ',' + sourceLat +
+		'origin=' + sourceLat + ',' + sourceLon +
 		'&' +
-		'destination=' + destLon + ',' + destLat + 
+		'destination=' + destLat + ',' + destLon + 
 		'&' +
 		'mode=walking' +
 		'&' +
@@ -53,17 +55,33 @@ module.exports.getSafestRoute = function(redisKey, googleQueryString, callback) 
 	  const routes = {};
 	  const scores = []; 
 	  const routesLength = data.routes.length;
+	  
+	  function getWaypoints (route) {
+	  	//This will take in a whole root and return the coordinates of all the steps
+	  	var waypoints = [];
+	  	var startPoint = route.legs[0].start_location;
+	  	// console.log(route.legs)
+	  	console.log('startPoint', startPoint)
+	  	waypoints.push([startPoint.lat, startPoint.lng]) //Initialise the start point
+
+	  	route.legs[0].steps.forEach(function(step) {
+	  		waypoints.push([step.end_location.lat, step.end_location.lng])
+	  	})
+
+	  	return waypoints;
+	  }
 
 	  //Populate an object with all of the routes as keys and the standardised polylines as values
 	  for (var i = 0; i < data.routes.length; i++) {
-	    routes['route' + i] = david(polyline.decode(data.routes[i].overview_polyline.points));
-	 	 //TODO: In here is where I can probably assign the value of the key to be an object of two values
-	 	 	//1st: the standardised polyline
-	 	 	//2nd: All of the coordinates for the turning points along the way
+	  	var routeData = {}
+	  	routeData.standardPolyline = david(polyline.decode(data.routes[i].overview_polyline.points))
+	  	routeData.waypoints = getWaypoints(data.routes[i]);
+	    routes['route' + i] = routeData
+
 	  }
 
 	  async.each(Object.keys(routes), function(key) {
-	    const routeArr = routes[key];
+	    const routeArr = routes[key].standardPolyline;
 	    async.reduce(routeArr, 0, function(memo, coordinate, callback1) {
 	      getDangersInArea(coordinate[1], coordinate[0], function(err, data) {
 	      	//Get the number of crimes nearby this point
@@ -71,15 +89,17 @@ module.exports.getSafestRoute = function(redisKey, googleQueryString, callback) 
 	      });
 	    }, function(err, results) {
 	      const obj = {};
-	      obj['polyline'] = polyline.encode(routes[key]);
+	      obj['polyline'] = polyline.encode(routes[key].standardPolyline);
 	      obj['score'] = results;
+	      obj['waypoints'] = routes[key].waypoints
 	      scores.push(obj);
 	      if (routesLength === scores.length) {
-	        client.set(redisKey, getMinimumPolyline(scores));
+	        // client.set(redisKey, getMinimum(scores,polyline));
 	        //This callback will send the result back to the client.
 	        //TODO: This needs to be changed to a link.
 	        //TODO: This link will be created with my function, provided an array of all the waypoints
-	        callback(getMinimumPolyline(scores));
+	        var shareableURL = createShareableURL(getMinimum(scores, 'waypoints'))
+	        callback(shareableURL);
 	      }
 	    });
 	  });

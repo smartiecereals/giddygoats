@@ -21,11 +21,11 @@ app.get('/safestRoute', function(req, res) {
   const destLat = req.query.destLat;
   const destLon = req.query.destLon;
   var redisKey = sourceLat+sourceLon+destLat+destLon;
-
   client.get(redisKey, function(err, reply) {
     if (reply !== null) {
       res.send(200, reply);
     } else {
+      console.log('Not In cache')
       const googleQueryString = utils.queryStringGoogle(sourceLat, sourceLon, destLat, destLon);
       console.log('googleQueryString', googleQueryString)
       utils.getSafestRoute(redisKey, googleQueryString, function(safestRoute) {
