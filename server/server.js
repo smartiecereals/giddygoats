@@ -20,7 +20,6 @@ app.get('/safestRoute', function(req, res) {
   const sourceLon = req.query.sourceLon;
   const destLat = req.query.destLat;
   const destLon = req.query.destLon;
-
   var redisKey = sourceLat+sourceLon+destLat+destLon;
 
   client.get(redisKey, function(err, reply) {
@@ -28,7 +27,7 @@ app.get('/safestRoute', function(req, res) {
       res.send(200, reply);
     } else {
       const googleQueryString = utils.queryStringGoogle(sourceLat, sourceLon, destLat, destLon);
-
+      console.log('googleQueryString', googleQueryString)
       utils.getSafestRoute(redisKey, googleQueryString, function(safestRoute) {
         res.send(200, safestRoute);
       });
@@ -50,6 +49,10 @@ app.get('/testDanger', function(req, res) {
      res.status(200).send(newArr);   
    });   
  });
+
+app.get('/*', function(req, res) {
+  console.log('Missed the route!')
+})
 
 
 app.listen(port, function() {
