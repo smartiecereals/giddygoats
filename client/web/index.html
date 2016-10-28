@@ -58,6 +58,10 @@
               <input type="submit" value="Go" class='directions-field-submit'>
             </center>
         </form>
+        <div id="safeURL" ng-if="safeRoute">
+          <p>The safest route is: </p>
+          <a ng-href="{{safeRoute.shortURL}}" target="_blank">{{safeRoute.shortURL}}</a>
+        </div>
       </div>
     </div>
 
