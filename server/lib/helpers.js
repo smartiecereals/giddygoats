@@ -10,7 +10,14 @@ const createShareableURL = require('../shareableURL');
 const GoogleURL = require('google-url');
 
 
-
+var createDrawableWaypoints = function(points) {
+	var drawablePoints = [];
+	points.forEach(function(point) {
+		var newPoint = {lat: point[0], lng: point[1]}
+		drawablePoints.push(newPoint);
+	})
+	return drawablePoints;
+}
 
 module.exports.shortenURL = function (longUrl, callback) {
 	googleUrl = new GoogleURL( { key: 'AIzaSyBgXiNUqN5OlBHE7hAVxV9phqHQrfKldXw' })
@@ -68,39 +75,39 @@ module.exports.getSafestRoute = function(redisKey, googleQueryString, callback) 
 		const routesLength = data.routes.length;
 
 		function getWaypoints (route) {
-	  	//This will take in a whole root and return the coordinates of all the steps
-	  	var waypoints = [];
-	  	var startPoint = route.legs[0].start_location;
-	  	// console.log(route.legs)
-	  	console.log('startPoint', startPoint)
-	  	waypoints.push([startPoint.lat, startPoint.lng]) //Initialise the start point
+		  	//This will take in a whole root and return the coordinates of all the steps
+		  	var waypoints = [];
+		  	var startPoint = route.legs[0].start_location;
+		  	// console.log(route.legs)
+		  	console.log('startPoint', startPoint)
+		  	waypoints.push([startPoint.lat, startPoint.lng]) //Initialise the start point
 
-	  	route.legs[0].steps.forEach(function(step) {
-	  		waypoints.push([step.end_location.lat, step.end_location.lng])
-	  	})
+		  	route.legs[0].steps.forEach(function(step) {
+		  		waypoints.push([step.end_location.lat, step.end_location.lng])
+		  	})
 
-	  	return waypoints;
-	  }
+		  	return waypoints;
+	 	}
 
 	  //Populate an object with all of the routes as keys and the standardised polylines as values
 	  for (var i = 0; i < data.routes.length; i++) {
 	  	var routeData = {}
-	  	routeData.standardPolyline = david(polyline.decode(data.routes[i].overview_polyline.points))
+	  	routeData.standardPoints = david(polyline.decode(data.routes[i].overview_polyline.points))
 	  	routeData.waypoints = getWaypoints(data.routes[i]);
 	  	routes['route' + i] = routeData
 
 	  }
 
 	  async.each(Object.keys(routes), function(key) {
-	  	const routeArr = routes[key].standardPolyline;
+	  	const routeArr = routes[key].standardPoints;
 	  	async.reduce(routeArr, 0, function(memo, coordinate, callback1) {
 	  		getDangersInArea(coordinate[1], coordinate[0], function(err, data) {
 	      	//Get the number of crimes nearby this point
+	      	console.log('data from the query', data)
 	      	callback1(null, memo + data.length);
 	      });
 	  	}, function(err, results) {
 	  		const obj = {};
-	  		obj['polyline'] = polyline.encode(routes[key].standardPolyline);
 	  		obj['score'] = results;
 	  		obj['waypoints'] = routes[key].waypoints
 	  		scores.push(obj);
@@ -109,9 +116,8 @@ module.exports.getSafestRoute = function(redisKey, googleQueryString, callback) 
 
 	        var bestRoute = getMinimum(scores)
 	        var shareableURL = createShareableURL(bestRoute.waypoints)
-	        var bestPoly = bestRoute.polyline;
-	        
-	        callback({url:shareableURL, polyline: bestPoly});
+	        var drawableWaypoints = createDrawableWaypoints(bestRoute.waypoints)
+	        callback({url:shareableURL, waypoints: drawableWaypoints});
 	    }
 	});
 	  });
