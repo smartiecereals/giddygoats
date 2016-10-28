@@ -1,7 +1,28 @@
 var map, heatmap;
+var autocomplete;
 
 //This function will be called once the google api script in index.html
-function initMap() {
+
+
+function initMapAndFields () {
+  initMap();
+  initAutocomplete();
+}
+
+function initAutocomplete() {
+   // Create the autocomplete object, restricting the search to geographical
+   // location types.
+   autocomplete = new google.maps.places.Autocomplete(
+     (document.getElementById('destination-field')),
+     {types: ['geocode']});
+
+   autocomplete = new google.maps.places.Autocomplete(
+     (document.getElementById('origin-field')),
+     {types: ['geocode']});
+ }
+
+
+ function initMap() {
 
   //Create the raw map
   map = new google.maps.Map(document.getElementById('map'), {
@@ -19,7 +40,13 @@ function initMap() {
         lng: position.coords.longitude
       };
 
-      angular.element(document.querySelector('[ng-controller="ViewController"]')).scope().setPos(pos);
+      var circle = new google.maps.Circle({
+        center: pos,
+        radius: position.coords.accuracy
+      });
+      autocomplete.setBounds(circle.getBounds());
+
+    angular.element(document.querySelector('[ng-controller="ViewController"]')).scope().setPos(pos);
 
       //Update global variables to be query the API for relevant radius
       console.log('set the window user location')
@@ -39,13 +66,13 @@ function initMap() {
       })
       .then(function(crimePoints) {
       //Process these co-ordinates and create an array of the data points that google heat maps API requires
-        var mapPoints = [];
-        for (let i = 0; i < crimePoints.length; i++) {
-              mapPoints.push(new google.maps.LatLng(crimePoints[i][1], crimePoints[i][0]));
-        }
+      var mapPoints = [];
+      for (let i = 0; i < crimePoints.length; i++) {
+        mapPoints.push(new google.maps.LatLng(crimePoints[i][1], crimePoints[i][0]));
+      }
 
-        return mapPoints
-      })
+      return mapPoints
+    })
       .then(function(mapPoints) {
         //Create the heatmap from the array created in the previous step
         heatmap = new google.maps.visualization.HeatmapLayer({
@@ -55,9 +82,9 @@ function initMap() {
         angular.element(document.querySelector('[ng-controller="ViewController"]')).scope().flipMapLoaded();
       })
 
-    }, function() {
+    }), function() {
       handleLocationError(true, infoWindow, map.getCenter());
-    });
+    };
   } else {
     // Browser doesn't support Geolocation
     handleLocationError(false, infoWindow, map.getCenter());
