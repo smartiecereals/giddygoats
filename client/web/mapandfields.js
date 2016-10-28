@@ -12,13 +12,14 @@ function initMapAndFields () {
 function initAutocomplete() {
    // Create the autocomplete object, restricting the search to geographical
    // location types.
-   autocomplete = new google.maps.places.Autocomplete(
+   origin = new google.maps.places.Autocomplete(
+     (document.getElementById('origin-field')),
+     {types: ['geocode']});
+
+   destination = new google.maps.places.Autocomplete(
      (document.getElementById('destination-field')),
      {types: ['geocode']});
 
-   autocomplete = new google.maps.places.Autocomplete(
-     (document.getElementById('origin-field')),
-     {types: ['geocode']});
  }
 
 
@@ -44,7 +45,8 @@ function initAutocomplete() {
         center: pos,
         radius: position.coords.accuracy
       });
-      autocomplete.setBounds(circle.getBounds());
+      origin.setBounds(circle.getBounds());
+      destination.setBounds(circle.getBounds());
 
     angular.element(document.querySelector('[ng-controller="ViewController"]')).scope().setPos(pos);
 
