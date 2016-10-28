@@ -20,17 +20,20 @@ app.get('/safestRoute', function(req, res) {
   const sourceLon = req.query.sourceLon;
   const destLat = req.query.destLat;
   const destLon = req.query.destLon;
-
   var redisKey = sourceLat+sourceLon+destLat+destLon;
-
   client.get(redisKey, function(err, reply) {
     if (reply !== null) {
       res.send(200, reply);
     } else {
       const googleQueryString = utils.queryStringGoogle(sourceLat, sourceLon, destLat, destLon);
-
+      console.log('googleQueryString', googleQueryString)
       utils.getSafestRoute(redisKey, googleQueryString, function(safestRoute) {
-        res.send(200, safestRoute);
+        console.log('safestRoute', safestRoute)
+        utils.shortenURL(safestRoute.url, function(shortURL) {
+          safestRoute.shortURL = shortURL
+          res.send(200, JSON.stringify(safestRoute));
+        })
+
       });
     }
   });
@@ -46,10 +49,14 @@ app.get('/testDanger', function(req, res) {
        //Create newArr so that it is an array of tuples with the coordinates in them   
        return item.location.coordinates;   
      });   
-     console.log(newArr)
+
      res.status(200).send(newArr);   
    });   
  });
+
+app.get('/*', function(req, res) {
+  console.log('Missed the route!')
+})
 
 
 app.listen(port, function() {
