@@ -15,6 +15,26 @@ const client = redis.createClient();
 
 app.use(express.static(__dirname + '/../client/web'));
 
+
+
+//-----------------------------------------------------------------
+//-----------------------GET SAFEST ROUTE--------------------------
+//-----------------------------------------------------------------
+
+// INPUT:
+
+// Takes latitude-longitude pairs for both the origin and destination
+// of the user's journey. This information is stored in the params of
+// the url
+
+// OUTPUT:
+
+// Sends an object back to the client called 'safestRoute'. The object 
+// contains a google maps url stored on the property 'shortURL', which 
+// describes the safest route. The returned object also contains an array 
+// of all the 'waypoints'.
+
+
 app.get('/safestRoute', function(req, res) {
   const sourceLat = req.query.sourceLat;
   const sourceLon = req.query.sourceLon;
@@ -38,6 +58,24 @@ app.get('/safestRoute', function(req, res) {
     }
   });
 });
+
+//-----------------------------------------------------------------
+//-----------------------GET TEST DANGER --------------------------
+//-----------------------------------------------------------------
+
+// INPUT:
+
+// Takes latitude-longitude pairs for both the origin and destination
+// of the user's journey. This information is stored in the params of
+// the url
+
+// OUTPUT:
+
+// Sends an object back to the client called 'safestRoute'. The object 
+// contains a google maps url stored on the property 'shortURL', which 
+// describes the safest route. The returned object also contains an array 
+// of all the 'waypoints'.
+
 
 app.get('/testDanger', function(req, res) {    
    //Create the URL to query the Crime API with based on co-ordinates    
