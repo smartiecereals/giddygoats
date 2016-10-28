@@ -15,8 +15,10 @@ const createShareableURL = function(coordinates) {
 		+ 'saddr=' + start
 		+ '&daddr=' + end
 		+ waypoints
-		+ '&via=' 
-		+ viaPoints.join(','))
+		+ '&dirflg=w'
+		// + '&via=' 
+		// + viaPoints.join(',')
+		)
 	
 	console.log('The final shareable URL is', finalURL)
 	return finalURL;
