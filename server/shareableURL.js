@@ -2,7 +2,7 @@ const createShareableURL = function(coordinates) {
 	var start = coordinates[0]
 	var end = coordinates[coordinates.length - 1];
 	var baseURL = 'https://www.google.com/maps?';
-	debugger;
+
 	var waypoints = '';
 	var viaPoints = [];
 
