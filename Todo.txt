@@ -3,16 +3,28 @@ This file outlines features any member of the team thinks would be cool to add g
 
 GUY
 
-- create input field for origin
 - allow query location to be moved by draggable marker
 - determine the best way to convert polyline into a google link
 
 
 SAM
 
-- step 0: return long,lat pairs from /shortestRoute endpoint and render new polyline on map
-- step 1: convert address to (lat,long)
-- step 2: send long, lat (for origin and destination) and phone to server
+- comment back end in normal english
+- pass back coordinates to client instead of polyline
+- hook up client to actually send post request
+- convert address to lat long pairs on the server
+
+
+- twilio, send sms of link to user
+- twilio, receive sms from mobiles
+- only show green panel on mobile (maybe map below)
+- render polyline onto map after server comes back with polyline
+- ping crime api centred on mod point between destination and origin.
+- test suite
+- render short url to page
+- change icon to a hippo
+
+
 
 BEA
 
