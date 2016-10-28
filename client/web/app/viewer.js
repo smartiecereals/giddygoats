@@ -7,6 +7,18 @@ angular.module('app.controllers', [])
 
   $scope.mapLoaded = true;
   $scope.showOriginField = false;
+  $scope.safeRoute;
+
+  $scope.renderRoute = function(points) {
+    var safeRoute = new google.maps.Polyline({
+              path: points,
+              geodesic: true,
+              strokeColor: '#FF0000',
+              strokeOpacity: 1.0,
+              strokeWeight: 2
+            });
+            safeRoute.setMap(map);
+  }
 
   $scope.flipMapLoaded = function() {
     $scope.mapLoaded = !$scope.mapLoaded;
@@ -39,41 +51,48 @@ angular.module('app.controllers', [])
   // submitHandler takes the form values and does [INSERT PURPOSE]
 
   $scope.submitHandler = function(destination, mobile, origin) {
-    console.log('inside the Submit Handler');
     console.log('destination: ', destination);
     console.log('mobile: ', mobile);
     console.log('origin: ', origin);
 
-    // if user entered an address i.e. they do NOT want to depart
-    // from their current location
 
-    var url = '/shortestRoute?sourceLat=' + origin.lat + '&sourceLon=' + origin.lng + '&destLat=' + destination.lat + '&destLon=' + destination.lng; 
+    var locationURL = '/safestRoute?'
+ 
+    if (origin.lat && origin.lng) {
+      locationURL += ('sourceLat=' + origin.lat)
+      locationURL += ('&sourceLon=' + origin.lng)
+    } else {
+      locationURL += ('strOrigin=' + origin.replace(/\s/g, '+'))
+    }
 
-    fetch(url)
-    .then(function(data) {
-      console.log('data', data);
+    if (destination) {
+      locationURL += ('&strDest='+ destination.replace(/\s/g, '+'))
+    } else {
+      console.log('There should be a validity check on this form')
+    }
 
-      // render polyline from data
-      // repopulate heat map
-
-
-      var flightPath = new google.maps.Polyline({
-        path: JSON.parse(data),
-        geodesic: true,
-        strokeColor: '#FF0000',
-        strokeOpacity: 1.0,
-        strokeWeight: 2
-      }); 
-
-      flightPath.setMap(map);
-    })
-    // if (typeof(origin)==="string") {
-    //   //
-    // }
-
-    // navigator.geolocation.getCurrentPosition(function(location) {
-    //   console.log('location in the "then" callback: ', location);
+    if (mobile) {
+      locationURL += ('&mobile=' + mobile)
+    }
+    
+    
+    // fetch(locationURL)
+    // .then(function(route) {
+    //   $scope.safeRoute = route.json()
+    //   $scope.renderRoute($scope.safeRoute.waypoints);
+    //   //Update the heatmap with the new relevant data
     // })
+    // .catch(function(err) {
+    //   console.log('There was an error', err)
+    // })
+
+    // TODO: This is a hard coded response. The api call should update
+    $scope.safeRoute = {"url":"https://www.google.com/maps?saddr=37.7901786,-122.4071487&daddr=37.7764555,-122.4082531+to:37.7854928,-122.4062062+to:37.7804776,-122.4125511+to:37.77676659999999,-122.4078552&via=1,2,3"
+                      ,"waypoints":[{"lat":37.7901786,"lng":-122.4071487},{"lat":37.7854928,"lng":-122.4062062},{"lat":37.7804776,"lng":-122.4125511},{"lat":37.77676659999999,"lng":-122.4078552},{"lat":37.7764555,"lng":-122.4082531}]
+                      ,"shortURL":"https://goo.gl/8eh9uX"}
+
+    $scope.renderRoute($scope.safeRoute.waypoints);
+
   }
   
 });
