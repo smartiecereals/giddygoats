@@ -31,6 +31,7 @@ app.get('/safestRoute', function(req, res) {
         console.log('safestRoute', safestRoute)
         utils.shortenURL(safestRoute.url, function(shortURL) {
           safestRoute.shortURL = shortURL
+          console.log(JSON.stringify(safestRoute))
           res.send(200, JSON.stringify(safestRoute));
         })
 

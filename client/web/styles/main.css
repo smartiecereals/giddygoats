@@ -135,29 +135,55 @@ html, body {
   font-weight: 800;
 }
 
+#safeURL {
+  padding-top: 40px;
+  text-align: center;
+}
+
+#safeURL p {
+  margin-bottom: 0;
+  color: white;
+}
+
+a:link {
+  color: white;
+}
+
+a:visited {
+  color: white;
+}
+
+a:hover {
+  color: white;
+}
+
+a:active {
+  color: white;
+}
+
 .shine {
-      background: white -webkit-gradient(linear, left top, right top, from(white), to(white), color-stop(0.5, black)) 0 0 no-repeat;
-      -webkit-background-size: 30px;
-      
-      color: rgba(255, 255, 255, 0.7);
-      -webkit-background-clip: text;
-      
-      -webkit-animation-name: shine;
-      -webkit-animation-duration: 5s;
-      -webkit-animation-iteration-count: infinite;
+  background: white -webkit-gradient(linear, left top, right top, from(white), to(white), color-stop(0.5, black)) 0 0 no-repeat;
+  -webkit-background-size: 30px;
+
+  color: rgba(255, 255, 255, 0.7);
+  -webkit-background-clip: text;
+
+  -webkit-animation-name: shine;
+  -webkit-animation-duration: 5s;
+  -webkit-animation-iteration-count: infinite;
 }
 
 @-webkit-keyframes shine {
-    0%
-    {
-        background-position:-250px;
+  0%
+  {
+    background-position:-250px;
     50%
     {
-        background-position: center;
+      background-position: center;
     }
-    }
-    100%
-    {
-      background-position:350px;
-    }
+  }
+  100%
+  {
+    background-position:350px;
+  }
 }
