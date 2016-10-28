@@ -9,19 +9,6 @@ GUY
 
 SAM
 
-- comment back end in normal english
-- pass back coordinates to client instead of polyline
-- hook up client to actually send post request
-- convert address to lat long pairs on the server
-
-
-- twilio, send sms of link to user
-- twilio, receive sms from mobiles
-- only show green panel on mobile (maybe map below)
-- render polyline onto map after server comes back with polyline
-- ping crime api centred on mod point between destination and origin.
-- test suite
-- render short url to page
 - change icon to a hippo
 
 

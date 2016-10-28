@@ -46,9 +46,7 @@ app.get('/safestRoute', function(req, res) {
       res.send(200, reply);
     } else {
       const googleQueryString = utils.queryStringGoogle(sourceLat, sourceLon, destLat, destLon);
-      console.log('googleQueryString', googleQueryString)
       utils.getSafestRoute(redisKey, googleQueryString, function(safestRoute) {
-        console.log('safestRoute', safestRoute)
         utils.shortenURL(safestRoute.url, function(shortURL) {
           safestRoute.shortURL = shortURL
           res.send(200, JSON.stringify(safestRoute));
@@ -65,21 +63,20 @@ app.get('/safestRoute', function(req, res) {
 
 // INPUT:
 
-// Takes latitude-longitude pairs for both the origin and destination
-// of the user's journey. This information is stored in the params of
-// the url
+
 
 // OUTPUT:
 
-// Sends an object back to the client called 'safestRoute'. The object 
-// contains a google maps url stored on the property 'shortURL', which 
-// describes the safest route. The returned object also contains an array 
-// of all the 'waypoints'.
+
 
 
 app.get('/testDanger', function(req, res) {    
    //Create the URL to query the Crime API with based on co-ordinates    
-   var queryUrl = createCrimeQuery(req.query.long, req.query.lat)    
+
+   var radius = ???
+
+
+   var queryUrl = createCrimeQuery(req.query.long, req.query.lat, radius)    
     
    request(queryUrl, function(err, response, body){    
      var data = JSON.parse(body);    

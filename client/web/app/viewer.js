@@ -52,6 +52,11 @@ angular.module('app.controllers', [])
     fetch(url)
     .then(function(data) {
       console.log('data', data);
+
+      // render polyline from data
+      // repopulate heat map
+
+
       var flightPath = new google.maps.Polyline({
         path: JSON.parse(data),
         geodesic: true,
