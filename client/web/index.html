@@ -51,8 +51,8 @@
             <center>
               <div class="dirInput">
                 <!-- Current Location from -->
-                <input type="text" name="origin" placeholder="Origin" class='directions-field' ng-model='origin' ng-show='showOriginField' id="origin-field">
-                <input type="text" name="destination" placeholder="Destination" class='directions-field-bottom' ng-model='destination' id="destination-field">
+                <input type="text" name="origin" placeholder="Origin" class='directions-field' ng-model='origin' ng-show='showOriginField' id="origin-field" ng-change="originCoords={}">
+                <input type="text" name="destination" placeholder="Destination" class='directions-field-bottom' ng-model='destination' id="destination-field" ng-change="destinationCoords={}">
                 <input type="tel" name="mobile" placeholder="Mobile" class='directions-field-bottom' ng-model='mobile'>
               </div>
               <input type="submit" value="Go" class='directions-field-submit'>
