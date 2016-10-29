@@ -18,7 +18,6 @@ const createShareableURL = function(coordinates) {
 		+ '&via=' 
 		+ viaPoints.join(','))
 	
-	console.log('The final shareable URL is', finalURL)
 	return finalURL;
 	  //format for shared url is
 	  // https://www.google.com/maps?saddr=40.802147,-81.941460&daddr=40.814147,-82.061460+to:40.805266,-81.927727&via=1

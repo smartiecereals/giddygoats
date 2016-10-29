@@ -54,8 +54,7 @@ app.get('/safestRoute', function(req, res) {
         utils.getSafestRoute(redisKey, googleQueryString, function(safestRoute) {
           utils.shortenURL(safestRoute.url, function(shortURL) {
             safestRoute.shortURL = shortURL
-            console.log(JSON.stringify(safestRoute))
-            res.send(200, JSON.stringify(safestRoute));
+            res.status(200).send(JSON.stringify(safestRoute));
           })
 
         });
@@ -104,7 +103,7 @@ app.get('/safestRoute', function(req, res) {
 app.get('/testDanger', function(req, res) {    
    //Create the URL to query the Crime API with based on co-ordinates    
 
-   var queryUrl = createCrimeQuery(req.query.long, req.query.lat)    
+   var queryUrl = createCrimeQuery(req.query.long, req.query.lat, req.query.radius)    
     
    request(queryUrl, function(err, response, body){    
      var data = JSON.parse(body);

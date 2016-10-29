@@ -32,7 +32,7 @@ function initMap() {
 
       map.setCenter(pos);
 
-      fetch('/testDanger' + "?long=" + position.coords.longitude + "&lat=" + position.coords.latitude)
+      fetch('/testDanger' + "?long=" + position.coords.longitude + "&lat=" + position.coords.latitude + "&radius=" + 1000)
       //Get an array of all of the long/lat co-ordinates from crime in current region
       .then(function(rawData) {
         return rawData.json();

@@ -63,7 +63,6 @@ const sortByKey = function(array, key) {
 
 const getMinimum = function(arr) {
 	var routes = sortByKey(arr, 'score');
-	console.log('sorted routes', JSON.stringify(routes))
 	return routes[0];
 }
 
