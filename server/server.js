@@ -123,3 +123,5 @@ app.listen(port, function() {
   console.log('Listening in on http://' + ip + ':' + port);
 });
 
+module.exports = app;
+
