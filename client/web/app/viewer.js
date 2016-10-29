@@ -75,16 +75,17 @@ angular.module('app.controllers', [])
       locationURL += ('&mobile=' + mobile)
     }
     
-    
-    // fetch(locationURL)
-    // .then(function(route) {
-    //   $scope.safeRoute = route.json()
-    //   $scope.renderRoute($scope.safeRoute.waypoints);
-    //   //Update the heatmap with the new relevant data
-    // })
-    // .catch(function(err) {
-    //   console.log('There was an error', err)
-    // })
+
+    fetch(locationURL)
+    .then(function(route) {
+      console.log('response from server: ', route.json());
+      $scope.safeRoute = route.json()
+      $scope.renderRoute($scope.safeRoute.waypoints);
+      //Update the heatmap with the new relevant data
+    })
+    .catch(function(err) {
+      console.log('There was an error', err)
+    })
 
     // TODO: This is a hard coded response. The api call should update
     $scope.safeRoute = {"url":"https://www.google.com/maps?saddr=37.7901786,-122.4071487&daddr=37.7764555,-122.4082531+to:37.7854928,-122.4062062+to:37.7804776,-122.4125511+to:37.77676659999999,-122.4078552&via=1,2,3"
