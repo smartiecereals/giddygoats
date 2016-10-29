@@ -20,10 +20,29 @@ function initAutocomplete() {
      (document.getElementById('destination-field')),
      {types: ['geocode']});
 
+   // origin.addListener('place_changed', setAddress)
+   origin.addListener('place_changed', setOrigin)
+   destination.addListener('place_changed', setDestination)
  }
 
+ function setDestination() {
+  var place = destination.getPlace();
+  var scope = angular.element(document.querySelector('[ng-controller="ViewController"]')).scope()
 
- function initMap() {
+  scope.destinationCoords.lat = place.geometry.location.lat()
+  scope.destinationCoords.lng = place.geometry.location.lng()
+};
+
+ function setOrigin() {
+  var place = origin.getPlace();
+  var scope = angular.element(document.querySelector('[ng-controller="ViewController"]')).scope()
+
+  scope.originCoords.lat = place.geometry.location.lat()
+  scope.originCoords.lng = place.geometry.location.lng()
+};
+
+
+function initMap() {
 
   //Create the raw map
   map = new google.maps.Map(document.getElementById('map'), {
@@ -48,10 +67,9 @@ function initAutocomplete() {
       origin.setBounds(circle.getBounds());
       destination.setBounds(circle.getBounds());
 
-    angular.element(document.querySelector('[ng-controller="ViewController"]')).scope().setPos(pos);
-
+      angular.element(document.querySelector('[ng-controller="ViewController"]')).scope().setPos(pos);
+      angular.element(document.querySelector('[ng-controller="ViewController"]')).scope().originCoords = pos;
       //Update global variables to be query the API for relevant radius
-      console.log('set the window user location')
       userLat = position.coords.latitude;
       userLong = position.coords.longitude;
 
