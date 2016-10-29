@@ -71,19 +71,19 @@ angular.module('app.controllers', [])
     // $scope.destinationCoords = {};
     var locationURL = '/safestRoute?'
     
-    if ($scope.originCoords.lat && $scope.originCoords.lng) {
-      locationURL += ('sourceLat=' + $scope.originCoords.lat)
-      locationURL += ('&sourceLon=' + $scope.originCoords.lng)
-    } else {
-      locationURL += ('strOrigin=' + origin.replace(/\s/g, '+'))
-    }
+    // if ($scope.originCoords.lat && $scope.originCoords.lng) {
+      locationURL += ('originLat=' + $scope.originCoords.lat)
+      locationURL += ('&originLon=' + $scope.originCoords.lng)
+    // } else {
+    //   locationURL += ('strOrigin=' + origin.replace(/\s/g, '+'))
+    // }
 
-    if ($scope.destinationCoords.lat && $scope.destinationCoords.lng) {
+    // if ($scope.destinationCoords.lat && $scope.destinationCoords.lng) {
       locationURL += ('&destLat=' + $scope.destinationCoords.lat)
       locationURL += ('&destLon=' + $scope.destinationCoords.lng)
-    } else {
-      locationURL += ('&strDest=' + destination.replace(/\s/g, '+'))
-    }
+    // } else {
+    //   locationURL += ('&strDest=' + destination.replace(/\s/g, '+'))
+    // }
 
 
     if (mobile) {
@@ -101,6 +101,7 @@ angular.module('app.controllers', [])
       console.log('jsonRoute', jsonRoute)
       $scope.safeRoute = jsonRoute
       $scope.renderRoute($scope.safeRoute.waypoints);
+      $scope.$apply();
       //Update the heatmap with the new relevant data
     })
     .catch(function(err) {
