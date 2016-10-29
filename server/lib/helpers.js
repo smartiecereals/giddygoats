@@ -19,6 +19,33 @@ var createDrawableWaypoints = function(points) {
 	return drawablePoints;
 }
 
+//----------------------------------------------------------------------
+//-------------------------GEOCODE ADDRESS------------------------------
+//----------------------------------------------------------------------
+
+// INPUT: address e.g. "944 Market Street, San Francisco", and a callback function
+
+// RESULT: the callback acts on an object containing the lat & long of the address
+// e.g  { lat: 37.771102, lng: -122.4525798 }
+
+
+module.exports.geocodeAddress = function(strAddress, callback) {
+	var addressFormatted = strAddress.split(' ').join('+');
+	var url = 'https://maps.googleapis.com/maps/api/geocode/json?address=' 
+						+ addressFormatted
+						+ '&key=AIzaSyBgXiNUqN5OlBHE7hAVxV9phqHQrfKldXw';
+
+	request(url, function(err, response, body) {
+		var latLongObject = JSON.parse(body).results[0].geometry.location;
+		callback(latLongObject);
+	})
+}
+
+//----------------------------------------------------------------------
+//----------------------------------------------------------------------
+//----------------------------------------------------------------------
+
+
 module.exports.shortenURL = function (longUrl, callback) {
 	googleUrl = new GoogleURL( { key: 'AIzaSyBgXiNUqN5OlBHE7hAVxV9phqHQrfKldXw' })
 	googleUrl.shorten( longUrl, function( err, shortUrl ) {
@@ -78,8 +105,6 @@ module.exports.getSafestRoute = function(redisKey, googleQueryString, callback) 
 		  	//This will take in a whole root and return the coordinates of all the steps
 		  	var waypoints = [];
 		  	var startPoint = route.legs[0].start_location;
-		  	// console.log(route.legs)
-		  	console.log('startPoint', startPoint)
 		  	waypoints.push([startPoint.lat, startPoint.lng]) //Initialise the start point
 
 		  	route.legs[0].steps.forEach(function(step) {
@@ -103,7 +128,6 @@ module.exports.getSafestRoute = function(redisKey, googleQueryString, callback) 
 	  	async.reduce(routeArr, 0, function(memo, coordinate, callback1) {
 	  		getDangersInArea(coordinate[1], coordinate[0], function(err, data) {
 	      	//Get the number of crimes nearby this point
-	      	console.log('data from the query', data)
 	      	callback1(null, memo + data.length);
 	      });
 	  	}, function(err, results) {
@@ -118,8 +142,8 @@ module.exports.getSafestRoute = function(redisKey, googleQueryString, callback) 
 	        var shareableURL = createShareableURL(bestRoute.waypoints)
 	        var drawableWaypoints = createDrawableWaypoints(bestRoute.waypoints)
 	        callback({url:shareableURL, waypoints: drawableWaypoints});
-	    }
-	});
+	    	}
+			});
 	  });
 	});
 }

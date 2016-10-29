@@ -9,7 +9,7 @@
     "node": ">=4.0.0"
   },
   "scripts": {
-    "start": "node ./server/express-server.js"
+    "start": "node server.js"
   },
   "devDependencies": {
     "babel-cli": "^6.7.5",

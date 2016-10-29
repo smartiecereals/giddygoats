@@ -3,15 +3,14 @@ This file outlines features any member of the team thinks would be cool to add g
 
 GUY
 
-- create input field for origin
 - allow query location to be moved by draggable marker
+- determine the best way to convert polyline into a google link
 
 
 SAM
 
-- pass address through in form
-- make address editable
-- make icon a hippo
+- change icon to a hippo
+
 
 
 BEA
