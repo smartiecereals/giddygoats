@@ -101,15 +101,18 @@ module.exports.getSafestRoute = function(redisKey, googleQueryString, callback) 
 		const routesLength = data.routes.length;
 
 		function getWaypoints (route) {
+			// console.log(JSON.stringify(JSON.stringify(route)));
 		  	//This will take in a whole root and return the coordinates of all the steps
 		  	var waypoints = [];
+		  	// var testSteps = []
 		  	var startPoint = route.legs[0].start_location;
 		  	waypoints.push([startPoint.lat, startPoint.lng]) //Initialise the start point
 
 		  	route.legs[0].steps.forEach(function(step) {
+		  		// testSteps.push(step.html_instructions)
 		  		waypoints.push([step.end_location.lat, step.end_location.lng])
 		  	})
-
+		  	// console.log(testSteps);
 		  	return waypoints;
 	 	}
 
