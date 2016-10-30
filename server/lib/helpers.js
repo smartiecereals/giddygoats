@@ -10,6 +10,13 @@ const createShareableURL = require('../shareableURL');
 const GoogleURL = require('google-url');
 
 
+var twilioSID = process.env.SAFE_HIPPO_TWILIO_ACCOUNT_SID;
+var twilioAuthToken = process.env.SAFE_HIPPO_TWILIO_ACCOUNT_AUTH_TOKEN;
+var twillio = require('twilio')( twilioSID, twilioAuthToken);
+
+
+var googleKey = process.env.SAFE_HIPPO_GOOGLE_MAPS_KEY;
+
 var createDrawableWaypoints = function(points) {
 	var drawablePoints = [];
 	points.forEach(function(point) {
@@ -33,7 +40,8 @@ module.exports.geocodeAddress = function(strAddress, callback) {
 	var addressFormatted = strAddress.split(' ').join('+');
 	var url = 'https://maps.googleapis.com/maps/api/geocode/json?address=' 
 						+ addressFormatted
-						+ '&key=AIzaSyBgXiNUqN5OlBHE7hAVxV9phqHQrfKldXw';
+						+ '&key='
+						+ googleKey;
 
 	request(url, function(err, response, body) {
 		var latLongObject = JSON.parse(body).results[0].geometry.location;
@@ -42,12 +50,33 @@ module.exports.geocodeAddress = function(strAddress, callback) {
 }
 
 //----------------------------------------------------------------------
+//----------------------- SEND SMS TO USER -----------------------------
+//----------------------------------------------------------------------
+
+
+module.exports.sendSms = function(mobile, shortURL) {
+  twillio.messages.create({
+    body: 'Oink Oink, here is the safest way home: ' + shortURL,
+    to: mobile,
+    from: '+16282222956'
+  }, function(err, data) {
+    if (err) {
+      console.error('Error sending SMS');
+      console.error(err);
+    } else {
+      console.log('SMS successfully sent!');
+    }
+  });
+};
+
+
+//----------------------------------------------------------------------
 //----------------------------------------------------------------------
 //----------------------------------------------------------------------
 
 
 module.exports.shortenURL = function (longUrl, callback) {
-	googleUrl = new GoogleURL( { key: 'AIzaSyBgXiNUqN5OlBHE7hAVxV9phqHQrfKldXw' })
+	googleUrl = new GoogleURL( { key: googleKey })
 	googleUrl.shorten( longUrl, function( err, shortUrl ) {
 		console.log('shortUrl', shortUrl)
 		callback(shortUrl);
@@ -87,7 +116,7 @@ module.exports.queryStringGoogle = function(sourceLat, sourceLon, destLat, destL
 		'&' +
 		'alternatives=true' +
 		'&' +
-		'key=AIzaSyBgXiNUqN5OlBHE7hAVxV9phqHQrfKldXw'
+		'key=' + googleKey
 		);
 }
 

@@ -1,5 +1,6 @@
 # Node
 node_modules/
+env.js
 
 # MobileFiles
 client/mobile/__tests__/

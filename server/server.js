@@ -6,6 +6,7 @@ const bodyParser = require('body-parser');
 const app = express();
 const port = 3000;
 const redis = require('redis');
+require('../env.js')
 const utils = require('./lib/helpers.js');
 const request = require('request')
 const createCrimeQuery = require('./queryCrime')
@@ -44,7 +45,7 @@ app.get('/safestRoute', function(req, res) {
   // It sends the safest route (a google URL & an array of 'waypoints')
   // back to the client.
 
-  var returnRoute = function(sourceLat, sourceLon, destLat, destLon) {
+  var returnRoute = function(sourceLat, sourceLon, destLat, destLon, mobile) {
     var redisKey = sourceLat+sourceLon+destLat+destLon;
     client.get(redisKey, function(err, reply) {
       if (reply !== null) {
@@ -53,7 +54,8 @@ app.get('/safestRoute', function(req, res) {
         const googleQueryString = utils.queryStringGoogle(sourceLat, sourceLon, destLat, destLon);
         utils.getSafestRoute(redisKey, googleQueryString, function(safestRoute) {
           utils.shortenURL(safestRoute.url, function(shortURL) {
-            safestRoute.shortURL = shortURL
+            safestRoute.shortURL = shortURL;
+            utils.sendSms(mobile, shortURL);
             res.status(200).send(JSON.stringify(safestRoute));
           })
 
@@ -77,12 +79,12 @@ app.get('/safestRoute', function(req, res) {
         const originLat = latLongOriginObj.lat;
         const originLon = latLongOriginObj.lng;
 
-        returnRoute(originLat, originLon, destLat, destLon)
+        returnRoute(originLat, originLon, destLat, destLon, req.query.mobile)
       })
     })
   } else {
     //In this case is was a web query and we should have the coordinates of both in the query
-    returnRoute(req.query.originLat, req.query.originLon, req.query.destLat, req.query.destLon)
+    returnRoute(req.query.originLat, req.query.originLon, req.query.destLat, req.query.destLon, req.query.mobile)
   }
 
 });
