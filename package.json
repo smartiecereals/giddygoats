@@ -49,6 +49,7 @@
     "request": "^2.75.0",
     "sequelize": "^3.24.4",
     "sequelize-cli": "^2.4.0",
-    "session-memory-store": "^0.2.2"
+    "session-memory-store": "^0.2.2",
+    "twilio": "^2.11.0"
   }
 }
