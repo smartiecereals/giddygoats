@@ -6,7 +6,6 @@ module.exports = function createCrimeQuery (long = -122.444586, lat = 37.782745,
   //Get the current hour of the day (i.e. 22, 4, 12)
   var currDate = new Date()
   var currHour = currDate.getHours()
-  console.log('radius parameter: ', radius);
 
   //Use the helper functions time & location to get the correct string format for the time and location
   var queryString = "https://data.sfgov.org/resource/cuks-n6tp.json?"

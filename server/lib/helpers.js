@@ -8,14 +8,10 @@ const polyline = require('polyline');
 const async = require('async');
 const createShareableURL = require('../shareableURL');
 const GoogleURL = require('google-url');
-
-
-var twilioSID = process.env.SAFE_HIPPO_TWILIO_ACCOUNT_SID;
-var twilioAuthToken = process.env.SAFE_HIPPO_TWILIO_ACCOUNT_AUTH_TOKEN;
-var twillio = require('twilio')( twilioSID, twilioAuthToken);
-
-
-var googleKey = process.env.SAFE_HIPPO_GOOGLE_MAPS_KEY;
+const twilioSID = process.env.SAFE_HIPPO_TWILIO_ACCOUNT_SID;
+const twilioAuthToken = process.env.SAFE_HIPPO_TWILIO_ACCOUNT_AUTH_TOKEN;
+const twillio = require('twilio')( twilioSID, twilioAuthToken);
+const googleKey = process.env.SAFE_HIPPO_GOOGLE_MAPS_KEY;
 
 var createDrawableWaypoints = function(points) {
 	var drawablePoints = [];
@@ -42,7 +38,6 @@ module.exports.geocodeAddress = function(strAddress, callback) {
 						+ addressFormatted
 						+ '&key='
 						+ googleKey;
-
 	request(url, function(err, response, body) {
 		var latLongObject = JSON.parse(body).results[0].geometry.location;
 		callback(latLongObject);
@@ -78,7 +73,6 @@ module.exports.sendSms = function(mobile, shortURL) {
 module.exports.shortenURL = function (longUrl, callback) {
 	googleUrl = new GoogleURL( { key: googleKey })
 	googleUrl.shorten( longUrl, function( err, shortUrl ) {
-		console.log('shortUrl', shortUrl)
 		callback(shortUrl);
 	});
 }

@@ -46,6 +46,7 @@ app.get('/safestRoute', function(req, res) {
   // back to the client.
 
   var returnRoute = function(sourceLat, sourceLon, destLat, destLon, mobile) {
+    console.log('req.query in server: ', req.query);
     var redisKey = sourceLat+sourceLon+destLat+destLon;
     client.get(redisKey, function(err, reply) {
       if (reply !== null) {
