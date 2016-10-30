@@ -1,6 +1,47 @@
 var map, heatmap;
+var autocomplete;
 
 //This function will be called once the google api script in index.html
+
+
+function initMapAndFields () {
+  initMap();
+  initAutocomplete();
+}
+
+function initAutocomplete() {
+   // Create the autocomplete object, restricting the search to geographical
+   // location types.
+   origin = new google.maps.places.Autocomplete(
+     (document.getElementById('origin-field')),
+     {types: ['geocode']});
+
+   destination = new google.maps.places.Autocomplete(
+     (document.getElementById('destination-field')),
+     {types: ['geocode']});
+
+   // origin.addListener('place_changed', setAddress)
+   origin.addListener('place_changed', setOrigin)
+   destination.addListener('place_changed', setDestination)
+ }
+
+ function setDestination() {
+  var place = destination.getPlace();
+  var scope = angular.element(document.querySelector('[ng-controller="ViewController"]')).scope()
+
+  scope.destinationCoords.lat = place.geometry.location.lat()
+  scope.destinationCoords.lng = place.geometry.location.lng()
+};
+
+ function setOrigin() {
+  var place = origin.getPlace();
+  var scope = angular.element(document.querySelector('[ng-controller="ViewController"]')).scope()
+
+  scope.originCoords.lat = place.geometry.location.lat()
+  scope.originCoords.lng = place.geometry.location.lng()
+};
+
+
 function initMap() {
 
   //Create the raw map
@@ -19,10 +60,16 @@ function initMap() {
         lng: position.coords.longitude
       };
 
-      angular.element(document.querySelector('[ng-controller="ViewController"]')).scope().setPos(pos);
+      var circle = new google.maps.Circle({
+        center: pos,
+        radius: position.coords.accuracy
+      });
+      origin.setBounds(circle.getBounds());
+      destination.setBounds(circle.getBounds());
 
+      angular.element(document.querySelector('[ng-controller="ViewController"]')).scope().setPos(pos);
+      angular.element(document.querySelector('[ng-controller="ViewController"]')).scope().originCoords = pos;
       //Update global variables to be query the API for relevant radius
-      console.log('set the window user location')
       userLat = position.coords.latitude;
       userLong = position.coords.longitude;
 
@@ -39,13 +86,13 @@ function initMap() {
       })
       .then(function(crimePoints) {
       //Process these co-ordinates and create an array of the data points that google heat maps API requires
-        var mapPoints = [];
-        for (let i = 0; i < crimePoints.length; i++) {
-              mapPoints.push(new google.maps.LatLng(crimePoints[i][1], crimePoints[i][0]));
-        }
+      var mapPoints = [];
+      for (let i = 0; i < crimePoints.length; i++) {
+        mapPoints.push(new google.maps.LatLng(crimePoints[i][1], crimePoints[i][0]));
+      }
 
-        return mapPoints
-      })
+      return mapPoints
+    })
       .then(function(mapPoints) {
         //Create the heatmap from the array created in the previous step
         heatmap = new google.maps.visualization.HeatmapLayer({
@@ -55,9 +102,9 @@ function initMap() {
         angular.element(document.querySelector('[ng-controller="ViewController"]')).scope().flipMapLoaded();
       })
 
-    }, function() {
+    }), function() {
       handleLocationError(true, infoWindow, map.getCenter());
-    });
+    };
   } else {
     // Browser doesn't support Geolocation
     handleLocationError(false, infoWindow, map.getCenter());

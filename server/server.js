@@ -6,6 +6,7 @@ const bodyParser = require('body-parser');
 const app = express();
 const port = 3000;
 const redis = require('redis');
+require('../env.js')
 const utils = require('./lib/helpers.js');
 const request = require('request')
 const createCrimeQuery = require('./queryCrime')
@@ -44,7 +45,8 @@ app.get('/safestRoute', function(req, res) {
   // It sends the safest route (a google URL & an array of 'waypoints')
   // back to the client.
 
-  var returnRoute = function(sourceLat, sourceLon, destLat, destLon) {
+  var returnRoute = function(sourceLat, sourceLon, destLat, destLon, mobile) {
+    console.log('req.query in server: ', req.query);
     var redisKey = sourceLat+sourceLon+destLat+destLon;
     client.get(redisKey, function(err, reply) {
       if (reply !== null) {
@@ -53,9 +55,9 @@ app.get('/safestRoute', function(req, res) {
         const googleQueryString = utils.queryStringGoogle(sourceLat, sourceLon, destLat, destLon);
         utils.getSafestRoute(redisKey, googleQueryString, function(safestRoute) {
           utils.shortenURL(safestRoute.url, function(shortURL) {
-            safestRoute.shortURL = shortURL
-            console.log(JSON.stringify(safestRoute))
-            res.send(200, JSON.stringify(safestRoute));
+            safestRoute.shortURL = shortURL;
+            utils.sendSms(mobile, shortURL);
+            res.status(200).send(JSON.stringify(safestRoute));
           })
 
         });
@@ -65,28 +67,26 @@ app.get('/safestRoute', function(req, res) {
 
 
   // convert destination address from plain text to lat/long - desination will ALWAYS need geocoding
-  utils.geocodeAddress(req.query.strDest, function(latLongDestObj) {
-    const destLat = latLongDestObj.lat;
-    const destLon = latLongDestObj.lng;
+  //If both are strings, then geocode them both and call returnRoute
+  //Else, call return route with the geocoded data
 
-    // if origin address is in plain text i.e. user didn't use default address, convert 
-    // origin address to lat/long. Then call returnRoute.
-    if (req.query.strOrigin) {
+
+  //If the origin and destination are strings, then it must be a SMS query - so decode them
+  if (req.query.strOrigin && req.query.strDest) {
+    utils.geocodeAddress(req.query.strDest, function(latLongDestObj) {
+      const destLat = latLongDestObj.lat;
+      const destLon = latLongDestObj.lng;
       utils.geocodeAddress(req.query.strOrigin, function(latLongOriginObj) {
-        const sourceLat = latLongOriginObj.lat;
-        const sourceLon = latLongOriginObj.lng;
-        console.log('origin: ', latLongOriginObj);
-        console.log('destination: ', latLongDestObj)
-        returnRoute(sourceLat, sourceLon, destLat, destLon)
+        const originLat = latLongOriginObj.lat;
+        const originLon = latLongOriginObj.lng;
+
+        returnRoute(originLat, originLon, destLat, destLon, req.query.mobile)
       })
-    // if origin address is in lat/long i.e. user accepted default address, get lat/long from
-    // the url params. Then call returnRoute.
-    } else {
-        const sourceLat = req.query.sourceLat;
-        const sourceLon = req.query.sourceLon;
-        returnRoute(sourceLat, sourceLon, destLat, destLon)
-    }
-  })
+    })
+  } else {
+    //In this case is was a web query and we should have the coordinates of both in the query
+    returnRoute(req.query.originLat, req.query.originLon, req.query.destLat, req.query.destLon, req.query.mobile)
+  }
 
 });
 
@@ -104,8 +104,8 @@ app.get('/safestRoute', function(req, res) {
 app.get('/testDanger', function(req, res) {    
    //Create the URL to query the Crime API with based on co-ordinates    
 
-   var queryUrl = createCrimeQuery(req.query.long, req.query.lat)    
-    
+   var queryUrl = createCrimeQuery(req.query.long, req.query.lat, req.query.radius)    
+
    request(queryUrl, function(err, response, body){    
      var data = JSON.parse(body);
      var newArr = data.map(function(item) {    
@@ -125,4 +125,6 @@ app.get('/*', function(req, res) {
 app.listen(port, function() {
   console.log('Listening in on http://' + ip + ':' + port);
 });
+
+module.exports = app;
 

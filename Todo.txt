@@ -9,8 +9,16 @@ GUY
 
 SAM
 
-- change icon to a hippo
+- Twillio
+  - require twillio module
+  - pass in accountSid & authToken
+  - define sendSms function in helpers
+  - trigger sendSMS in returnRoute function. Pass in mobile number & shortUrl
+  - set accountSid & authToken as environmental variables
 
+
+
+- change icon to a hippo
 
 
 BEA
