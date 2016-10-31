@@ -1,20 +1,19 @@
 const http = require('http');
-const ip = '159.203.167.63';
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const app = express();
 const port = 3000;
 const redis = require('redis');
-require('../env.js')
+require('../env.js');
 const utils = require('./lib/helpers.js');
 const request = require('request')
-const createCrimeQuery = require('./queryCrime')
+const createCrimeQuery = require('./lib/queryCrime')
 mongoose.connect('mongodb://127.0.0.1:27017/dangerDataDB');
 
 const client = redis.createClient();
 
-app.use(express.static(__dirname + '/../client/web'));
+app.use(express.static(__dirname + '/../client'));
 
 
 
@@ -123,7 +122,7 @@ app.get('/*', function(req, res) {
 
 
 app.listen(port, function() {
-  console.log('Listening in on http://' + ip + ':' + port);
+  console.log('listening on port: ', port);
 });
 
 module.exports = app;
