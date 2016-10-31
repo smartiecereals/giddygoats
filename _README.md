@@ -10,7 +10,11 @@
 
 ## Suggested improvements
 
-  - 
+  - Configure Twilio to receive SMS' containing origin & destination address, and to then reply with the safest route between their current location and their desination address.
+  - Assess more 'dummy routes' than the 3 Google Maps Directions gives us. New dummy routes could be suggested by specifying a random waypoint between origin and destination.
+  - Connect the back end to a React Native Mobile App.
+  - Extend to more cities e.g. Chicago has a crime statistics API (https://data.cityofchicago.org/api/views/ijzp-q8t2/rows.json?accessType=DOWNLOAD). Remember, the DB queries need to be in terms of distance on the Earth rather than latitude degrees because a 1 degree of latitude isn't the same Earth surface distance on the equator as it is at the poles.
+  - Validation on the client forms to reject locations outside of SF.
 
 ## How Safe Hippo Works
 
