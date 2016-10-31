@@ -27,8 +27,7 @@
 - Node 0.10.x
 - Redis 2.6.x
 - MongoDB 9.1.x
-- etc
-- etc
+
 
 ## Development
 
