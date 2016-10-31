@@ -33,8 +33,8 @@
 
 ## Contribution Guide
 
-1. Fork this repo.
-2. Clone down your forked version down to your local machine
+- Fork this repo.
+- Clone down your forked version down to your local machine
 
 ```
 git clone https://github.com/<INSERT YOUR GITHUB USERNAME HERE>/giddygoats.git
@@ -45,7 +45,7 @@ git remote add upstream https://github.com/giddygoats/giddygoats.git
 ```
 
 
-3. Commit work often and provide informative commit messages
+- Commit work often and provide informative commit messages
 
 ```
 git add .
@@ -54,12 +54,12 @@ git add .
 git commit -m <INSERT INFORMATIVE COMMIT MESSAGE HERE>
 ```
 
-4. Push to your forked repo (by default, the remote name is 'origin'). 
+- Push to your forked repo (by default, the remote name is 'origin'). 
 
 ```
 git push origin master
 ```
 
-5. Each developer on the team has a branch titled that developers name. As of 31st Oct 2016, Guy Thomas administers the account. Email guythomas721@gmail.com and ask him to create a branch for you.
+- Each developer on the team has a branch titled that developers name. As of 31st Oct 2016, Guy Thomas administers the account. Email guythomas721@gmail.com and ask him to create a branch for you.
 
 6. Submit a pull request to your branch. After a code review, your new feature can be merged into the main repo! 
