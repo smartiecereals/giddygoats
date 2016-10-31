@@ -62,4 +62,4 @@ git push origin master
 
 - Each developer on the team has a branch titled that developers name. As of 31st Oct 2016, Guy Thomas administers the account. Email guythomas721@gmail.com and ask him to create a branch for you.
 
-6. Submit a pull request to your branch. After a code review, your new feature can be merged into the main repo! 
+- Submit a pull request to your branch. After a code review, your new feature can be merged into the main repo! 
