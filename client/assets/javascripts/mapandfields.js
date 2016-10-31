@@ -75,7 +75,7 @@ function initMap() {
 
       //Center the map on the location and add marker
       infoWindow.setPosition(pos);
-      infoWindow.setContent('<div class="map-panel"><img src="http://res.cloudinary.com/small-change/image/upload/v1477434563/hippi_mg7ts4.png" class="hippo-small-logo"/>YOU ARE HERE</div>');
+      infoWindow.setContent('<div class="map-panel"><img src="http://res.cloudinary.com/small-change/image/upload/v1477935825/SafeHippo-small_1_m1g8jy.png" class="hippo-small-logo"/>YOU ARE HERE</div>');
 
       map.setCenter(pos);
 
