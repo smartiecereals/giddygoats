@@ -95,7 +95,7 @@ module.exports.sendSms = function(mobile, shortURL) {
 //----------------------------------------------------------------------
 
 
-module.exports.shortenURL = function (longUrl, callback) {
+const shortenURL = function (longUrl, callback) {
 	googleUrl = new GoogleURL( { key: googleKey })
 	googleUrl.shorten( longUrl, function( err, shortUrl ) {
 		callback(shortUrl);
@@ -186,12 +186,16 @@ module.exports.getSafestRoute = function(redisKey, googleQueryString, callback) 
 	  		obj['waypoints'] = routes[key].waypoints
 	  		scores.push(obj);
 	  		if (routesLength === scores.length) {
-	        // client.set(redisKey, getMinimum(scores,polyline)); //This was breaking the code. Took out for testing
-
-	        var bestRoute = getMinimum(scores)
-	        var shareableURL = createShareableURL(bestRoute.waypoints)
-	        var drawableWaypoints = createDrawableWaypoints(bestRoute.waypoints)
-	        callback({url:shareableURL, waypoints: drawableWaypoints});
+	  			const safestRoute = {};
+	        const bestRoute = getMinimum(scores)
+	        safestRoute.url = createShareableURL(bestRoute.waypoints)
+	        safestRoute.waypoints = createDrawableWaypoints(bestRoute.waypoints)
+	        shortenURL(safestRoute.shareableURL, function(shortURL) {
+	        	safestRoute.shortURL = shortURL;
+	        	const redisValue = JSON.stringify(safestRoute);
+	        	client.set(redisKey, redisValue); 
+	        	callback(safestRoute);
+	        });
 	    	}
 			});
 	  });
