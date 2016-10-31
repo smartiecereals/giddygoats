@@ -1,3 +1,5 @@
+<img src='http://res.cloudinary.com/small-change/image/upload/v1477935825/SafeHippo-small_1_m1g8jy.png'/>
+
 # Safe Hippo
 
 > By crunching real time crime data, Safe Hippo will SMS you the safest route home.
@@ -23,9 +25,9 @@
   - A GET request is sent to /safestRoute with the origin, destination & mobile in the params
   - We check the Redis DB if that particular route has been requested before. If it has, we return the safest route straight away.
   - If that route hasn't been requested before, we call the getSafestRoute method which does the following:
-  -- We query the Google Directions API which provides 3 potential routes to get from A to B.
-  -- We space the waypoints (lat,long pairs along a given route) out evenly using a helper function called 'david', because David wrote the algorithm. He's a genius.
-  -- Our database contains every recoreded crime that occured in San Francisco in 2015 with it's latitude and longitude. We populated the DB with data from the SF OpenData API at this endpoint: https://data.sfgov.org/resource/ritf-b9ki.json. For each waypoint on a given route, we query the db to see how many crimes happen within 80 metres of that waypoint. Each waypoint has a crime score equal to how many crimes happened near that point. We then sum up how many crimes happened on each route - each route's score is the sum of all the waypoint's crime score on that route. We then return the route with the lowest crime score. This will be the route where the fewest recorded crimes have occured over the past year.
+    * We query the Google Directions API which provides 3 potential routes to get from A to B.
+    * We space the waypoints (lat,long pairs along a given route) out evenly using a helper function called 'david', because David wrote the algorithm. He's a genius.
+    * Our database contains every recoreded crime that occured in San Francisco in 2015 with it's latitude and longitude. We populated the DB with data from the SF OpenData API at this endpoint: https://data.sfgov.org/resource/ritf-b9ki.json. For each waypoint on a given route, we query the db to see how many crimes happen within 80 metres of that waypoint. Each waypoint has a crime score equal to how many crimes happened near that point. We then sum up how many crimes happened on each route - each route's score is the sum of all the waypoint's crime score on that route. We then return the route with the lowest crime score. This will be the route where the fewest recorded crimes have occured over the past year.
   - We then SMS the provided mobile number the Google Maps URL of the safest route using Twilio's API
   - We return an object back to the client which contains all the waypoints of the safest route as well as the Google Maps URL.
 
