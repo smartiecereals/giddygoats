@@ -48,18 +48,19 @@ app.get('/safestRoute', function(req, res) {
     console.log('req.query in server: ', req.query);
     var redisKey = sourceLat+sourceLon+destLat+destLon;
     client.get(redisKey, function(err, reply) {
-      if (reply !== null) {
+      if (reply) {
+        var parsed = JSON.parse(reply);
+        console.log('found in redis!', reply);
         res.send(200, reply);
       } else {
+        console.log('not found on redis!');
         const googleQueryString = utils.queryStringGoogle(sourceLat, sourceLon, destLat, destLon);
         utils.getSafestRoute(redisKey, googleQueryString, function(safestRoute) {
-          utils.shortenURL(safestRoute.url, function(shortURL) {
-            safestRoute.shortURL = shortURL;
-            utils.sendSms(mobile, shortURL);
-            res.status(200).send(JSON.stringify(safestRoute));
-          })
-
-        });
+          if (mobile) {
+            utils.sendSms(mobile, safestRoute.shortURL);
+          }
+          res.status(200).send(JSON.stringify(safestRoute));
+        })
       }
     });
   };
