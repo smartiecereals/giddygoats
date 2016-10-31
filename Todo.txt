@@ -23,8 +23,8 @@ SAM
 
 BEA
 
--
--
+- Deploy with docker and nginx
+- use sequelize instead of mongoose
 
 
 DAVID
