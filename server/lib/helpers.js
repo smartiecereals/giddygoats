@@ -9,9 +9,12 @@ const async = require('async');
 const GoogleURL = require('google-url');
 const twilioSID = process.env.SAFE_HIPPO_TWILIO_ACCOUNT_SID;
 const twilioAuthToken = process.env.SAFE_HIPPO_TWILIO_ACCOUNT_AUTH_TOKEN;
-const twillio = require('twilio')( twilioSID, twilioAuthToken);
+const twillio = require('twilio')(twilioSID, twilioAuthToken);
 const googleKey = process.env.SAFE_HIPPO_GOOGLE_MAPS_KEY;
+require('../../env.js');
 
+//I: an array of points
+//O: an array of objects with lats and lons
 const createDrawableWaypoints = function(points) {
 	var drawablePoints = [];
 	points.forEach(function(point) {
@@ -21,6 +24,8 @@ const createDrawableWaypoints = function(points) {
 	return drawablePoints;
 }
 
+//I: Coordinates of start and end
+//O: A url of a route
 const createShareableURL = function(coordinates) {
 
 	var start = coordinates[0]
@@ -28,11 +33,9 @@ const createShareableURL = function(coordinates) {
 	var baseURL = 'https://www.google.com/maps?';
 
 	var waypoints = '';
-	// var viaPoints = []; Used for the via parameter to stop displaying waypoints
 
 	for (var i = 2; i < coordinates.length; i++) {
 		waypoints += ('+to:' + coordinates[i]);
-		// viaPoints.push(i);
 	}
 
 	var finalURL = (baseURL
@@ -40,23 +43,14 @@ const createShareableURL = function(coordinates) {
 		+ '&daddr=' + end
 		+ waypoints
 		+ '&dirflg=w'
-		// + '&via=' 
-		// + viaPoints.join(',')
 		)
 	
 	return finalURL;
 }
 
-//----------------------------------------------------------------------
-//-------------------------GEOCODE ADDRESS------------------------------
-//----------------------------------------------------------------------
-
-// INPUT: address e.g. "944 Market Street, San Francisco", and a callback function
-
-// RESULT: the callback acts on an object containing the lat & long of the address
+//I: address e.g. "944 Market Street, San Francisco", and a callback function
+// O: the callback acts on an object containing the lat & long of the address
 // e.g  { lat: 37.771102, lng: -122.4525798 }
-
-
 module.exports.geocodeAddress = function(strAddress, callback) {
 	var addressFormatted = strAddress.split(' ').join('+');
 	var url = 'https://maps.googleapis.com/maps/api/geocode/json?address=' 
@@ -69,11 +63,8 @@ module.exports.geocodeAddress = function(strAddress, callback) {
 	})
 }
 
-//----------------------------------------------------------------------
-//----------------------- SEND SMS TO USER -----------------------------
-//----------------------------------------------------------------------
-
-
+//I: phone number and url
+//O: Log of whether or not the sms was sent
 module.exports.sendSms = function(mobile, shortURL) {
   twillio.messages.create({
     body: 'Oink Oink, here is the safest way home: ' + shortURL,
@@ -89,12 +80,8 @@ module.exports.sendSms = function(mobile, shortURL) {
   });
 };
 
-
-//----------------------------------------------------------------------
-//----------------------------------------------------------------------
-//----------------------------------------------------------------------
-
-
+//I: full url and callback
+//O: None, just call the callbackfunction with the shorturl as an input
 const shortenURL = function (longUrl, callback) {
 	googleUrl = new GoogleURL( { key: googleKey })
 	googleUrl.shorten( longUrl, function( err, shortUrl ) {
@@ -102,6 +89,8 @@ const shortenURL = function (longUrl, callback) {
 	});
 }
 
+//I: array of objects with scores and waypoints
+//O: sorted array by scores
 const sortByKey = function(array, key) {
 	return array.sort(function(a, b) {
 		var x = a[key]; var y = b[key];
@@ -109,20 +98,42 @@ const sortByKey = function(array, key) {
 	});
 }
 
+//I: sorted array of objects with scores and waypoints
+//O: object with the lowest score
 const getMinimum = function(arr) {
 	var routes = sortByKey(arr, 'score');
 	return routes[0];
 }
 
+//I: Coordinates and callback
+//O: An array of coordinates where incidents have occured
 const getDangersInArea = function(lat, lon, callback) {
 	DangerArea
-	.where('lat').gte(lat - 0.005).lte(lat + 0.005)
-	.where('lon').gte(lon - 0.005).lte(lon + 0.005)
+	.where('lat').gte(lat - 0.0005).lte(lat + 0.0005)
+	.where('lon').gte(lon - 0.0005).lte(lon + 0.0005)
 	.exec(callback);
 }
 
+//I: route from google maps body
+//O: an array of waypoints of the route
+const getWaypoints = function(route) {
+	const waypoints = [];
+	const currRoute = route.legs[0];
+	const startPoint = currRoute.start_location;
+
+	waypoints.push([startPoint.lat, startPoint.lng]);
+
+	currRoute.steps.forEach(function(step) {
+		waypoints.push([step.end_location.lat, step.end_location.lng]);
+	});
+
+	return waypoints;
+}
 
 
+//define the string to query google maps api with.
+//I: current location coordinates
+//O: query string
 module.exports.queryStringGoogle = function(sourceLat, sourceLon, destLat, destLon) {
 	const baseURL = 'https://maps.googleapis.com/maps/api/directions/json?'
 	return (
@@ -139,61 +150,57 @@ module.exports.queryStringGoogle = function(sourceLat, sourceLon, destLat, destL
 		);
 }
 
+//I: a redisKey, a string to query google with, and a callback
+//O: An object that defines the safest route with its url and the waypoints
 module.exports.getSafestRoute = function(redisKey, googleQueryString, callback) {
-
-
 	request(googleQueryString, function(err, response, body) {
 		const data = JSON.parse(body);
 		const routes = {};
 		const scores = []; 
 		const routesLength = data.routes.length;
 
-		function getWaypoints (route) {
-			// console.log(JSON.stringify(JSON.stringify(route)));
-		  	//This will take in a whole root and return the coordinates of all the steps
-		  	var waypoints = [];
-		  	// var testSteps = []
-		  	var startPoint = route.legs[0].start_location;
-		  	waypoints.push([startPoint.lat, startPoint.lng]) //Initialise the start point
-
-		  	route.legs[0].steps.forEach(function(step) {
-		  		// testSteps.push(step.html_instructions)
-		  		waypoints.push([step.end_location.lat, step.end_location.lng])
-		  	})
-		  	// console.log(testSteps);
-		  	return waypoints;
-	 	}
-
 	  //Populate an object with all of the routes as keys and the standardised polylines as values
 	  for (var i = 0; i < data.routes.length; i++) {
-	  	var routeData = {}
+	  	const routeData = {}
+	  	
 	  	routeData.standardPoints = david(polyline.decode(data.routes[i].overview_polyline.points))
 	  	routeData.waypoints = getWaypoints(data.routes[i]);
 	  	routes['route' + i] = routeData
-
 	  }
 
+	  //loop through each of the routes
 	  async.each(Object.keys(routes), function(key) {
 	  	const routeArr = routes[key].standardPoints;
+
+	  	//return back a single score for the route. Data length defines how many incidents occured
+	  	//within the coordinates passed in.
 	  	async.reduce(routeArr, 0, function(memo, coordinate, callback1) {
 	  		getDangersInArea(coordinate[1], coordinate[0], function(err, data) {
-	      	//Get the number of crimes nearby this point
 	      	callback1(null, memo + data.length);
 	      });
-	  	}, function(err, results) {
+	  	}, 
+
+	  	function(err, results) {
 	  		const obj = {};
+	  		
 	  		obj['score'] = results;
 	  		obj['waypoints'] = routes[key].waypoints
+	  		
 	  		scores.push(obj);
+	  		
 	  		if (routesLength === scores.length) {
 	  			const safestRoute = {};
 	        const bestRoute = getMinimum(scores)
+	        
 	        safestRoute.url = createShareableURL(bestRoute.waypoints)
 	        safestRoute.waypoints = createDrawableWaypoints(bestRoute.waypoints)
-	        shortenURL(safestRoute.shareableURL, function(shortURL) {
+	        
+	        shortenURL(safestRoute.url, function(shortURL) {
 	        	safestRoute.shortURL = shortURL;
+	        	
 	        	const redisValue = JSON.stringify(safestRoute);
-	        	client.set(redisKey, redisValue); 
+	        	client.set(redisKey, redisValue);
+	        	
 	        	callback(safestRoute);
 	        });
 	    	}

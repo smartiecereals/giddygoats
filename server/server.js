@@ -21,16 +21,14 @@ app.use(express.static(__dirname + '/../client'));
 //-----------------------GET SAFEST ROUTE--------------------------
 //-----------------------------------------------------------------
 
-// INPUT:
-
+// I:
 // Takes in origin and destination location. This information is stored 
 // in the params of the url. The destination is always in plain text.
 // The origin will sometimes be in plain text (if the user changes the
 // origin address from their current location). But otherwise, the origin
 // address will be an object containing latitude and location.
 
-// RESULT:
-
+// O:
 // Sends an object back to the client called 'safestRoute'. The object 
 // contains a google maps url stored on the property 'shortURL', which 
 // describes the safest route. The returned object also contains an array 
@@ -38,8 +36,6 @@ app.use(express.static(__dirname + '/../client'));
 
 
 app.get('/safestRoute', function(req, res) {
-
-
   // returnRoute accepts the long/lat values of the source & destination.
   // It sends the safest route (a google URL & an array of 'waypoints')
   // back to the client.
@@ -65,11 +61,9 @@ app.get('/safestRoute', function(req, res) {
     });
   };
 
-
   // convert destination address from plain text to lat/long - desination will ALWAYS need geocoding
   //If both are strings, then geocode them both and call returnRoute
   //Else, call return route with the geocoded data
-
 
   //If the origin and destination are strings, then it must be a SMS query - so decode them
   if (req.query.strOrigin && req.query.strDest) {
@@ -94,11 +88,8 @@ app.get('/safestRoute', function(req, res) {
 //-----------------------GET TEST DANGER --------------------------
 //-----------------------------------------------------------------
 
-// INPUT:
-
-
-
-// OUTPUT:
+// I: Current coordinates and the radius in which to check our database for hits
+// O: An array of tuples with coordinates of where incidents have occurred.
 
 
 app.get('/testDanger', function(req, res) {    
@@ -117,8 +108,9 @@ app.get('/testDanger', function(req, res) {
    });   
  });
 
+//If typed in a wrong route, redirect back to home
 app.get('/*', function(req, res) {
-  console.log('Missed the route!')
+  res.redirect(302, '/');
 })
 
 

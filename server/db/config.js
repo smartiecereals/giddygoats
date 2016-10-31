@@ -12,7 +12,7 @@ mongoose.connection.on('disconnected', function() {
 
 var db = mongoose.connect('mongodb://127.0.0.1:27017/dangerDataDB');
 
-
+//Populate the database with incidents from SFOpenData
 var populateDB = function() {
     DangerArea.collection.drop();
 	dangers.forEach(danger => {
