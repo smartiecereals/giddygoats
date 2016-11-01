@@ -8,3 +8,5 @@ client/mobile/android/
 client/mobile/ios/
 client/mobile/node_modules/
 
+# macOS
+.DS_Store
