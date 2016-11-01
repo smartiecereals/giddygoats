@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "731CC60464DB8C6D633A6A7E69118A565B4EA7CC",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "731CC60464DB8C6D633A6A7E69118A565B4EA7CC" : 9223372036854775807,
+    "5C950489098D94B36A4AC6080D6CED83728CE0D5" : 9223372036854775807
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "FA6922C3-D1DD-48F2-816C-0238E63EA1EA",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "731CC60464DB8C6D633A6A7E69118A565B4EA7CC" : "react-native-maps\/",
+    "5C950489098D94B36A4AC6080D6CED83728CE0D5" : "eleganthedgehogs\/"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "AirMapsExplorer",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "example\/ios\/AirMapsExplorer.xcworkspace",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/caportil\/eleganthedgehogs.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "5C950489098D94B36A4AC6080D6CED83728CE0D5"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/airbnb\/react-native-maps.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "731CC60464DB8C6D633A6A7E69118A565B4EA7CC"
+    }
+  ]
+}
