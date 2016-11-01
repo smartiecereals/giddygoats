@@ -1,8 +1,8 @@
 {
   "name": "Safe-Hippo",
-  "version": "1.0.0",
+  "version": "1.5.0",
   "description": "Safe Hippo",
-  "author": "Guy Thomas, Sam Henderson, David Minehan, Bianca Subion <http://github.com/biancasubion>",
+  "author": "Guy Thomas, Sam Henderson, David Minehan, Bianca Subion, Amad Kahn, Meijiao Png, Benjamin Antalek, Tony Le",
   "license": "UNLICENSED",
   "private": true,
   "engines": {
@@ -12,24 +12,19 @@
     "start": "node server.js"
   },
   "dependencies": {
-  	"async": "^2.1.2",
+    "async": "^2.1.2",
     "bluebird": "^3.4.6",
     "body-parser": "^1.15.2",
     "express": "^4.14.0",
+    "google-url": "0.0.4",
     "mongodb": "^2.2.10",
     "mongoose": "^4.6.4",
     "nodemon": "^1.11.0",
     "path": "^0.12.7",
-    "pg": "^6.1.0",
-    "pg-hstore": "^2.3.2",
-    "request": "^2.75.0",
-    "session-memory-store": "^0.2.2",
-    "twilio": "^2.11.0",
-    "mongodb": "^2.2.10",
-    "path": "^0.12.7",
     "polyline": "^0.2.0",
     "redis": "^2.6.2",
     "request": "^2.76.0",
-    "google-url": "0.0.4"
+    "session-memory-store": "^0.2.2",
+    "twilio": "^2.11.0"
   }
 }
