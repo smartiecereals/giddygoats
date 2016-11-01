@@ -1,8 +1,8 @@
 {
   "name": "Safe-Hippo",
-  "version": "1.0.0",
+  "version": "1.5.0",
   "description": "Safe Hippo",
-  "author": "Guy Thomas, Sam Henderson, David Minehan, Bianca Subion <http://github.com/biancasubion>",
+  "author": "Guy Thomas, Sam Henderson, David Minehan, Bianca Subion, Amad Kahn, Meijiao Png, Benjamin Antalek, Tony Le",
   "license": "UNLICENSED",
   "private": true,
   "engines": {
