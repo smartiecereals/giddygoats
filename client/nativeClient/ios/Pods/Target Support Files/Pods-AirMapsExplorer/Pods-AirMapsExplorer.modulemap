@@ -1,0 +1,6 @@
+framework module Pods_AirMapsExplorer {
+  umbrella header "Pods-AirMapsExplorer-umbrella.h"
+
+  export *
+  module * { export * }
+}
