@@ -16,6 +16,7 @@
     "native-base": "^0.5.11",
     "npm": "^3.10.9",
     "react": "~15.3.2",
+    "react-heatmap": "^1.0.6",
     "react-native": "github:exponentjs/react-native#sdk-10.1.2",
     "react-native-blur": "^1.0.1",
     "react-native-cli": "^1.0.0",
