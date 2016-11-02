@@ -10,3 +10,5 @@ client/mobile/node_modules/
 
 # macOS
 .DS_Store
+client/exponent/react-native-maps
+/nativeClient
