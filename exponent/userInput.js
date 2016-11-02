@@ -3,15 +3,13 @@ import styles from './styles.js';
 
 import {View, Text, TextInput} from 'react-native';
 
-//onChangeText={(textInput) => this.setState({text})
-
-let UserInput = () => {
+let UserInput = (props) => {
 
     return (
         <View style={styles.inputContainer}>
           <TextInput style={styles.textBox}
             placeholder="Destination"
-            //onChangeText={(text) => this.setState({text})}
+            onChangeText={(text) => props.handleUserDestinationInput(text)}
           />
           <Text> User Input </Text>
         </View>

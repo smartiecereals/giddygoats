@@ -11,20 +11,34 @@ import {
   TextInput
 } from 'react-native';
 
+//this.handleUserInput = this.handleUserInput.bind(this);
+       //<Maps />
 class App extends React.Component {
-  constructor (props) {
-    super (props)
+  constructor () {
+    super ();
     this.state = {
         
-    }
+    };
+
+  this.handleUserDestinationInput = this.handleUserDestinationInput.bind(this);
+
+  }
+
+  getState () {
+    return this.state;
+  }
+
+  handleUserDestinationInput (text) {
+    console.log(text, 'in handleUserTextInput');
+    this.setState({destination: text});
   }
 
 
   render() {
     return (
       <View style={styles.container}>
-          <UserInput test='yo' />
-          <Maps />
+          <UserInput handleUserDestinationInput={this.handleUserDestinationInput}/>
+   
           <MapLink/>
       </View>
 
