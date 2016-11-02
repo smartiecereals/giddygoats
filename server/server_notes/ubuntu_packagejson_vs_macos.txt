@@ -1,0 +1,4 @@
+// trying to run "node install" on Ubuntu will fail for the
+// macOS-only sub-library "fsevent", so you must use this command
+// instead on ubuntu 14.04:
+npm install --no-optional
