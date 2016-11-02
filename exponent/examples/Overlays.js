@@ -49,25 +49,19 @@ class Overlays extends React.Component {
           longitude: LONGITUDE + SPACE,
         },
       ],
-      polyline: [
-        {
-          latitude: LATITUDE + SPACE,
-          longitude: LONGITUDE - SPACE,
-        },
-        {
-          latitude: LATITUDE - (2 * SPACE),
-          longitude: LONGITUDE + (2 * SPACE),
-        },
-        {
-          latitude: LATITUDE - SPACE,
-          longitude: LONGITUDE - SPACE,
-        },
-        {
-          latitude: LATITUDE - (2 * SPACE),
-          longitude: LONGITUDE - SPACE,
-        },
-      ],
+      polyline:
+      [
+      {"latitude":37.7836636,"longitude":-122.4091892},
+      {"latitude":37.7862237,"longitude":-122.4097009},
+      {"latitude":37.7867339,"longitude":-122.4046232},
+      {"latitude":37.7876538,"longitude":-122.4034605},
+      {"latitude":37.7870261,"longitude":-122.4030306},
+      {"latitude":37.7867666,"longitude":-122.4033535}
+      ]
     };
+  }
+  getPolyData() {
+    // get 
   }
 
   render() {
@@ -99,9 +93,7 @@ class Overlays extends React.Component {
           />
         </MapView>
         <View style={styles.buttonContainer}>
-          <View style={styles.bubble}>
-            <Text>Render circles, polygons, and polylines</Text>
-          </View>
+          
         </View>
       </View>
     );
@@ -144,5 +136,8 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
   },
 });
+// <View style={styles.bubble}>
+//             <Text>Render circles, polygons, and polylines</Text>
+// </View>
 
 module.exports = Overlays;
