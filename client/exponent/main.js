@@ -1,52 +1,35 @@
 import Exponent from 'exponent';
 import React from 'react';
+import styles from './styles.js';
 
 import {
-  StyleSheet,
+  View,
   Text,
-  View
+  TextInput
 } from 'react-native';
 
 
 class App extends React.Component {
+  //onChangeText={(textInput) => this.setState({text})
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.welcome}>
-          Welcome to React Native!
-        </Text>
-        <Text style={styles.instructions}>
-          To get started, edit index.ios.js yo
-        </Text>
-        <Text style={styles.instructions}>
-          Press Cmd+R to reload,{'\n'}
-          Cmd+D or shake for dev menu
-        </Text>
+
+        <View style={styles.userInput}/>
+          <TextInput 
+            style={styles.textInput}
+            placeholder="Destination"
+          />
+
+        <View style={styles.map}/>
+
       </View>
     );
   }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
-});
+
 
 Exponent.registerRootComponent(App);
-
 
 
