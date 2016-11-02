@@ -1,5 +1,8 @@
 import Exponent from 'exponent';
 import React from 'react';
+import UserInput from './userInput.js';
+import Maps from './maps.js';
+import MapLink from './mapLink.js';
 import styles from './styles.js';
 
 import {
@@ -8,22 +11,23 @@ import {
   TextInput
 } from 'react-native';
 
-
 class App extends React.Component {
-  //onChangeText={(textInput) => this.setState({text})
+
+  constructor () {
+    super ()
+
+
+  }
+
+
   render() {
     return (
       <View style={styles.container}>
-
-        <View style={styles.userInput}/>
-          <TextInput 
-            style={styles.textInput}
-            placeholder="Destination"
-          />
-
-        <View style={styles.map}/>
-
+          <UserInput test='yo' />
+          <Maps />
+          <MapLink/>
       </View>
+
     );
   }
 }

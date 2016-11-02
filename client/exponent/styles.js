@@ -23,16 +23,17 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column', 
     justifyContent: 'space-between',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
+    alignItems: 'stretch',
+    backgroundColor: 'white',
   },
 
-  userInput: {
+  inputContainer: {
     flex: 1,
-    backgroundColor: 'pink',
+    backgroundColor: 'powderblue',
   },
 
-  textInput: {
+  textBox: {
+    flex: 1,
     fontSize: 20,
     height: 20,
     textAlign: 'center',
@@ -40,10 +41,15 @@ const styles = StyleSheet.create({
   },
 
   map: {
-    backgroundColor: 'powderblue',
+    backgroundColor: 'skyblue',
     flex: 4,    
-    width: 500
+  },
+
+  mapLink: {
+    backgroundColor: 'steelblue',
+    flex: 1,    
   }
+
 });
 
 export default styles;
