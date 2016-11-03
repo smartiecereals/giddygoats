@@ -61,7 +61,7 @@ class Overlays extends React.Component {
     };
   }
   getPolyData() {
-    // get 
+    // get polygon for grid area around walking route
   }
 
   render() {

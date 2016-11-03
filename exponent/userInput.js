@@ -3,7 +3,9 @@ import styles from './styles.js';
 import {View, Text, TextInput} from 'react-native';
 import Search from './googlePlacesAutocomplete.js';
 
-let UserInput = (props) => {
+//onChangeText={(textInput) => this.setState({text})
+
+let UserInput = () => {
 
   var origin = props.origin || '944 Market Street';
   
@@ -15,9 +17,10 @@ let UserInput = (props) => {
         onChangeText={(text) => props.handleUserDestinationInput(text)}
       />
     </View>
-
   );
   
 }
 
 export default UserInput
+
+

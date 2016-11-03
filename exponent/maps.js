@@ -24,18 +24,6 @@ class HippoMap extends React.Component {
       useGoogleMaps: ANDROID,
     };
   }
-
-  renderBackButton() {
-    return (
-      <TouchableOpacity
-        style={styles.back}
-        onPress={() => this.setState({ Component: null })}
-      >
-        <Text style={{ fontWeight: 'bold', fontSize: 30 }}>&larr;</Text>
-      </TouchableOpacity>
-    );
-  }
-
   render() {
   return (
         <View style={styles.map}>
