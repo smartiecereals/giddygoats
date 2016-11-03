@@ -1,4 +1,5 @@
 import React from 'react';
+import HeatMap from './controllers/heatmap.js'
 import {
   StyleSheet,
   View,
@@ -94,6 +95,12 @@ class Overlays extends React.Component {
             strokeColor="rgba(0,0,200,0.5)"
             strokeWidth={3}
             lineDashPattern={[5, 2, 3, 2]}
+          />
+          <MapView.Circle
+            center={circle.center}
+            radius={10}
+            fillColor="rgba(200, 0, 0, 0.5)"
+            strokeColor="rgba(0,0,0,0.5)"
           />
         </MapView>
         <View style={styles.buttonContainer}>
