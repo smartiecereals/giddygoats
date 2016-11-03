@@ -4,17 +4,9 @@ import UserInput from './userInput.js';
 import HippoMap from './maps.js';
 import MapLink from './mapLink.js';
 import styles from './styles.js';
-<<<<<<< 5fec627624170bc3c3ea1b2a2155b3796afff8d4
 import Example from './inputExample.js'
 import Overlays from './Overlays';
 import { PROVIDER_GOOGLE, PROVIDER_DEFAULT } from 'react-native-maps';
-=======
-import Geocoder from './googleMapsGeocode.js';
-// for searchbox that autocompletes
-//import Search from './googlePlacesAutocomplete.js';
-
-import Example from './inputExample.js'
->>>>>>> Implement heat map
 import {
   View,
   Text,
@@ -31,27 +23,14 @@ class App extends React.Component {
       currLocation: {
         lat: 37.783697,
         lng: -122.408966
-<<<<<<< 98fe6236a22880557605fa08a4018d95390113ab
-<<<<<<< 5fec627624170bc3c3ea1b2a2155b3796afff8d4
       },
       view: 'Hippo',
       inputView: 'current'
-=======
-      }
-=======
-      },
->>>>>>> Implement google maps link
-      view: 'Hippo'
->>>>>>> Implement heat map
-    };
+    }
 
   this.handleUserInput = this.handleUserInput.bind(this);
   this.getSafestRoute = this.getSafestRoute.bind(this);
-<<<<<<< 5fec627624170bc3c3ea1b2a2155b3796afff8d4
   this.getAddress = this.getAddress.bind(this);
-=======
-
->>>>>>> Implement heat map
   }
 
   componentDidMount() {
@@ -125,12 +104,6 @@ class App extends React.Component {
     }
 
 
-
-<<<<<<< 84f18060ab2bca81a3f369775e1e30400a20e785
-  getCurrLocation () {
-    // MJ IN PROGRESS: GET GEOCODE FROM USER INPUT
-   
-=======
   getAddress (currOrDest) {
     const context = this;
     let url ='https://maps.googleapis.com/maps/api/geocode/json?latlng=';
@@ -142,7 +115,6 @@ class App extends React.Component {
       formattedAddress = geoLocation.data.results[1].formatted_address;
       context.setState({currAddress: formattedAddress})
     });
->>>>>>>  render map as container for app
   }
 
   setCurrLocation() {
@@ -177,16 +149,10 @@ class App extends React.Component {
     if (view === 'Hippo') {
       return (
       <View style={styles.container}>
-<<<<<<< 98fe6236a22880557605fa08a4018d95390113ab
         <View style={styles.map}>
           <Overlays inputView={inputView} changeText={this.handleUserInput} provider = {PROVIDER_DEFAULT}/>
         </View>
         <MapLink/>
-=======
-          <Example changeText={(text) => this.handleUserDestinationInput(text)}/>
-          <HippoMap style={stylees.parent}/>
-          <MapLink/>
->>>>>>> Implement google maps link
       </View>
       );
     } else if (view === 'Destination') {
