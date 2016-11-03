@@ -5,6 +5,9 @@ npm-debug.*
 node_modules/
 env.js
 
+#API_KEYS
+keys.js
+
 # MobileFiles
 client/mobile/__tests__/
 client/mobile/android/

@@ -4,14 +4,10 @@ import UserInput from './userInput.js';
 import HippoMap from './maps.js';
 import MapLink from './mapLink.js';
 import styles from './styles.js';
-<<<<<<< 7eff143285703d2b6e637e9dd902206c28c4c627
-import Geocoder from './googleMapsGeocode.js';
 // for searchbox that autocompletes
 //import Search from './googlePlacesAutocomplete.js';
 
-=======
 import Example from './inputExample.js'
->>>>>>> google auto complete integration
 import {
   View,
   Text,
@@ -24,14 +20,11 @@ class App extends React.Component {
   constructor () {
     super ();
     this.state = {
-<<<<<<< 7eff143285703d2b6e637e9dd902206c28c4c627
       currLocation: {
         lat: 37.783697,
         lng: -122.408966
-      }
-=======
+      },
       view: 'Hippo'
->>>>>>> google auto complete integration
     };
 
   this.handleUserDestinationInput = this.handleUserDestinationInput.bind(this);
@@ -106,20 +99,7 @@ class App extends React.Component {
 
   getCurrLocation () {
     // MJ IN PROGRESS: GET GEOCODE FROM USER INPUT
-    var location = this.state.currLocation || "Colosseum";
-    console.log(location, 'currLocation');
-    Geocoder.setApiKey('AIzaSyDyNjDICkQcZG7liIvJ8E1DHUQHmABNCBY');
-
-    Geocoder.getFromLocation(location)
-    .then(
-      json => {
-        var location = json.results[0].geometry.location;
-        alert(location.lat + ", " + location.lng);
-      },
-      error => {
-        alert(error);
-      }
-    );
+   
   }
 
   setCurrLocation() {
@@ -153,12 +133,9 @@ class App extends React.Component {
     if (this.state.view === 'Hippo') {
       return (
       <View style={styles.container}>
-        <UserInput handleUserDestinationInput={this.handleUserDestinationInput}/>
-        <HippoMap />
+        <Example changeText={(text) => this.handleUserDestinationInput(text)}/>
+        <HippoMap style={stylees.parent}/>
         <MapLink/>
-          <Example changeText={(text) => this.handleUserDestinationInput(text)}/>
-          <HippoMap style={stylees.parent}/>
-          <MapLink/>
       </View>
       );
     } else if (this.state.view === 'Destination') {
