@@ -1,5 +1,4 @@
 import React from 'react';
-import HeatMap from './controllers/heatmap.js'
 import {
   StyleSheet,
   View,
@@ -8,6 +7,7 @@ import {
 } from 'react-native';
 import Example from './inputExample.js'
 import MapView from 'react-native-maps';
+import axios from 'axios';
 
 const { width, height } = Dimensions.get('window');
 
@@ -22,6 +22,7 @@ class Overlays extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      data: [],
       region: {
         latitude: LATITUDE,
         longitude: LONGITUDE,
@@ -60,6 +61,19 @@ class Overlays extends React.Component {
       ]
     };
   }
+  componentDidMount () {
+    context = this;
+    axios.get('https://safehippo.com/testDanger?long=-122.40898400000003&lat=37.7865518&radius=.01')
+      .then(function(res) {
+        let crimeData = res.data.map(function(dataPoint) {
+          return {longitude: dataPoint[0], latitude:dataPoint[1]}
+        })
+        context.setState({
+          data: crimeData
+        })
+    })
+  }
+
   getPolyData() {
     // get polygon for grid area around walking route
   }
@@ -82,6 +96,20 @@ class Overlays extends React.Component {
   render() {
     const { region, circle, polygon, polyline } = this.state;
     const {provider, inputType, inputView} = this.props
+    var HeatMap = []
+    if(this.state.data.length > 0) {
+      HeatMap = this.state.data.map((dataObj, index) => {
+        return (
+          <MapView.Circle
+            key={index}
+            center={dataObj}
+            radius={20}
+            fillColor="rgb(66, 244, 137)"
+            strokeColor="rgb(244, 86, 66)"
+          /> 
+        )
+      })
+    }
     return (
       <View style={styles.container}>
         <MapView
@@ -102,9 +130,13 @@ class Overlays extends React.Component {
             fillColor="rgba(200, 0, 0, 0.5)"
             strokeColor="rgba(0,0,0,0.5)"
           />
+          {HeatMap}
         </MapView>
+<<<<<<< 5fec627624170bc3c3ea1b2a2155b3796afff8d4
         <View style={styles.buttonContainer}>
         </View>
+=======
+>>>>>>> Implement heat map
       </View>
     );
   }

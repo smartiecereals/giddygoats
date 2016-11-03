@@ -4,9 +4,17 @@ import UserInput from './userInput.js';
 import HippoMap from './maps.js';
 import MapLink from './mapLink.js';
 import styles from './styles.js';
+<<<<<<< 5fec627624170bc3c3ea1b2a2155b3796afff8d4
 import Example from './inputExample.js'
 import Overlays from './Overlays';
 import { PROVIDER_GOOGLE, PROVIDER_DEFAULT } from 'react-native-maps';
+=======
+import Geocoder from './googleMapsGeocode.js';
+// for searchbox that autocompletes
+//import Search from './googlePlacesAutocomplete.js';
+
+import Example from './inputExample.js'
+>>>>>>> Implement heat map
 import {
   View,
   Text,
@@ -23,14 +31,23 @@ class App extends React.Component {
       currLocation: {
         lat: 37.783697,
         lng: -122.408966
+<<<<<<< 5fec627624170bc3c3ea1b2a2155b3796afff8d4
       },
       view: 'Hippo',
       inputView: 'current'
+=======
+      }
+      view: 'Hippo'
+>>>>>>> Implement heat map
     };
 
   this.handleUserInput = this.handleUserInput.bind(this);
   this.getSafestRoute = this.getSafestRoute.bind(this);
+<<<<<<< 5fec627624170bc3c3ea1b2a2155b3796afff8d4
   this.getAddress = this.getAddress.bind(this);
+=======
+
+>>>>>>> Implement heat map
   }
 
   componentDidMount() {
