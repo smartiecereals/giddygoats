@@ -1,7 +1,6 @@
 import React from 'react';
 import styles from './styles.js';
 import {View, Text, TextInput} from 'react-native';
-import Search from './googlePlacesAutocomplete.js';
 
 //onChangeText={(textInput) => this.setState({text})
 
