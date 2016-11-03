@@ -4,7 +4,7 @@ import {View, Text, TextInput} from 'react-native';
 
 //onChangeText={(textInput) => this.setState({text})
 
-let UserInput = () => {
+let UserInput = (props) => {
 
   var origin = props.origin || '944 Market Street';
   

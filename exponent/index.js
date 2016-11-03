@@ -31,12 +31,16 @@ class App extends React.Component {
       currLocation: {
         lat: 37.783697,
         lng: -122.408966
+<<<<<<< 98fe6236a22880557605fa08a4018d95390113ab
 <<<<<<< 5fec627624170bc3c3ea1b2a2155b3796afff8d4
       },
       view: 'Hippo',
       inputView: 'current'
 =======
       }
+=======
+      },
+>>>>>>> Implement google maps link
       view: 'Hippo'
 >>>>>>> Implement heat map
     };
@@ -173,10 +177,16 @@ class App extends React.Component {
     if (view === 'Hippo') {
       return (
       <View style={styles.container}>
+<<<<<<< 98fe6236a22880557605fa08a4018d95390113ab
         <View style={styles.map}>
           <Overlays inputView={inputView} changeText={this.handleUserInput} provider = {PROVIDER_DEFAULT}/>
         </View>
         <MapLink/>
+=======
+          <Example changeText={(text) => this.handleUserDestinationInput(text)}/>
+          <HippoMap style={stylees.parent}/>
+          <MapLink/>
+>>>>>>> Implement google maps link
       </View>
       );
     } else if (view === 'Destination') {
