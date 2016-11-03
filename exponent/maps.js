@@ -9,7 +9,6 @@ import {
   Text,
   Switch,
 } from 'react-native';
-import { PROVIDER_GOOGLE, PROVIDER_DEFAULT } from 'react-native-maps';
 
 import Overlays from './Overlays';
 
@@ -23,14 +22,6 @@ class HippoMap extends React.Component {
       Component: null,
       useGoogleMaps: ANDROID,
     };
-  }
-  render() {
-  return (
-        <View style={styles.map}>
-          <Overlays provider = {PROVIDER_DEFAULT}/>
-        </View>
-
-    );
   }
 }
 

@@ -562,10 +562,9 @@ const GooglePlacesAutocomplete = React.createClass({
     if ((this.state.text !== '' || this.props.predefinedPlaces.length || this.props.currentLocation === true) && this.state.listViewDisplayed === true) {
       return (
         <ListView
-
           keyboardShouldPersistTaps={true}
           keyboardDismissMode="on-drag"
-          style={[defaultStyles.listView, this.props.styles.listView], {flex: 2}}
+          style={[defaultStyles.listView, this.props.styles.listView], {flex: 2, backgroundColor: 'white'}}
           dataSource={this.state.dataSource}
           renderSeparator={this._renderSeparator}
           automaticallyAdjustContentInsets={false}
