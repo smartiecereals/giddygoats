@@ -16,12 +16,10 @@ class App extends React.Component {
   constructor () {
     super ();
     this.state = {
-      currLocation: null,
-      destination: null
     };
 
   this.handleUserDestinationInput = this.handleUserDestinationInput.bind(this);
-
+  this.getState = this.getState.bind(this);
   }
 
   componentDidMount() {
@@ -31,6 +29,9 @@ class App extends React.Component {
   handleUserDestinationInput (text) {
     console.log(text, 'in handleUserTextInput');
     this.setState({destination: text});
+  }
+  getLocationData() {
+
   }
 
   getCurrLocation() {
