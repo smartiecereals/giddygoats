@@ -34,7 +34,6 @@ const styles = StyleSheet.create({
 
   textBox: {
     flex: 1,
-    fontSize: 20,
     height: 20,
     textAlign: 'center',
     marginBottom: 10,
