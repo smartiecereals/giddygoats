@@ -5,7 +5,7 @@ import {
   Text,
   Dimensions,
 } from 'react-native';
-
+import Example from './inputExample.js'
 import MapView from 'react-native-maps';
 
 const { width, height } = Dimensions.get('window');
@@ -20,7 +20,6 @@ const SPACE = 0.01;
 class Overlays extends React.Component {
   constructor(props) {
     super(props);
-
     this.state = {
       region: {
         latitude: LATITUDE,
@@ -64,27 +63,32 @@ class Overlays extends React.Component {
     // get polygon for grid area around walking route
   }
 
+  getInputView(view) {
+    if(view === 'current') {
+      let changeText = this.props.changeText('current')
+      return (
+        <Example changeText={(text) => changeText(text)}/>
+      );
+    } 
+    if(view === 'destination') {
+      let changeText = this.props.changeText('destination')
+      return (
+        <Example changeText={(text) => changeText(text)}/>
+      );
+    } 
+  }
+
   render() {
     const { region, circle, polygon, polyline } = this.state;
+    const {provider, inputType, inputView} = this.props
     return (
       <View style={styles.container}>
         <MapView
-          provider={this.props.provider}
+          provider={provider}
           style={styles.map}
           initialRegion={region}
         >
-          <MapView.Circle
-            center={circle.center}
-            radius={circle.radius}
-            fillColor="rgba(200, 0, 0, 0.5)"
-            strokeColor="rgba(0,0,0,0.5)"
-          />
-          <MapView.Polygon
-            coordinates={polygon}
-            fillColor="rgba(0, 200, 0, 0.5)"
-            strokeColor="rgba(0,0,0,0.5)"
-            strokeWidth={2}
-          />
+        {this.getInputView(inputView)}
           <MapView.Polyline
             coordinates={polyline}
             strokeColor="rgba(0,0,200,0.5)"
@@ -93,7 +97,6 @@ class Overlays extends React.Component {
           />
         </MapView>
         <View style={styles.buttonContainer}>
-          
         </View>
       </View>
     );

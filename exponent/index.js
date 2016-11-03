@@ -4,16 +4,16 @@ import UserInput from './userInput.js';
 import HippoMap from './maps.js';
 import MapLink from './mapLink.js';
 import styles from './styles.js';
-// for searchbox that autocompletes
-//import Search from './googlePlacesAutocomplete.js';
-
 import Example from './inputExample.js'
+import Overlays from './Overlays';
+import { PROVIDER_GOOGLE, PROVIDER_DEFAULT } from 'react-native-maps';
 import {
   View,
   Text,
   TextInput,
   StyleSheet
 } from 'react-native';
+
 
 
 class App extends React.Component {
@@ -24,24 +24,32 @@ class App extends React.Component {
         lat: 37.783697,
         lng: -122.408966
       },
-      view: 'Hippo'
+      view: 'Hippo',
+      inputView: 'current'
     };
 
-  this.handleUserDestinationInput = this.handleUserDestinationInput.bind(this);
+  this.handleUserInput = this.handleUserInput.bind(this);
   this.getSafestRoute = this.getSafestRoute.bind(this);
+  this.getAddress = this.getAddress.bind(this);
   }
 
   componentDidMount() {
-    this.getCurrLocation();
+    this.setCurrLocation();
+    this.getAddress('currLocation');
   }
 
-  handleUserDestinationInput (text) {
-    console.log(text, 'in handleUserTextInput');
-    // get geoCode from text
-
-    this.setState({destination: text});
-    this.getCurrLocation();
+  handleUserInput (type) {
+    return function(text) {
+      console.log(text, 'in handleUserTextInput');
+      if(type === 'current') {
+        this.setState({currAddress: text});
+      }
+      if(type === 'destination') {
+        this.setState({destAddress: text});
+      }
+    }
   }
+
 
   getSafestRoute(destination, mobile, origin) {
     console.log('destination: ', destination);
@@ -97,9 +105,23 @@ class App extends React.Component {
 
 
 
+<<<<<<< 84f18060ab2bca81a3f369775e1e30400a20e785
   getCurrLocation () {
     // MJ IN PROGRESS: GET GEOCODE FROM USER INPUT
    
+=======
+  getAddress (currOrDest) {
+    const context = this;
+    let url ='https://maps.googleapis.com/maps/api/geocode/json?latlng=';
+    let currLocation = this.state[currOrDest];
+    let coords = currLocation.lat.toString() +','+ currLocation.lng.toString();
+    let key = '&key=AIzaSyDyNjDICkQcZG7liIvJ8E1DHUQHmABNCBY';
+    let getUrl = url+coords+key;
+    axios.get(getUrl).then(function(geoLocation) {
+      formattedAddress = geoLocation.data.results[1].formatted_address;
+      context.setState({currAddress: formattedAddress})
+    });
+>>>>>>>  render map as container for app
   }
 
   setCurrLocation() {
@@ -108,7 +130,8 @@ class App extends React.Component {
         var initialPosition = {}
         initialPosition.lat = position.coords.latitude;
         initialPosition.lon = position.coords.longitude;
-        this.setState({origin: initialPosition});
+        console.log('setcurrlocation', initialPosition)
+        this.setState({currLocation: initialPosition});
       },
       (error) => alert(JSON.stringify(error)),
       {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
@@ -116,8 +139,7 @@ class App extends React.Component {
   }
 
   renderSubmitButton() {
-    let origin = this.state.origin;
-    let destination = this.state.destination;
+    const {origin, destination} = this.state;
     return (
       <TouchableOpacity
         key={'Be Safe!'}
@@ -130,18 +152,17 @@ class App extends React.Component {
   }
 
     render() {
-    if (this.state.view === 'Hippo') {
+      const {view, inputView}= this.state;
+    if (view === 'Hippo') {
       return (
       <View style={styles.container}>
-        <Example changeText={(text) => this.handleUserDestinationInput(text)}/>
-        <HippoMap style={stylees.parent}/>
+        <View style={styles.map}>
+          <Overlays inputView={inputView} changeText={this.handleUserInput} provider = {PROVIDER_DEFAULT}/>
+        </View>
         <MapLink/>
       </View>
       );
-    } else if (this.state.view === 'Destination') {
-      return (
-        <Example />
-      );
+    } else if (view === 'Destination') {
     } 
   }
 }
