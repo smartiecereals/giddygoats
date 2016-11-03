@@ -15,6 +15,7 @@ class App extends React.Component {
   constructor () {
     super ();
     this.state = {
+      
     };
 
   this.handleUserDestinationInput = this.handleUserDestinationInput.bind(this);
