@@ -7,6 +7,7 @@ import styles from './styles.js';
 import Example from './inputExample.js'
 import Overlays from './Overlays';
 import { PROVIDER_GOOGLE, PROVIDER_DEFAULT } from 'react-native-maps';
+import axios from 'axios';
 import {
   View,
   Text,
@@ -26,7 +27,7 @@ class App extends React.Component {
       },
       view: 'Hippo',
       inputView: 'current'
-    };
+    }
 
   this.handleUserInput = this.handleUserInput.bind(this);
   this.getSafestRoute = this.getSafestRoute.bind(this);
@@ -104,12 +105,6 @@ class App extends React.Component {
     }
 
 
-
-<<<<<<< 84f18060ab2bca81a3f369775e1e30400a20e785
-  getCurrLocation () {
-    // MJ IN PROGRESS: GET GEOCODE FROM USER INPUT
-   
-=======
   getAddress (currOrDest) {
     const context = this;
     let url ='https://maps.googleapis.com/maps/api/geocode/json?latlng=';
@@ -121,7 +116,6 @@ class App extends React.Component {
       formattedAddress = geoLocation.data.results[1].formatted_address;
       context.setState({currAddress: formattedAddress})
     });
->>>>>>>  render map as container for app
   }
 
   setCurrLocation() {

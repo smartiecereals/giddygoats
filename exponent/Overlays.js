@@ -4,9 +4,11 @@ import {
   View,
   Text,
   Dimensions,
+  Linking
 } from 'react-native';
 import Example from './inputExample.js'
 import MapView from 'react-native-maps';
+import axios from 'axios';
 
 const { width, height } = Dimensions.get('window');
 
@@ -21,6 +23,8 @@ class Overlays extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      shortURL: 'bla',
+      data: [],
       region: {
         latitude: LATITUDE,
         longitude: LONGITUDE,
@@ -29,8 +33,8 @@ class Overlays extends React.Component {
       },
       circle: {
         center: {
-          latitude: LATITUDE + SPACE,
-          longitude: LONGITUDE + SPACE,
+          latitude: 37.7836883,
+          longitude: -122.40898400000003,
         },
         radius: 700,
       },
@@ -59,6 +63,29 @@ class Overlays extends React.Component {
       ]
     };
   }
+  componentDidMount () {
+    context = this;
+    axios.get('http://138.68.62.73:3000/testDanger?long=-122.40898400000003&lat=37.7865518&radius=.01')
+      .then(function(res) {
+        let crimeData = res.data.map(function(dataPoint) {
+          return {longitude: dataPoint[0], latitude:dataPoint[1]}
+        })
+        context.setState({
+          data: crimeData
+        })
+    })
+  }
+
+  getUrl (originLon, originLat, destLon, destLat) {
+    context = this;
+    axios.get('https://safehippo.com/safestRoute?originLat=37.7836883&originLon=-122.40898400000003&destLat=37.7865518&destLon=-122.40307710000002')
+      .then(function(res) {
+        context.setState({
+          url: res.shortURL
+        })
+    })
+  }
+
   getPolyData() {
     // get polygon for grid area around walking route
   }
@@ -81,6 +108,20 @@ class Overlays extends React.Component {
   render() {
     const { region, circle, polygon, polyline } = this.state;
     const {provider, inputType, inputView} = this.props
+    var HeatMap = []
+    if(this.state.data.length > 0) {
+      HeatMap = this.state.data.map((dataObj, index) => {
+        return (
+          <MapView.Circle
+            key={index}
+            center={dataObj}
+            radius={20}
+            fillColor="rgb(66, 244, 137)"
+            strokeColor="rgb(244, 86, 66)"
+          /> 
+        )
+      })
+    }
     return (
       <View style={styles.container}>
         <MapView
@@ -95,6 +136,12 @@ class Overlays extends React.Component {
             strokeWidth={3}
             lineDashPattern={[5, 2, 3, 2]}
           />
+          <MapView.Marker 
+          coordinate={circle.center} 
+          onPress={() => Linking.openURL('https://www.google.com/maps/dir/37.7836636,-122.4091892/37.7852914,-122.4095192/37.7857207,-122.4059059/37.7849899,-122.4048666/37.7850684,-122.4047512/37.7853724,-122.404164/37.7861407,-122.4031622/37.7864958,-122.4036929/37.7867666,-122.4033535/@37.7852649,-122.4106916,16z/data=!3m1!4b1!4m2!4m1!3e2')}
+          >
+          </MapView.Marker>
+          {HeatMap}
         </MapView>
         <View style={styles.buttonContainer}>
         </View>
