@@ -40,6 +40,7 @@ class App extends React.Component {
         var initialPosition = {}
         initialPosition.lat = position.coords.latitude;
         initialPosition.long = position.coords.longitude;
+        console.log(initialPosition);
         this.setState({currLocation: initialPosition});
       },
       (error) => alert(JSON.stringify(error)),
