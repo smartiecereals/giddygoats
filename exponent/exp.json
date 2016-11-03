@@ -13,7 +13,7 @@
   },
   "loading": {
     "iconUrl": "./assets/images/app-splash-safe-hippo_640.png",
-    "hideExponentText": false
+    "hideExponentText": true
   },
   "packagerOpts": {
     "assetExts": ["ttf", "mp4"]
