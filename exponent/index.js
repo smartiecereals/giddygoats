@@ -4,6 +4,10 @@ import UserInput from './userInput.js';
 import HippoMap from './maps.js';
 import MapLink from './mapLink.js';
 import styles from './styles.js';
+import Geocoder from './googleMapsGeocode.js';
+// for searchbox that autocompletes
+//import Search from './googlePlacesAutocomplete.js';
+
 import {
   View,
   Text,
@@ -15,7 +19,10 @@ class App extends React.Component {
   constructor () {
     super ();
     this.state = {
-      
+      currLocation: {
+        lat: 37.783697,
+        lng: -122.408966
+      }
     };
 
   this.handleUserDestinationInput = this.handleUserDestinationInput.bind(this);
@@ -28,8 +35,12 @@ class App extends React.Component {
 
   handleUserDestinationInput (text) {
     console.log(text, 'in handleUserTextInput');
+    // get geoCode from text
+
     this.setState({destination: text});
+    this.getCurrLocation();
   }
+
   getSafestRoute(destination, mobile, origin) {
     console.log('destination: ', destination);
     console.log('mobile: ', mobile);
@@ -74,15 +85,35 @@ class App extends React.Component {
       .catch(function (error) {
         console.log(error);
       });
-    // TODO: This is a hard coded response. The api call should update
-    // $scope.safeRoute = {"url":"https://www.google.com/maps?saddr=37.7901786,-122.4071487&daddr=37.7764555,-122.4082531+to:37.7854928,-122.4062062+to:37.7804776,-122.4125511+to:37.77676659999999,-122.4078552&via=1,2,3"
-    //                   ,"waypoints":[{"lat":37.7901786,"lng":-122.4071487},{"lat":37.7854928,"lng":-122.4062062},{"lat":37.7804776,"lng":-122.4125511},{"lat":37.77676659999999,"lng":-122.4078552},{"lat":37.7764555,"lng":-122.4082531}]
-    //                   ,"shortURL":"https://goo.gl/8eh9uX"}
+      // TODO: This is a hard coded response. The api call should update
+      // $scope.safeRoute = {"url":"https://www.google.com/maps?saddr=37.7901786,-122.4071487&daddr=37.7764555,-122.4082531+to:37.7854928,-122.4062062+to:37.7804776,-122.4125511+to:37.77676659999999,-122.4078552&via=1,2,3"
+      //                   ,"waypoints":[{"lat":37.7901786,"lng":-122.4071487},{"lat":37.7854928,"lng":-122.4062062},{"lat":37.7804776,"lng":-122.4125511},{"lat":37.77676659999999,"lng":-122.4078552},{"lat":37.7764555,"lng":-122.4082531}]
+      //                   ,"shortURL":"https://goo.gl/8eh9uX"}
 
-    // $scope.renderRoute($scope.safeRoute.waypoints);
+      // $scope.renderRoute($scope.safeRoute.waypoints);
+    }
+
+
+
+  getCurrLocation () {
+    // MJ IN PROGRESS: GET GEOCODE FROM USER INPUT
+    var location = this.state.currLocation || "Colosseum";
+    console.log(location, 'currLocation');
+    Geocoder.setApiKey('AIzaSyDyNjDICkQcZG7liIvJ8E1DHUQHmABNCBY');
+
+    Geocoder.getFromLocation(location)
+    .then(
+      json => {
+        var location = json.results[0].geometry.location;
+        alert(location.lat + ", " + location.lng);
+      },
+      error => {
+        alert(error);
+      }
+    );
   }
 
-  getCurrLocation() {
+  setCurrLocation() {
     navigator.geolocation.getCurrentPosition(
       (position) => {
         var initialPosition = {}
@@ -94,6 +125,7 @@ class App extends React.Component {
       {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
     );
   }
+
   renderSubmitButton() {
     let origin = this.state.origin;
     let destination = this.state.destination;
@@ -111,9 +143,9 @@ class App extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-          <UserInput handleUserDestinationInput={this.handleUserDestinationInput}/>
-          <HippoMap />
-          <MapLink/>
+        <UserInput handleUserDestinationInput={this.handleUserDestinationInput}/>
+        <HippoMap />
+        <MapLink/>
       </View>
     )
   }
@@ -122,5 +154,4 @@ class App extends React.Component {
 
 
 Exponent.registerRootComponent(App);
-
 

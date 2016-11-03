@@ -1,26 +1,22 @@
 import React from 'react';
 import styles from './styles.js';
-
 import {View, Text, TextInput} from 'react-native';
+import Search from './googlePlacesAutocomplete.js';
 
 let UserInput = (props) => {
 
-  var origin = props.origin;
+  var origin = props.origin || '944 Market Street';
+  
+  return (
 
-    return (
-        <View style={styles.inputContainer}>
-          <TextInput style={styles.textBox}
-            placeholder={origin}
-            onChangeText={(text) => props.handleUserOriginInput(text)}
-          />
-          <TextInput style={styles.textBox}
-            placeholder="Destination"
-            onChangeText={(text) => props.handleUserDestinationInput(text)}
-          />
-          <Text> User Input </Text>
-        </View>
+    <View style={styles.inputContainer}>
+      <TextInput style={styles.textBox}
+        placeholder="Destination"
+        onChangeText={(text) => props.handleUserDestinationInput(text)}
+      />
+    </View>
 
-    );
+  );
   
 }
 
