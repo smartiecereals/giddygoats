@@ -7,6 +7,7 @@ import styles from './styles.js';
 import Example from './inputExample.js'
 import Overlays from './Overlays';
 import { PROVIDER_GOOGLE, PROVIDER_DEFAULT } from 'react-native-maps';
+import axios from 'axios';
 import {
   View,
   Text,
