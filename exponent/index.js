@@ -13,7 +13,8 @@ import {
   View,
   Text,
   TextInput,
-  StyleSheet
+  StyleSheet,
+  TouchableOpacity
 } from 'react-native';
 
 
@@ -133,15 +134,15 @@ class App extends React.Component {
     );
   }
 
-  renderSubmitButton() {
-    const {origin, destination} = this.state;
+
+  renderButton(key, fnOnPress, text) {
     return (
       <TouchableOpacity
-        key={'Be Safe!'}
+        key={key}
         style={styles.button}
-        onPress={() => this.getSafestRoute(origin, destination)}
+        onPress={fnOnPress}
       >
-        <Text>{title}</Text>
+        <Text>{text}</Text>
       </TouchableOpacity>
     );
   }
@@ -160,25 +161,25 @@ class App extends React.Component {
     } else if (view === 'Destination') {
     } 
   }
-}
 
-var stylees = StyleSheet.create({
-    fullScreen: {
-        flex:1,
-        backgroundColor: 'red',
-    },
-    floatView: {
-        position: 'absolute',
-        width: 100,
-        height: 100,
-        top: 200,
-        left: 40,
-        backgroundColor: 'green',
-    },
-    parent: {
-        flex: 1,
-    }
-});
+  // render() {
+  //   var currAddress = this.state.currAddress;
+  //   var destination = this.state.destination;
+  //   var getRoute = () => {getSafestRoute(a,b,c)}
+
+  //   return (
+  //   <View style={styles.container}>
+  //     <HippoMap style={styles.parent}
+  //       <Example changeText={(text) => this.handleUserDestinationInput(text)}/>
+  //       {this.renderButton('origin', null, currAddress)}
+  //       {this.renderButton('destination', getRoute, currDestination)}
+  //     />
+
+  //   </View>
+  //   );
+  // } 
+  
+}
 
 Exponent.registerRootComponent(App);
 
