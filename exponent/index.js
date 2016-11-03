@@ -4,14 +4,19 @@ import UserInput from './userInput.js';
 import HippoMap from './maps.js';
 import MapLink from './mapLink.js';
 import styles from './styles.js';
+<<<<<<< 7eff143285703d2b6e637e9dd902206c28c4c627
 import Geocoder from './googleMapsGeocode.js';
 // for searchbox that autocompletes
 //import Search from './googlePlacesAutocomplete.js';
 
+=======
+import Example from './inputExample.js'
+>>>>>>> google auto complete integration
 import {
   View,
   Text,
-  TextInput
+  TextInput,
+  StyleSheet
 } from 'react-native';
 
 
@@ -19,10 +24,14 @@ class App extends React.Component {
   constructor () {
     super ();
     this.state = {
+<<<<<<< 7eff143285703d2b6e637e9dd902206c28c4c627
       currLocation: {
         lat: 37.783697,
         lng: -122.408966
       }
+=======
+      view: 'Hippo'
+>>>>>>> google auto complete integration
     };
 
   this.handleUserDestinationInput = this.handleUserDestinationInput.bind(this);
@@ -140,18 +149,43 @@ class App extends React.Component {
     );
   }
 
-  render() {
-    return (
+    render() {
+    if (this.state.view === 'Hippo') {
+      return (
       <View style={styles.container}>
         <UserInput handleUserDestinationInput={this.handleUserDestinationInput}/>
         <HippoMap />
         <MapLink/>
+          <Example changeText={(text) => this.handleUserDestinationInput(text)}/>
+          <HippoMap style={stylees.parent}/>
+          <MapLink/>
       </View>
-    )
+      );
+    } else if (this.state.view === 'Destination') {
+      return (
+        <Example />
+      );
+    } 
   }
 }
 
-
+var stylees = StyleSheet.create({
+    fullScreen: {
+        flex:1,
+        backgroundColor: 'red',
+    },
+    floatView: {
+        position: 'absolute',
+        width: 100,
+        height: 100,
+        top: 200,
+        left: 40,
+        backgroundColor: 'green',
+    },
+    parent: {
+        flex: 1,
+    }
+});
 
 Exponent.registerRootComponent(App);
 
