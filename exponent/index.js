@@ -11,21 +11,21 @@ import {
   TextInput
 } from 'react-native';
 
-//this.handleUserInput = this.handleUserInput.bind(this);
-       //<Maps />
+
 class App extends React.Component {
   constructor () {
     super ();
     this.state = {
-        
+      currLocation: null,
+      destination: null
     };
 
   this.handleUserDestinationInput = this.handleUserDestinationInput.bind(this);
 
   }
 
-  getState () {
-    return this.state;
+  componentDidMount() {
+    this.getCurrLocation();
   }
 
   handleUserDestinationInput (text) {
@@ -33,17 +33,28 @@ class App extends React.Component {
     this.setState({destination: text});
   }
 
+  getCurrLocation() {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        var initialPosition = {}
+        initialPosition.lat = position.coords.latitude;
+        initialPosition.long = position.coords.longitude;
+        this.setState({currLocation: initialPosition});
+      },
+      (error) => alert(JSON.stringify(error)),
+      {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
+    );
+  }
+
 
   render() {
     return (
       <View style={styles.container}>
           <UserInput handleUserDestinationInput={this.handleUserDestinationInput}/>
-          <UserInput test='yo' />
           <HippoMap />
           <MapLink/>
       </View>
-
-    );
+    )
   }
 }
 
