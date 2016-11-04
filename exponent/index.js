@@ -11,11 +11,13 @@ import Example from './inputExample.js'
 import Overlays from './Overlays';
 import { PROVIDER_GOOGLE, PROVIDER_DEFAULT } from 'react-native-maps';
 import axios from 'axios';
+import API_KEY from './keys.js';
 import {
   View,
   Text,
   TextInput,
-  StyleSheet
+  StyleSheet,
+  TouchableOpacity
 } from 'react-native';
 
 
@@ -28,7 +30,9 @@ class App extends React.Component {
         lat: 37.783697,
         lng: -122.408966
       },
-      view: 'Hippo',
+      currAddress: null,
+      destination: null,
+      view: 'main',
       inputView: 'current'
     }
 
@@ -38,8 +42,42 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    this.setCurrLocation();
     this.getAddress('currLocation');
+    this.alertIfLocationsDisabledAsync();
+    this.getLocationPermissionsAsync();
+  }
+
+  async getLocationPermissionsAsync() {
+    const { Location, Permissions } = Exponent;
+    const { status } = await Permissions.askAsync(Permissions.LOCATION);
+    console.log(status);
+    if (status === 'granted') {
+      return this.setCurrLocation();
+    } else {
+      console.log('in error');
+      throw new Error('Location permission not granted');
+    }
+  }
+
+  async alertIfLocationsDisabledAsync() {
+    const { Permissions } = Exponent;
+    const { status } = await Permissions.getAsync(Permissions.LOCATION);
+    if (status !== 'granted') {
+      alert('Hey! You might want to enable notifications for my app, they are good.');
+    }
+  }
+
+  setCurrLocation() {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        var initialPosition = {}
+        initialPosition.lat = position.coords.latitude;
+        initialPosition.lon = position.coords.longitude;
+        console.log(initialPosition, 'position in setCurr');
+        this.setState({origin: initialPosition});
+      },
+      (error) => alert(JSON.stringify(error)),
+    );
   }
 
   handleUserInput (type) {
@@ -113,7 +151,7 @@ class App extends React.Component {
     let url ='https://maps.googleapis.com/maps/api/geocode/json?latlng=';
     let currLocation = this.state[currOrDest];
     let coords = currLocation.lat.toString() +','+ currLocation.lng.toString();
-    let key = '&key=AIzaSyDyNjDICkQcZG7liIvJ8E1DHUQHmABNCBY';
+    let key = '&key=' + API_KEY;
     let getUrl = url+coords+key;
     axios.get(getUrl).then(function(geoLocation) {
       formattedAddress = geoLocation.data.results[1].formatted_address;
@@ -121,66 +159,52 @@ class App extends React.Component {
     });
   }
 
-  setCurrLocation() {
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        var initialPosition = {}
-        initialPosition.lat = position.coords.latitude;
-        initialPosition.lon = position.coords.longitude;
-        console.log('setcurrlocation', initialPosition)
-        this.setState({currLocation: initialPosition});
-      },
-      (error) => alert(JSON.stringify(error)),
-      {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
-    );
+  setInputView (view) {
+    this.setState({inputView: view})
   }
 
-  renderSubmitButton() {
-    const {origin, destination} = this.state;
+  renderButton(key, fnOnPress, text) {
     return (
       <TouchableOpacity
-        key={'Be Safe!'}
+        key={key}
         style={styles.button}
-        onPress={() => this.getSafestRoute(origin, destination)}
+        onPress={fnOnPress}
       >
-        <Text>{title}</Text>
+        <Text>{text}</Text>
       </TouchableOpacity>
     );
   }
 
-    render() {
-      const {view, inputView}= this.state;
-    if (view === 'Hippo') {
+  render() {
+    
+    const {view} = this.state;
+    
+    if (view === 'main') {
       return (
-      <View style={styles.container}>
-        <View style={styles.map}>
-          <Overlays inputView={inputView} changeText={this.handleUserInput} provider = {PROVIDER_DEFAULT}/>
+        <View style={styles.container}>
+          <View style={styles.map}>
+            <Overlays 
+              setInputView={this.setInputView}
+              changeText={this.handleUserInput}
+              provider = {PROVIDER_DEFAULT}
+            />
+          </View>
+          {/*this.renderButton('origin', this.setInputView(, )}
+          {this.renderButton('destination', this.setInputView())*/}
+          <MapLink/>
         </View>
-        <MapLink/>
-      </View>
-      );
-    } else if (view === 'Destination') {
-    } 
-  }
-}
-
-var stylees = StyleSheet.create({
-    fullScreen: {
-        flex:1,
-        backgroundColor: 'red',
-    },
-    floatView: {
-        position: 'absolute',
-        width: 100,
-        height: 100,
-        top: 200,
-        left: 40,
-        backgroundColor: 'green',
-    },
-    parent: {
-        flex: 1,
+      )
     }
-});
+    if (view === 'origin') {
+     
+    }
+    if (view === 'destination') {
+     
+    }
+
+  }
+  
+}
 
 Exponent.registerRootComponent(App);
 
