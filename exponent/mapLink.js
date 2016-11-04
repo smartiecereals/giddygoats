@@ -1,5 +1,6 @@
 import React from 'react';
 import styles from './styles.js';
+import * as Animatable from 'react-native-animatable';
 
 import {View, Text, TextInput, Image} from 'react-native';
 
@@ -13,7 +14,13 @@ let MapLink = () => {
         source={require('./assets/images/app-icon-safe-hippo_96.png')} 
         style={styles.logo}
       />
-      <Text style={styles.logoText}>Open in Google Maps</Text>
+      <Animatable.Text 
+        animation="fadeInUp" 
+        style={styles.logoText} 
+        duration={1500}
+      >
+        Open in Google Maps
+      </Animatable.Text>
       <Image 
         source={require('./assets/images/toggle-crime_96.png')} 
         style={styles.toggleCrime}
