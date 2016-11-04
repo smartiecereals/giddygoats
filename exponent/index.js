@@ -43,35 +43,41 @@ class App extends React.Component {
 
   componentDidMount() {
     this.getAddress('currLocation');
-    this.alertIfRemoteNotificationsDisabledAsync();
+    this.alertIfLocationsDisabledAsync();
     this.getLocationPermissionsAsync();
   }
 
   async getLocationPermissionsAsync() {
-    console.log('in get location async')
     const { Location, Permissions } = Exponent;
     const { status } = await Permissions.askAsync(Permissions.LOCATION);
     console.log(status);
-
     if (status === 'granted') {
-      console.log('in status granted')
-      var location = await Location.getCurrentPositionAsync({enableHighAccuracy: true});
-      var initialPosition = {}
-      initialPosition.lat = location.coords.latitude;
-      initialPosition.lng = location.coords.longitude;
-      this.setState({currLocation: initialPosition});
+      return this.setCurrLocation();
     } else {
+      console.log('in error');
       throw new Error('Location permission not granted');
     }
   }
 
-  async alertIfRemoteNotificationsDisabledAsync() {
+  async alertIfLocationsDisabledAsync() {
     const { Permissions } = Exponent;
-    const { status } = await Permissions.getAsync(Permissions.REMOTE_NOTIFICATIONS);
-
+    const { status } = await Permissions.getAsync(Permissions.LOCATION);
     if (status !== 'granted') {
       alert('Hey! You might want to enable notifications for my app, they are good.');
     }
+  }
+
+  setCurrLocation() {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        var initialPosition = {}
+        initialPosition.lat = position.coords.latitude;
+        initialPosition.lon = position.coords.longitude;
+        console.log(initialPosition, 'position in setCurr');
+        this.setState({origin: initialPosition});
+      },
+      (error) => alert(JSON.stringify(error)),
+    );
   }
 
   handleUserInput (type) {
@@ -152,21 +158,6 @@ class App extends React.Component {
       context.setState({currAddress: formattedAddress})
     });
   }
-
-  // MJ: Archive for now. 
-  // setCurrLocation() {
-  //   navigator.geolocation.getCurrentPosition(
-  //     (position) => {
-  //       var initialPosition = {}
-  //       initialPosition.lat = position.coords.latitude;
-  //       initialPosition.lon = position.coords.longitude;
-  //       console.log('setcurrlocation', initialPosition)
-  //       this.setState({currLocation: initialPosition});
-  //     },
-  //     (error) => alert(JSON.stringify(error)),
-  //     {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
-  //   );
-  // }
 
   setInputView (view) {
     this.setState({inputView: view})
