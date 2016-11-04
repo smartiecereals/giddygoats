@@ -90,6 +90,7 @@ class Overlays extends React.Component {
     // get polygon for grid area around walking route
   }
 
+
   render() {
     const { region, circle, polygon, polyline } = this.state;
     const {provider, inputType, inputView} = this.props
