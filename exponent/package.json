@@ -15,6 +15,7 @@
     "native-base": "^0.5.11",
     "react": "^15.3.2",
     "react-native": "github:exponentjs/react-native#sdk-10.1.2",
+    "react-native-animatable": "^0.6.1",
     "react-native-blur": "^1.0.1",
     "react-native-cli": "^1.0.0",
     "react-native-google-places-autocomplete": "^1.2.6",

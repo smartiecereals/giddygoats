@@ -1,4 +1,5 @@
 var React = require('react');
+
 var {GooglePlacesAutocomplete} = require('./react-native-google-places-autocomplete/GooglePlacesAutocomplete.js');
 
 const homePlace = {description: 'Home', geometry: { location: { lat: 37.7812941, lng: -122.406819 } }};
@@ -29,11 +30,18 @@ var Example = (props) => {
           types: 'geocode', // default: 'geocode'
         }}
         styles={{
+          textInputContainer: {
+            backgroundColor: '#0f5866',
+            borderTopWidth: 0
+          },
+          textInput: {
+            color: '#000'
+          },
           description: {
             fontWeight: 'bold',
           },
           predefinedPlacesDescription: {
-            color: '#1faadb',
+            color: '#27a1ab'
           },
         }}
         
