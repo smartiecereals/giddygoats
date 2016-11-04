@@ -90,20 +90,6 @@ class Overlays extends React.Component {
     // get polygon for grid area around walking route
   }
 
-  // getInputView(view) {
-  //   if(view === 'current') {
-  //     let changeText = this.props.changeText('current')
-  //     return (
-  //       <Example changeText={(text) => changeText(text)}/>
-  //     );
-  //   } 
-  //   if(view === 'destination') {
-  //     let changeText = this.props.changeText('destination')
-  //     return (
-  //       <Example changeText={(text) => changeText(text)}/>
-  //     );
-  //   } 
-  // }
 
   render() {
     const { region, circle, polygon, polyline } = this.state;

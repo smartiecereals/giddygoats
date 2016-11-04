@@ -1,5 +1,8 @@
 var React = require('react');
+
+
 var {GooglePlacesAutocomplete} = require('./react-native-google-places-autocomplete/GooglePlacesAutocomplete.js');
+
 const homePlace = {description: 'Home', geometry: { location: { lat: 37.7812941, lng: -122.406819 } }};
 const workPlace = {description: 'Work', geometry: { location: { lat: 48.8496818, lng: 2.2940881 } }};
 var API_KEY = require ('./keys.js');
@@ -7,14 +10,12 @@ var API_KEY = require ('./keys.js');
 var Example = (props) => {
     return (
       <GooglePlacesAutocomplete
-        changeText ={props.changeText}
-        placeholder='Search'
+        placeholder={props.placeHolder}
         minLength={2} // minimum length of text to search
         autoFocus={false}
         fetchDetails={true}
         onPress={(data, details = null) => { // 'details' is provided when fetchDetails = true
-          console.log(data);
-          console.log(details);
+          props.handleUserInput(details.formatted_address, details.geometry.location)
         }}
         getDefaultValue={() => {
           return ''; // text input default value

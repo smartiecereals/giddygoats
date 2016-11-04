@@ -30,15 +30,14 @@ class App extends React.Component {
         lat: 37.783697,
         lng: -122.408966
       },
-      currAddress: null,
-      destination: null,
-      view: 'main',
-      inputView: 'current'
-    }
+      view: 'Hippo',
+    };
 
   this.handleUserInput = this.handleUserInput.bind(this);
+  this.handleUserCoords = this.handleUserCoords.bind(this);
   this.getSafestRoute = this.getSafestRoute.bind(this);
   this.getAddress = this.getAddress.bind(this);
+  this.getInputView = this.getInputView.bind(this)
   }
 
   componentDidMount() {
@@ -81,15 +80,26 @@ class App extends React.Component {
   }
 
   handleUserInput (type) {
-    return function(text) {
-      console.log(text, 'in handleUserTextInput');
+    return function(text, coords) {
       if(type === 'current') {
-        this.setState({currAddress: text});
+        this.setState({currAddress: text, currLocation: coords});
       }
       if(type === 'destination') {
-        this.setState({destAddress: text});
+        this.setState({destAddress: text, destLocation: coords});
       }
-    }
+      console.log(this.state, 'in handleUserTextInput');
+    }.bind(this);
+  }
+  handleUserCoords(type) {
+    return function(coords) {
+      if(type === 'current') {
+        this.setState({currLocation: coords});
+      }
+      if(type === 'destination') {
+        this.setState({destLocation: coords});
+      }
+        console.log(this.state, 'in handleUserTextInput');
+    }.bind(this)
   }
 
 
@@ -159,8 +169,29 @@ class App extends React.Component {
     });
   }
 
-  setInputView (view) {
-    this.setState({inputView: view})
+  setCurrLocation() {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        var initialPosition = {}
+        initialPosition.lat = position.coords.latitude;
+        initialPosition.lng = position.coords.longitude;
+        if (initialPosition) {
+          this.setState({
+            defaultCurrLoc: {
+              description: 'Home', 
+                geometry: { 
+                  location: initialPosition 
+              }
+            }, 
+            currLocation: initialPosition,
+            inputView: 'destination'
+          });
+        }
+        console.log('setcurrlocation', initialPosition)
+      },
+      (error) => alert(JSON.stringify(error)),
+      {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
+    );
   }
 
   renderButton(key, fnOnPress, text) {
@@ -174,37 +205,45 @@ class App extends React.Component {
       </TouchableOpacity>
     );
   }
+  getInputView() {
+    const {inputView, DefaultCurrentLocation} = this.state;
+    if(inputView === 'current') {
+      let handleUserInput = this.handleUserInput('current')
+      let handleUserCoords = this.handleUserCoords('current')
+      return (
+        <Example handleUserCoords={handleUserCoords} 
+          handleUserInput={handleUserInput}
+          placeHolder={'Your Address'}
+          currentLocation = {DefaultCurrentLocation}
+          />
+      );
+    } 
+    if(inputView === 'destination') {
+      let handleUserInput = this.handleUserInput('destination')
+      let handleUserCoords = this.handleUserCoords('destination')
+      return (
+        <Example handleUserCoords={handleUserCoords} 
+          handleUserInput={handleUserInput}
+          placeHolder={'Enter Your Destination'}
+          />
+      );
+    }
+  }
 
   render() {
-    
     const {view} = this.state;
-    
-    if (view === 'main') {
-      return (
-        <View style={styles.container}>
-          <View style={styles.map}>
-            <Overlays 
-              setInputView={this.setInputView}
-              changeText={this.handleUserInput}
-              provider = {PROVIDER_DEFAULT}
-            />
-          </View>
-          {/*this.renderButton('origin', this.setInputView(, )}
-          {this.renderButton('destination', this.setInputView())*/}
-          <MapLink/>
+    return (
+      <View style={styles.container}>
+
+      <View>
+        {this.getInputView()}
+      </View>
+        <View style={styles.map}>
+          <Overlays provider = {PROVIDER_DEFAULT}/>
         </View>
-      )
-    }
-    if (view === 'origin') {
-     
-    }
-    if (view === 'destination') {
-     
-    }
-
+      </View>
+      );
   }
-  
 }
-
 Exponent.registerRootComponent(App);
 
