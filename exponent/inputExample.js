@@ -29,11 +29,18 @@ var Example = (props) => {
           types: 'geocode', // default: 'geocode'
         }}
         styles={{
+          textInputContainer: {
+            backgroundColor: '#0f5866',
+            borderTopWidth: 0
+          },
+          textInput: {
+            color: '#000'
+          },
           description: {
             fontWeight: 'bold',
           },
           predefinedPlacesDescription: {
-            color: '#1faadb',
+            color: '#27a1ab'
           },
         }}
         

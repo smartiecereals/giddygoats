@@ -16,6 +16,7 @@ import {
   View,
   Text,
   TextInput,
+  StatusBar,
   StyleSheet,
   TouchableOpacity
 } from 'react-native';
@@ -231,9 +232,15 @@ class App extends React.Component {
     const {getSafestRoute, destinationIsSync} = this;
     return (
       <View style={styles.container}>
-      <View>
-        {this.getInputView()}
-      </View>
+        <StatusBar
+          backgroundColor="#27a1ab"
+          barStyle="default"
+        />
+        <MapLink style={styles.mapLink}>
+        </MapLink>
+        <View>
+          {this.getInputView()}
+        </View>
         <View style={styles.map}>
           <Overlays destinationIsSync={destinationIsSync} 
           safeRoute={safeRoute} 

@@ -39,6 +39,10 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
 
+  destinationBar: {
+    backgroundColor: '#27a1ab'
+  },
+
   map: {
     backgroundColor: 'skyblue',
     flex: 7,    
@@ -46,6 +50,7 @@ const styles = StyleSheet.create({
 
   gradient: {
     flex: 1,
+    paddingTop: 13,
     flexDirection: 'row',
     alignItems: 'center',
     width: undefined,
@@ -71,8 +76,7 @@ const styles = StyleSheet.create({
   },
 
   mapLink: {
-    backgroundColor: '#047cfe',
-    flex: 1,    
+    flex: 1    
   },
   // container: {
   //   ...StyleSheet.absoluteFillObject,
