@@ -41,11 +41,33 @@ const styles = StyleSheet.create({
 
   map: {
     backgroundColor: 'skyblue',
-    flex: 4,    
+    flex: 7,    
+  },
+
+  gradient: {
+    flex: 1,
+    flexDirection: 'row',
+    width: undefined,
+    height: undefined,
+    backgroundColor: 'transparent',
+  },
+
+  logo: {
+    width: 45,
+    height: 45,
+    top: 6,
+    left: 10,
+    backgroundColor: 'transparent',
+  },
+
+  logoText: {
+    paddingTop: 21,
+    paddingLeft: 75,
+    color: '#FFF'
   },
 
   mapLink: {
-    backgroundColor: 'steelblue',
+    backgroundColor: '#047cfe',
     flex: 1,    
   },
   // container: {
