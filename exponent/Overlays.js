@@ -31,39 +31,14 @@ class Overlays extends React.Component {
         latitudeDelta: LATITUDE_DELTA,
         longitudeDelta: LONGITUDE_DELTA,
       },
-      circle: {
-        center: {
-          latitude: 37.7836883,
-          longitude: -122.40898400000003,
-        },
-        radius: 700,
-      },
-      polygon: [
-        {
-          latitude: LATITUDE + SPACE,
-          longitude: LONGITUDE + SPACE,
-        },
-        {
-          latitude: LATITUDE - SPACE,
-          longitude: LONGITUDE - SPACE,
-        },
-        {
-          latitude: LATITUDE - SPACE,
-          longitude: LONGITUDE + SPACE,
-        },
-      ],
       polyline:
       [
-      {"latitude":37.7836636,"longitude":-122.4091892},
-      {"latitude":37.7862237,"longitude":-122.4097009},
-      {"latitude":37.7867339,"longitude":-122.4046232},
-      {"latitude":37.7876538,"longitude":-122.4034605},
-      {"latitude":37.7870261,"longitude":-122.4030306},
-      {"latitude":37.7867666,"longitude":-122.4033535}
+      {"latitude":37.7836636,"longitude":-122.4091892}
       ]
     };
   }
   componentDidMount () {
+    console.log(this.props, 'LOOKING FOR PROPS')
     context = this;
     axios.get('http://138.68.62.73:3000/testDanger?long=-122.40898400000003&lat=37.7865518&radius=.01')
       .then(function(res) {
@@ -74,6 +49,7 @@ class Overlays extends React.Component {
           data: crimeData
         })
     })
+      console.log('COMPONENT DID MOUNT OVERLAYS')
   }
 
   getUrl (originLon, originLat, destLon, destLat) {
@@ -92,9 +68,13 @@ class Overlays extends React.Component {
 
 
   render() {
-    const { region, circle, polygon, polyline } = this.state;
-    const {provider, inputType, inputView} = this.props
+    const { region } = this.state;
+    const {provider, safeRoute, destLocation, currLocation, destinationIsSync, getSafestRoute} = this.props;
+    let polyline = safeRoute || this.state.polyline;
     var HeatMap = []
+    if (!destinationIsSync() && destLocation) {
+      getSafestRoute()
+    }
     if(this.state.data.length > 0) {
       HeatMap = this.state.data.map((dataObj, index) => {
         return (
@@ -102,7 +82,7 @@ class Overlays extends React.Component {
             key={index}
             center={dataObj}
             radius={20}
-            fillColor="rgb(66, 244, 137)"
+            fillColor="rgb(66, 244, 137, .30)"
             strokeColor="rgb(244, 86, 66)"
           /> 
         )
@@ -121,11 +101,7 @@ class Overlays extends React.Component {
             strokeWidth={3}
             lineDashPattern={[5, 2, 3, 2]}
           />
-          <MapView.Marker 
-          coordinate={circle.center} 
-          onPress={() => Linking.openURL('https://www.google.com/maps/dir/37.7836636,-122.4091892/37.7852914,-122.4095192/37.7857207,-122.4059059/37.7849899,-122.4048666/37.7850684,-122.4047512/37.7853724,-122.404164/37.7861407,-122.4031622/37.7864958,-122.4036929/37.7867666,-122.4033535/@37.7852649,-122.4106916,16z/data=!3m1!4b1!4m2!4m1!3e2')}
-          >
-          </MapView.Marker>
+          
           {HeatMap}
         </MapView>
         <View style={styles.buttonContainer}>
@@ -176,3 +152,9 @@ const styles = StyleSheet.create({
 // </View>
 
 module.exports = Overlays;
+
+// <MapView.Marker 
+//           coordinate={circle.center} 
+//           onPress={() => Linking.openURL('https://www.google.com/maps/dir/37.7836636,-122.4091892/37.7852914,-122.4095192/37.7857207,-122.4059059/37.7849899,-122.4048666/37.7850684,-122.4047512/37.7853724,-122.404164/37.7861407,-122.4031622/37.7864958,-122.4036929/37.7867666,-122.4033535/@37.7852649,-122.4106916,16z/data=!3m1!4b1!4m2!4m1!3e2')}
+//           >
+//           </MapView.Marker>
