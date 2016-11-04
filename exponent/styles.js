@@ -47,23 +47,27 @@ const styles = StyleSheet.create({
   gradient: {
     flex: 1,
     flexDirection: 'row',
+    alignItems: 'center',
     width: undefined,
     height: undefined,
-    backgroundColor: 'transparent',
+    backgroundColor: 'transparent'
   },
 
   logo: {
     width: 45,
     height: 45,
-    top: 6,
-    left: 10,
-    backgroundColor: 'transparent',
   },
 
   logoText: {
-    paddingTop: 21,
-    paddingLeft: 75,
-    color: '#FFF'
+    justifyContent: 'center',
+    textAlign: 'center',
+    color: '#fff',
+    flex: 1
+  },
+
+  toggleCrime: {
+    width: 45,
+    height: 45
   },
 
   mapLink: {
