@@ -81,8 +81,9 @@ class App extends React.Component {
   }
 
   handleUserInput (type) {
+  console.log(this.state, 'in handleUserTextInput');
+    
     return function(text) {
-      console.log(text, 'in handleUserTextInput');
       if(type === 'current') {
         this.setState({currAddress: text});
       }
