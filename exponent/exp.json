@@ -1,18 +1,18 @@
 {
-  "name": "testapp",
-  "description": "An empty new project",
-  "slug": "testapp",
+  "name": "Safe Hippo",
+  "description": "Find the safest way home",
+  "slug": "safe-hippo",
   "sdkVersion": "10.0.0",
-  "version": "1.0.0",
+  "version": "1.5.0",
   "orientation": "portrait",
-  "primaryColor": "#cccccc",
-  "iconUrl": "./assets/images/app-icon-safe-hippo_192.png",
+  "primaryColor": "#27a1ab",
+  "iconUrl": "https://cloud.githubusercontent.com/assets/7908723/19989247/7856b438-a1e2-11e6-9615-6b0c038bc000.png",
   "notification": {
-    "iconUrl": "./assets/images/android-push-notification-safe-hippo.png",
+    "iconUrl": "https://cloud.githubusercontent.com/assets/7908723/19989241/67bd178e-a1e2-11e6-8c48-0fb730dc7037.png",
     "color": "#27a1ab"
   },
   "loading": {
-    "iconUrl": "./assets/images/app-splash-safe-hippo_640.png",
+    "iconUrl": "https://cloud.githubusercontent.com/assets/7908723/19989606/fb035948-a1e4-11e6-9f0a-def8282c411d.png",
     "hideExponentText": true
   },
   "packagerOpts": {
