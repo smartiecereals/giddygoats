@@ -1,14 +1,21 @@
 import React from 'react';
 import styles from './styles.js';
 
-import {View, Text, TextInput} from 'react-native';
+import {View, Text, TextInput, Image} from 'react-native';
 
 let MapLink = () => {
 
     return (
-        <View style={styles.mapLink}>
-          <Text> Google Maps Link here </Text>
-        </View>
+          <Image
+            source={require('./assets/images/gradient_1024_320.png')}
+            style={styles.gradient}
+          >
+            <Image 
+              source={require('./assets/images/app-icon-safe-hippo_192.png')} 
+              style={styles.logo}
+            />
+            <Text style={styles.logoText}>Open in Google Maps</Text>
+          </Image>
 
     );
   
