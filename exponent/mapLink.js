@@ -6,7 +6,7 @@ import {View, Text, TextInput, Image} from 'react-native';
 let MapLink = () => {
   return (
     <Image
-      source={require('./assets/images/gradient_1024_320.png')}
+      source={require('./assets/images/gradient90_1024_320.png')}
       style={styles.gradient}
     >
       <Image 
