@@ -40,8 +40,36 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    this.setCurrLocation();
     this.getAddress('currLocation');
+    this.alertIfRemoteNotificationsDisabledAsync();
+    this.getLocationPermissionsAsync();
+  }
+
+  async getLocationPermissionsAsync() {
+    console.log('in get location async')
+    const { Location, Permissions } = Exponent;
+    const { status } = await Permissions.askAsync(Permissions.LOCATION);
+    console.log(status);
+
+    if (status === 'granted') {
+      console.log('in status granted')
+      var location = await Location.getCurrentPositionAsync({enableHighAccuracy: true});
+      var initialPosition = {}
+      initialPosition.lat = location.coords.latitude;
+      initialPosition.lng = location.coords.longitude;
+      this.setState({currLocation: initialPosition});
+    } else {
+      throw new Error('Location permission not granted');
+    }
+  }
+
+  async alertIfRemoteNotificationsDisabledAsync() {
+    const { Permissions } = Exponent;
+    const { status } = await Permissions.getAsync(Permissions.REMOTE_NOTIFICATIONS);
+
+    if (status !== 'granted') {
+      alert('Hey! You might want to enable notifications for my app, they are good.');
+    }
   }
 
   handleUserInput (type) {
@@ -123,19 +151,20 @@ class App extends React.Component {
     });
   }
 
-  setCurrLocation() {
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        var initialPosition = {}
-        initialPosition.lat = position.coords.latitude;
-        initialPosition.lon = position.coords.longitude;
-        console.log('setcurrlocation', initialPosition)
-        this.setState({currLocation: initialPosition});
-      },
-      (error) => alert(JSON.stringify(error)),
-      {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
-    );
-  }
+  // MJ: Archive for now. 
+  // setCurrLocation() {
+  //   navigator.geolocation.getCurrentPosition(
+  //     (position) => {
+  //       var initialPosition = {}
+  //       initialPosition.lat = position.coords.latitude;
+  //       initialPosition.lon = position.coords.longitude;
+  //       console.log('setcurrlocation', initialPosition)
+  //       this.setState({currLocation: initialPosition});
+  //     },
+  //     (error) => alert(JSON.stringify(error)),
+  //     {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
+  //   );
+  // }
 
   setInputView (view) {
     this.setState({inputView: view})
