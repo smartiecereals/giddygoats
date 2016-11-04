@@ -232,6 +232,7 @@ class App extends React.Component {
 
   render() {
     const {view} = this.state;
+    return (
       <View style={styles.container}>
 
       <View>
@@ -242,8 +243,6 @@ class App extends React.Component {
         </View>
       </View>
       );
-    } else if (view === 'Destination') {
-    } 
   }
 }
 Exponent.registerRootComponent(App);
