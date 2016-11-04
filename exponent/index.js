@@ -9,6 +9,7 @@ import Example from './inputExample.js'
 import Overlays from './Overlays';
 import { PROVIDER_GOOGLE, PROVIDER_DEFAULT } from 'react-native-maps';
 import axios from 'axios';
+import API_KEY from './keys.js';
 import {
   View,
   Text,
@@ -27,7 +28,9 @@ class App extends React.Component {
         lat: 37.783697,
         lng: -122.408966
       },
-      view: 'Hippo',
+      currAddress: null,
+      destination: null,
+      view: 'main',
       inputView: 'current'
     }
 
@@ -112,7 +115,7 @@ class App extends React.Component {
     let url ='https://maps.googleapis.com/maps/api/geocode/json?latlng=';
     let currLocation = this.state[currOrDest];
     let coords = currLocation.lat.toString() +','+ currLocation.lng.toString();
-    let key = '&key=AIzaSyDyNjDICkQcZG7liIvJ8E1DHUQHmABNCBY';
+    let key = '&key=' + API_KEY;
     let getUrl = url+coords+key;
     axios.get(getUrl).then(function(geoLocation) {
       formattedAddress = geoLocation.data.results[1].formatted_address;
@@ -134,6 +137,9 @@ class App extends React.Component {
     );
   }
 
+  setInputView (view) {
+    this.setState({inputView: view})
+  }
 
   renderButton(key, fnOnPress, text) {
     return (
@@ -147,37 +153,34 @@ class App extends React.Component {
     );
   }
 
-    render() {
-      const {view, inputView}= this.state;
-    if (view === 'Hippo') {
+  render() {
+    
+    const {view} = this.state;
+    
+    if (view === 'main') {
       return (
-      <View style={styles.container}>
-        <View style={styles.map}>
-          <Overlays inputView={inputView} changeText={this.handleUserInput} provider = {PROVIDER_DEFAULT}/>
+        <View style={styles.container}>
+          <View style={styles.map}>
+            <Overlays 
+              setInputView={this.setInputView}
+              changeText={this.handleUserInput}
+              provider = {PROVIDER_DEFAULT}
+            />
+          </View>
+          {/*this.renderButton('origin', this.setInputView(, )}
+          {this.renderButton('destination', this.setInputView())*/}
+          <MapLink/>
         </View>
-        <MapLink/>
-      </View>
-      );
-    } else if (view === 'Destination') {
-    } 
+      )
+    }
+    if (view === 'origin') {
+     
+    }
+    if (view === 'destination') {
+     
+    }
+
   }
-
-  // render() {
-  //   var currAddress = this.state.currAddress;
-  //   var destination = this.state.destination;
-  //   var getRoute = () => {getSafestRoute(a,b,c)}
-
-  //   return (
-  //   <View style={styles.container}>
-  //     <HippoMap style={styles.parent}
-  //       <Example changeText={(text) => this.handleUserDestinationInput(text)}/>
-  //       {this.renderButton('origin', null, currAddress)}
-  //       {this.renderButton('destination', getRoute, currDestination)}
-  //     />
-
-  //   </View>
-  //   );
-  // } 
   
 }
 

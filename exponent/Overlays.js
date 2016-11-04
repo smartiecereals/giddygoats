@@ -129,7 +129,6 @@ class Overlays extends React.Component {
           style={styles.map}
           initialRegion={region}
         >
-        {this.getInputView(inputView)}
           <MapView.Polyline
             coordinates={polyline}
             strokeColor="rgba(0,0,200,0.5)"
