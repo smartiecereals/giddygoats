@@ -5,17 +5,16 @@ const workPlace = {description: 'Tempest', formatted_address: '431 Natoma St, Sa
 const API_KEY = require ('../keys.js').default;
 
 let AutoComplete = (props) => {
-  console.log(props.currentAddress)
   //testing if input box can dispaly current address by default
     return (
       <GooglePlacesAutocomplete
+        currentLocation={props.currLocation}
         placeholder={props.placeHolder}
         minLength={2} // minimum length of text to search
         autoFocus={false}
         fetchDetails={true}
         onPress={(data, details = null) => { // 'details' is provided when fetchDetails = true
           props.handleUserInput(details.formatted_address, details.geometry.location)
-          props.setDestinationSync(false);
         }}
         query={{
           // available options: https://developers.google.com/places/web-service/autocomplete
