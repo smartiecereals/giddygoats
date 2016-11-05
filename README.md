@@ -49,7 +49,6 @@ We think these improvements would make the app even more useful. Give us a shout
 - **Standalone apps**: If you want your family and friends to download the app directly through the app store, you would have to deploy a [standalone app](https://docs.getexponent.com/versions/v9.0.0/guides/building-standalone-apps.html). As of 5th November 2016, the build pipeline for standalone apps through ExponentJS is still relatively new, and you might run into issues. 
 
 ## Contribution Guide
-IN PROGRESS
 
 - Fork and Clone this repo 
 

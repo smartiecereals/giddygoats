@@ -116,7 +116,7 @@ class App extends React.Component {
 
   getCrimeStats () {
     let context = this
-    let getUrl = 'http://138.68.62.73:3000/testDanger?';
+    let getUrl = 'http://138.68.62.73/testDanger?';
     axios.get(getUrl, {
         params: {
           long: this.state.currLocation.lng,
@@ -136,7 +136,7 @@ class App extends React.Component {
     let originCoords = this.state.currLocation;
     let destinationCoords = this.state.destLocation;
     let context = this;
-    let locationURL = 'http://138.68.62.73:3000/safestRoute?'
+    let locationURL = 'http://138.68.62.73/safestRoute?'
 
     axios.get(locationURL, {
         params: {
