@@ -88,6 +88,13 @@ const styles = StyleSheet.create({
     paddingVertical: 40,
   },
 
+  button: {
+    flex: 1,
+    backgroundColor: '#0f5866',
+    paddingHorizontal: 18,
+    paddingVertical: 12,
+  },
+
   back: {
     position: 'absolute',
     top: 20,
