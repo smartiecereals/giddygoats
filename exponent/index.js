@@ -141,15 +141,16 @@ class App extends React.Component {
         locationURL += ('&mobile=' + mobile)
       }
     }
-    console.log('COOORDS ARE HEREERE', destinationCoords, originCoords)
-    
-    axios.get(locationURL, {
-        params: {
+    let params = {
           originLat: originCoords.lat,
           originLon: originCoords.lng,
           destLat: destinationCoords.lat,
           destLon: destinationCoords.lng
         }
+    console.log('COOORDS ARE HEREERE', params)
+    
+    axios.get(locationURL, {
+        params: params
       })
       .then(function(jsonRoute) {
         console.log('JSON ROUTE', jsonRoute);
@@ -161,12 +162,6 @@ class App extends React.Component {
         context.setState({safeRoute: wayPointData});
         setDestinationSync(true);
       })
-      // TODO: This is a hard coded response. The api call should update
-      // $scope.safeRoute = {"url":"https://www.google.com/maps?saddr=37.7901786,-122.4071487&daddr=37.7764555,-122.4082531+to:37.7854928,-122.4062062+to:37.7804776,-122.4125511+to:37.77676659999999,-122.4078552&via=1,2,3"
-      //                   ,"waypoints":[{"lat":37.7901786,"lng":-122.4071487},{"lat":37.7854928,"lng":-122.4062062},{"lat":37.7804776,"lng":-122.4125511},{"lat":37.77676659999999,"lng":-122.4078552},{"lat":37.7764555,"lng":-122.4082531}]
-      //                   ,"shortURL":"https://goo.gl/8eh9uX"}
-
-      // $scope.renderRoute($scope.safeRoute.waypoints);
     }
     destinationIsSync() {
       return this.state.destinationIsSync;
