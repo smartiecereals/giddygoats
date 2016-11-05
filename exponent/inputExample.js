@@ -1,7 +1,8 @@
 var React = require('react');
 var {GooglePlacesAutocomplete} = require('./react-native-google-places-autocomplete/GooglePlacesAutocomplete.js');
 const homePlace = {description: 'Home', formatted_address: '442 Natoma St, San Francisco, CA 94103, USA', geometry: { location: { lat: 37.7812941, lng: -122.406819 } }};
-const workPlace = {description: 'Tempest', formatted_address: '431 Natoma St, San Francisco, CA 94103', geometry: { location: { lat: 48.8496818, lng: 2.2940881 } }};
+const workPlace = {description: 'Tempest', formatted_address: '431 Natoma St, San Francisco, CA 94103', geometry: { location: { lat: 37.7811581, lng: -122.4062434 } }};
+
 var API_KEY = require ('./keys.js').default;
 
 var Example = (props) => {
@@ -15,7 +16,6 @@ var Example = (props) => {
         fetchDetails={true}
         onPress={(data, details = null) => { // 'details' is provided when fetchDetails = true
           props.handleUserInput(details.formatted_address, details.geometry.location)
-          props.setDestinationSync(false);
         }}
         query={{
           // available options: https://developers.google.com/places/web-service/autocomplete
@@ -38,7 +38,6 @@ var Example = (props) => {
             color: '#27a1ab'
           },
         }}
-        
         currentLocation={false} // Will add a 'Current location' button at the top of the predefined places list
         currentLocationLabel="Current location"
         nearbyPlacesAPI='GooglePlacesSearch' // Which API to use: GoogleReverseGeocoding or GooglePlacesSearch

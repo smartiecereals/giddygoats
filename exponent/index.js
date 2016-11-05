@@ -107,9 +107,9 @@ class App extends React.Component {
       }
       if(type === 'destination') {
         this.setState({destAddress: text, destLocation: coords});
+        this.setDestinationSync(false);
         console.log('SET DESTINATION ADDRESS AND LOCATION')
       }
-      console.log(this.state, 'in handleUserInput');
     }.bind(this);
   }
 
@@ -128,9 +128,6 @@ class App extends React.Component {
 
   getSafestRoute() {
     console.log(this.state)
-    console.log('GETTING SAFEST ROUTE')
-    console.log('destination: ', this.state.destLocation);
-    console.log('origin: ', this.state.currLocation);
     let setDestinationSync = this.setDestinationSync;
     let originCoords = this.state.currLocation;
     let destinationCoords = this.state.destLocation;
@@ -141,8 +138,7 @@ class App extends React.Component {
         locationURL += ('&mobile=' + mobile)
       }
     }
-    console.log('COOORDS ARE HEREERE', destinationCoords, originCoords)
-    
+    console.log('GETTING SAFEST ROUTE', originCoords, destinationCoords)
     axios.get(locationURL, {
         params: {
           originLat: originCoords.lat,
@@ -152,21 +148,17 @@ class App extends React.Component {
         }
       })
       .then(function(jsonRoute) {
-        console.log('JSON ROUTE', jsonRoute);
         let wayPointData = jsonRoute.data.waypoints;
+        console.log('WAYPOINT DATA', wayPointData)
         wayPointData = wayPointData.map(function(waypoint) {
           let newWP = {latitude: waypoint.lat , longitude: waypoint.lng}
           return newWP
         })
         context.setState({safeRoute: wayPointData});
         setDestinationSync(true);
+      }).catch(function(err) {
+        console.log('ERROR :', err)
       })
-      // TODO: This is a hard coded response. The api call should update
-      // $scope.safeRoute = {"url":"https://www.google.com/maps?saddr=37.7901786,-122.4071487&daddr=37.7764555,-122.4082531+to:37.7854928,-122.4062062+to:37.7804776,-122.4125511+to:37.77676659999999,-122.4078552&via=1,2,3"
-      //                   ,"waypoints":[{"lat":37.7901786,"lng":-122.4071487},{"lat":37.7854928,"lng":-122.4062062},{"lat":37.7804776,"lng":-122.4125511},{"lat":37.77676659999999,"lng":-122.4078552},{"lat":37.7764555,"lng":-122.4082531}]
-      //                   ,"shortURL":"https://goo.gl/8eh9uX"}
-
-      // $scope.renderRoute($scope.safeRoute.waypoints);
     }
     destinationIsSync() {
       return this.state.destinationIsSync;
@@ -223,7 +215,7 @@ class App extends React.Component {
         <Example 
           handleUserCoords={handleUserCoords} 
           handleUserInput={handleUserInput}
-          placeHolder={'Your Address'}
+          placeHolder={'Enter Your Current Location'}
           currentAddress = {currAddress}
           setDestinationSync = {() => {return;}}
           />
