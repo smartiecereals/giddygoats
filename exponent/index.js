@@ -38,7 +38,8 @@ class App extends React.Component {
       },
       currAddress: null,
       view: 'Hippo',
-      inputView: 'current'
+      inputView: 'current',
+      googleMapsUrl: 'testLink',
     };
 
     this.handleUserInput = this.handleUserInput.bind(this);
@@ -286,15 +287,16 @@ class App extends React.Component {
   }
 
   render() {
-    const {view, destLocation, currLocation, safeRoute, crimeData} = this.state;
+    const {view, destLocation, currLocation, safeRoute, crimeData, googleMapsUrl} = this.state;
     const {getSafestRoute, destinationIsSync, originIsSync, getCrimeStats} = this;
+
     return (
       <View style={styles.container}>
         <StatusBar
           backgroundColor="#27a1ab"
           barStyle="default"
         />
-        <MapLink style={styles.mapLink}>
+        <MapLink googleMapsUrl={googleMapsUrl} style={styles.mapLink}>
         </MapLink>
         <View>
           {this.getInputView()}
