@@ -87,14 +87,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 40,
   },
-  button: {
-    flex: 1,
-    marginTop: 10,
-    backgroundColor: 'rgba(220,220,220,0.7)',
-    paddingHorizontal: 18,
-    paddingVertical: 12,
-    borderRadius: 20,
-  },
+
   back: {
     position: 'absolute',
     top: 20,
@@ -105,6 +98,33 @@ const styles = StyleSheet.create({
     width: 80,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+
+  UserInputCurrAddress: {
+    flex: 1,
+    backgroundColor: '#0f5866',
+    paddingTop: 13,
+    paddingLeft: 10,
+    paddingRight: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: undefined,
+    height: undefined,
+    justifyContent: 'space-between'
+  },
+
+  UserInputCurrAddressText: {  
+    flex: 1,
+    justifyContent: 'center',
+    paddingLeft: 10, 
+    textAlign: 'center',
+    color: '#fff',  
+  },
+
+  UserInputCurrAddressIcon: {
+    width: 15,
+    height: 15,
+    paddingRight: 10
   }
 });
 

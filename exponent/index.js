@@ -18,7 +18,8 @@ import {
   TextInput,
   StatusBar,
   StyleSheet,
-  TouchableOpacity
+  TouchableOpacity,
+  Image
 } from 'react-native';
 
 
@@ -31,6 +32,7 @@ class App extends React.Component {
         lat: 37.783697,
         lng: -122.408966
       },
+      currAddress: null,
       view: 'Hippo',
       inputView: 'current'
     };
@@ -107,8 +109,10 @@ class App extends React.Component {
         this.setState({destAddress: text, destLocation: coords});
         console.log('SET DESTINATION ADDRESS AND LOCATION')
       }
+      console.log(this.state, 'in handleUserInput');
     }.bind(this);
   }
+
   handleUserCoords(type) {
     return function(coords) {
       if(type === 'current') {
@@ -186,43 +190,66 @@ class App extends React.Component {
   }
 
 
-  renderButton(key, fnOnPress, text) {
+  renderCurrAddressButton(key, fnOnPress, text) {
     return (
+      <View style={styles.UserInput}>
       <TouchableOpacity
         key={key}
-        style={styles.button}
+        style={styles.UserInputCurrAddress}
         onPress={fnOnPress}
       >
-        <Text>{text}</Text>
+        <Text style={{color:'#FFF', fontSize: 15}}>{text}</Text>
+        <Image 
+        style={styles.UserInputCurrAddressIcon}
+        source={require('./assets/images/pencil_96.png')}/>
       </TouchableOpacity>
+      </View>
+
     );
   }
+
   getInputView() {
     const {inputView, DefaultCurrentLocation, currAddress} = this.state;
     const {handleUserInput, handleUserCoords, setDestinationSync} = this;
+
+
     if(inputView === 'current') {
       console.log('INPUT VIEW CURRENT')
       let handleUserInput = this.handleUserInput('current')
       let handleUserCoords = this.handleUserCoords('current')
       return (
-        <Example handleUserCoords={handleUserCoords} 
+        <View style={styles.UserInput}>
+        <Example 
+          handleUserCoords={handleUserCoords} 
           handleUserInput={handleUserInput}
           placeHolder={'Your Address'}
           currentAddress = {currAddress}
           setDestinationSync = {() => {return;}}
           />
+        </View>
       );
     } 
+
     if(inputView === 'destination') {
       console.log('INPUT VIEW DESTINATION')
       let handleUserInput = this.handleUserInput('destination')
       let handleUserCoords = this.handleUserCoords('destination')
+      let currAddressShorten = currAddress.split(',')[0];
+      let setCurrView = () => {this.setState({inputView: 'current'})}
+
       return (
-        <Example handleUserCoords={handleUserCoords} 
+        <View>
+        {this.renderCurrAddressButton(
+          'currAddress', 
+          setCurrView, 
+          `Current Location: ${currAddressShorten}`)}
+        <Example 
+          handleUserCoords={handleUserCoords} 
           handleUserInput={handleUserInput}
           placeHolder={'Enter Your Destination'}
           setDestinationSync = {setDestinationSync}
           />
+        </View>
       );
     }
   }
