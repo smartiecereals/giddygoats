@@ -32,14 +32,11 @@ class App extends React.Component {
         lat: 37.764719,
         lng: -122.398289
       },
-      destLocation: {
-        lat: 37.7864958,
-        lng: -122.4036929
-      },
       currAddress: null,
       view: 'Hippo',
       inputView: 'current',
-      googleMapsUrl: 'http://wwww.google.com',
+      googleMapsUrl: 'https://www.google.com/',
+      showCrime: false
     };
 
     this.handleUserInput = this.handleUserInput.bind(this);
@@ -52,6 +49,7 @@ class App extends React.Component {
     this.originIsSync = this.originIsSync.bind(this);
     this.setOriginSync = this.setOriginSync.bind(this);
     this.getCrimeStats = this.getCrimeStats.bind(this);
+    this.toggleCrime = this.toggleCrime.bind(this);
   }
 
   componentDidMount() {
@@ -187,6 +185,7 @@ class App extends React.Component {
           let newWP = {latitude: waypoint.lat , longitude: waypoint.lng}
           return newWP
         })
+        console.log('WOOORRRRKRKKKKK!!!!!!', jsonRoute)
         context.setState({
           safeRoute: wayPointData,
           googleMapsUrl: jsonRoute.data.url
@@ -223,6 +222,12 @@ class App extends React.Component {
       context.setState({currAddress: formattedAddress})
       console.log('SETTING CURRENT ADDRESS')
     });
+  }
+
+  toggleCrime () {
+      this.setState({
+        showCrime: !this.state.showCrime
+      })
   }
 
   renderCurrAddressButton(key, fnOnPress, text) {
@@ -265,7 +270,7 @@ class App extends React.Component {
       );
     } 
 
-    if(inputView === 'destination') {
+    if(inputView === 'destination' && currAddress) {
       console.log('INPUT VIEW DESTINATION')
       let handleUserInput = this.handleUserInput('destination')
       let handleUserCoords = this.handleUserCoords('destination')
@@ -290,22 +295,26 @@ class App extends React.Component {
   }
 
   render() {
-    const {view, destLocation, currLocation, safeRoute, crimeData, googleMapsUrl} = this.state;
-    const {getSafestRoute, destinationIsSync, originIsSync, getCrimeStats} = this;
 
+    const {view, destLocation, currLocation, safeRoute, crimeData, googleMapsUrl, showCrime} = this.state;
+    const {getSafestRoute, destinationIsSync, originIsSync, getCrimeStats, toggleCrime} = this;
     return (
       <View style={styles.container}>
         <StatusBar
           backgroundColor="#27a1ab"
           barStyle="default"
         />
-        <MapLink googleMapsUrl={googleMapsUrl} style={styles.mapLink}>
+        <MapLink
+        style={styles.mapLink}
+        toggleCrime={toggleCrime}
+        googleMapsUrl={googleMapsUrl} >
         </MapLink>
         <View>
           {this.getInputView()}
         </View>
         <View style={styles.map}>
-          <Overlays 
+          <Overlays
+          showCrime={showCrime}
           destinationIsSync={destinationIsSync}
           originIsSync={originIsSync}
           safeRoute={safeRoute} 

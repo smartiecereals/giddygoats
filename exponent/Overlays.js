@@ -56,23 +56,28 @@ class Overlays extends React.Component {
     let polyline = safeRoute || [];
 
     if (!originIsSync() && currLocation) {
-      getCrimeStats()
+      getCrimeStats();
     }
-    if (!destinationIsSync() && destLocation) {
-      getSafestRoute()
+    if (!destinationIsSync() && destLocation ||  !originIsSync() && currLocation && destLocation) {
+      getSafestRoute();
     }
-    HeatMap = crimePoints.map((dataObj, index) => {
-          return (
-            <MapView.Circle
-              key={index}
-              center={dataObj}
-              radius={20}
-              fillColor="rgba(66, 244, 137, 0.3)"
-              strokeColor="rgb(244, 86, 66)"
-            /> 
-          )
-        })
-    
+    if (this.props.showCrime) {
+      HeatMap = crimePoints.map((dataObj, index) => {
+            return (
+              <MapView.Circle
+                key={index}
+                center={dataObj}
+                radius={20}
+                fillColor="rgba(66, 244, 137, 0.3)"
+                strokeColor="rgba(244, 86, 66, 1)"
+              /> 
+            )
+          })      
+    }
+    if(destLocation) {
+      destMarker = <MapView.Marker 
+          coordinate={{latitude: destLocation.lat, longitude: destLocation.lng}} />
+    }
     return (
       <View style={styles.container}>
           <MapView
@@ -80,11 +85,10 @@ class Overlays extends React.Component {
             style={styles.map}
             initialRegion={region}
           > 
+          {destMarker}
           <MapView.Marker 
           coordinate={{latitude: currLocation.lat, longitude: currLocation.lng}} />  
             {HeatMap}
-          <MapView.Marker 
-          coordinate={{latitude: destLocation.lat, longitude: destLocation.lng}} />
           <MapView.Polyline
             coordinates={polyline}
             strokeColor="rgba(0,0,200,0.5)"
