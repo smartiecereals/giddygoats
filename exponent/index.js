@@ -107,9 +107,9 @@ class App extends React.Component {
       }
       if(type === 'destination') {
         this.setState({destAddress: text, destLocation: coords});
+        this.setDestinationSync(false);
         console.log('SET DESTINATION ADDRESS AND LOCATION')
       }
-      console.log(this.state, 'in handleUserInput');
     }.bind(this);
   }
 
@@ -128,9 +128,6 @@ class App extends React.Component {
 
   getSafestRoute() {
     console.log(this.state)
-    console.log('GETTING SAFEST ROUTE')
-    console.log('destination: ', this.state.destLocation);
-    console.log('origin: ', this.state.currLocation);
     let setDestinationSync = this.setDestinationSync;
     let originCoords = this.state.currLocation;
     let destinationCoords = this.state.destLocation;
@@ -141,26 +138,26 @@ class App extends React.Component {
         locationURL += ('&mobile=' + mobile)
       }
     }
-    let params = {
+    console.log('GETTING SAFEST ROUTE', originCoords, destinationCoords)
+    axios.get(locationURL, {
+        params: {
           originLat: originCoords.lat,
           originLon: originCoords.lng,
           destLat: destinationCoords.lat,
           destLon: destinationCoords.lng
         }
-    console.log('COOORDS ARE HEREERE', params)
-    
-    axios.get(locationURL, {
-        params: params
       })
       .then(function(jsonRoute) {
-        console.log('JSON ROUTE', jsonRoute);
         let wayPointData = jsonRoute.data.waypoints;
+        console.log('WAYPOINT DATA', wayPointData)
         wayPointData = wayPointData.map(function(waypoint) {
           let newWP = {latitude: waypoint.lat , longitude: waypoint.lng}
           return newWP
         })
         context.setState({safeRoute: wayPointData});
         setDestinationSync(true);
+      }).catch(function(err) {
+        console.log('ERROR :', err)
       })
     }
     destinationIsSync() {
@@ -218,7 +215,7 @@ class App extends React.Component {
         <Example 
           handleUserCoords={handleUserCoords} 
           handleUserInput={handleUserInput}
-          placeHolder={'Your Address'}
+          placeHolder={'Enter Your Current Location'}
           currentAddress = {currAddress}
           setDestinationSync = {() => {return;}}
           />
