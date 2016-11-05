@@ -13,108 +13,95 @@ import axios from 'axios';
 const { width, height } = Dimensions.get('window');
 
 const ASPECT_RATIO = width / height;
-const LATITUDE = 37.78825;
-const LONGITUDE = -122.4324;
-const LATITUDE_DELTA = 0.0922;
-const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
-const SPACE = 0.01;
+// const LATITUDE = 37.78825;
+// const LONGITUDE = -122.4324;
+// const LATITUDE_DELTA = 0.0922;
+// const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
+// const SPACE = 0.01;
 
 class Overlays extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      shortURL: 'bla',
-      data: [],
+    this.state = {  
       region: {
-        latitude: LATITUDE,
-        longitude: LONGITUDE,
-        latitudeDelta: LATITUDE_DELTA,
-        longitudeDelta: LONGITUDE_DELTA,
-      },
-      polyline:
-      [
-      {"latitude":37.7836636,"longitude":-122.4091892}
-      ]
-    };
-  }
-  componentDidMount () {
-    console.log(this.props, 'LOOKING FOR PROPS')
-    context = this;
-    axios.get('http://138.68.62.73:3000/testDanger?long=-122.40898400000003&lat=37.7865518&radius=.01')
-      .then(function(res) {
-        let crimeData = res.data.map(function(dataPoint) {
-          return {longitude: dataPoint[0], latitude:dataPoint[1]}
-        })
-        context.setState({
-          data: crimeData
-        })
-    })
-      console.log('COMPONENT DID MOUNT OVERLAYS')
-  }
-
-  getUrl (originLon, originLat, destLon, destLat) {
-    context = this;
-    axios.get('https://safehippo.com/safestRoute?originLat=37.7836883&originLon=-122.40898400000003&destLat=37.7865518&destLon=-122.40307710000002')
-      .then(function(res) {
-        context.setState({
-          url: res.shortURL
-        })
-    })
-  }
-
-  getPolyData() {
-    // get polygon for grid area around walking route
+        latitude: this.props.currLocation.lat,
+        longitude: this.props.currLocation.lng,
+        latitudeDelta: 0.0922,
+        longitudeDelta: 0.0922 * ASPECT_RATIO,
+      }
+    }
   }
 
 
-  render() {
-    const { region } = this.state;
-    const {provider, safeRoute, destLocation, currLocation, destinationIsSync, getSafestRoute} = this.props;
-    let polyline = safeRoute || this.state.polyline;
-    console.log('polyLine', polyline)
-    var HeatMap = []
-    console.log('OVERLAY RENDER', destinationIsSync(), destLocation)
+  render () {
+    const { region, } = this.state;
+
+    const {
+      provider,
+      destLocation,
+      currLocation,
+      safeRoute, 
+      originIsSync,
+      destinationIsSync,
+      getCrimeStats, 
+      crimeData,
+      getSafestRoute
+    } = this.props
+
+    let context = this;
+    let HeatMap = [];
+    var originMarker;
+    var destMarker;
+    crimePoints = crimeData || [];
+    let polyline = safeRoute || [];
+
+    if (!originIsSync() && currLocation) {
+      getCrimeStats()
+    }
     if (!destinationIsSync() && destLocation) {
       getSafestRoute()
     }
-    if(this.state.data.length > 0) {
-      HeatMap = this.state.data.map((dataObj, index) => {
-        return (
-          <MapView.Circle
-            key={index}
-            center={dataObj}
-            radius={20}
-            fillColor="rgb(66, 244, 137, .30)"
-            strokeColor="rgb(244, 86, 66)"
-          /> 
-        )
-      })
-    }
+    HeatMap = crimePoints.map((dataObj, index) => {
+          return (
+            <MapView.Circle
+              key={index}
+              center={dataObj}
+              radius={20}
+              fillColor="rgba(66, 244, 137, 0.3)"
+              strokeColor="rgb(244, 86, 66)"
+            /> 
+          )
+        })
+    
     return (
       <View style={styles.container}>
-        <MapView
-          provider={provider}
-          style={styles.map}
-          initialRegion={region}
-        >
+          <MapView
+            provider={provider}
+            style={styles.map}
+            initialRegion={region}
+          > 
+          <MapView.Marker 
+          coordinate={{latitude: currLocation.lat, longitude: currLocation.lng}} />  
+            {HeatMap}
+          <MapView.Marker 
+          coordinate={{latitude: destLocation.lat, longitude: destLocation.lng}} />
           <MapView.Polyline
             coordinates={polyline}
             strokeColor="rgba(0,0,200,0.5)"
             strokeWidth={3}
             lineDashPattern={[5, 2, 3, 2]}
-          />
-          
-          {HeatMap}
-        </MapView>
-        <View style={styles.buttonContainer}>
+          /> 
+          </MapView>
+          <View style={styles.buttonContainer}>
+          </View>
         </View>
-      </View>
-    );
+    )
   }
 }
 
+
 Overlays.propTypes = {
-  provider: MapView.ProviderPropType,
+  provider: MapView.ProviderPropType
 };
 
 const styles = StyleSheet.create({
@@ -147,11 +134,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginVertical: 20,
     backgroundColor: 'transparent',
-  },
+  }
 });
-// <View style={styles.bubble}>
-//             <Text>Render circles, polygons, and polylines</Text>
-// </View>
+
 
 module.exports = Overlays;
 
