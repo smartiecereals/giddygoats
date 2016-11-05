@@ -13,6 +13,10 @@ Safe Hippo is a Mobile App for both iOS and Android
 
 Amad Khan, Benjamin Antalek, Meijiao Png, Tony Le
 
+
+## Demo
+<img src='./safehippo-demo.gif'/> 
+
 ## How Safe Hippo Works
 
   This section explains what happens 'under the hood' when a user interacts with Safe Hippo. 
