@@ -21,7 +21,7 @@ let MapLink = (props) => {
      style={{color:'#FFF'}, styles.googleMapsLink} 
      duration={1500}
    >
-     Open in Google Maps
+     Open in Google Maps  → 
    </Animatable.Text>
   );
 
