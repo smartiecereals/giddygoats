@@ -1,6 +1,6 @@
 <img src='http://res.cloudinary.com/small-change/image/upload/v1477935825/SafeHippo-small_1_m1g8jy.png'/>
 
-# Safe Hippo
+# Safe Hippo Mobile
 
 > We all want to get home safe. By crunching real time crime data, Safe Hippo will show you the safest route home.
 
@@ -53,7 +53,7 @@ We think these improvements would make the app even more useful. Give us a shout
     - Install Node 6+
     - Use "--no-optional" flag, like this:
     `npm install --no-optional`
-  - Install client-side packages: `cd exponent. npm install`
+  - Install client-side packages: `cd exponent; npm install`
   - Create API keys for Google Maps and follow the instructions in keysPlaceholder.js to add your keys.
   - Download [Exponent client](https://docs.getexponent.com/versions/v9.0.0/introduction/index.html), which provides a simulator to preview your app during development. 
     - Go to "Open Project" and open the exponent folder
