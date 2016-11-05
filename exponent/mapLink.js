@@ -2,7 +2,7 @@ import React from 'react';
 import styles from './styles.js';
 import * as Animatable from 'react-native-animatable';
 
-import {View, Text, TextInput, Image, TouchableOpacity} from 'react-native';
+import {View, Text, TextInput, Image, TouchableOpacity, Linking} from 'react-native';
 
 let MapLink = (props) => {
 
@@ -18,7 +18,7 @@ let MapLink = (props) => {
         <TouchableOpacity
         key='googleMapsUrl'
         style={styles.googleMapsTouch}
-        onPress={console.log('opening maps link')}
+        onPress={()=>Linking.openURL(props.googleMapsUrl)}
         >
           <Animatable.Text 
             animation="fadeInUp" 

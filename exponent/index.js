@@ -39,7 +39,7 @@ class App extends React.Component {
       currAddress: null,
       view: 'Hippo',
       inputView: 'current',
-      googleMapsUrl: 'testLink',
+      googleMapsUrl: 'http://wwww.google.com',
     };
 
     this.handleUserInput = this.handleUserInput.bind(this);
@@ -187,7 +187,10 @@ class App extends React.Component {
           let newWP = {latitude: waypoint.lat , longitude: waypoint.lng}
           return newWP
         })
-        context.setState({safeRoute: wayPointData});
+        context.setState({
+          safeRoute: wayPointData,
+          googleMapsUrl: jsonRoute.data.url
+        });
         setDestinationSync(true);
       }).catch(function(err) {
         console.log('ERROR :', err)
