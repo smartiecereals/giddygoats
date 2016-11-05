@@ -71,6 +71,7 @@ class Overlays extends React.Component {
     const { region } = this.state;
     const {provider, safeRoute, destLocation, currLocation, destinationIsSync, getSafestRoute} = this.props;
     let polyline = safeRoute || this.state.polyline;
+    console.log('polyLine', polyline)
     var HeatMap = []
     if (!destinationIsSync() && destLocation) {
       getSafestRoute()
