@@ -50,13 +50,15 @@ We think these improvements would make the app even more useful. Give us a shout
 
 ## Contribution Guide
 IN PROGRESS
+
 - Fork and Clone this repo 
-- File structure: 
 
 - Installation: Open up the repo in your terminal and install packages. 
-  -  Download the [exponent client](https://docs.getexponent.com/versions/v9.0.0/introduction/index.html), which provides a neat way to preview your app during development. 
+  - Install server-side packages: `npm install` in the root directory
+  - Install client-side packages: `cd exponent. npm install`
+  - Download [Exponent client](https://docs.getexponent.com/versions/v9.0.0/introduction/index.html), which provides a simulator to preview your app during development. 
+    - Go to "Open Project" and open the exponent folder
 
-- `cd exponent. npm install`
 
 
 ## Questions? 
