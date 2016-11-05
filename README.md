@@ -42,11 +42,7 @@ We think these improvements would make the app even more useful. Give us a shout
 -  This app is currently best used to determine a safe route for the last mile journey of walking home. Improve the algorithm for longer distances. Suggestions: Ignore crime data for segments of the journey when the user is on a train/bus and only calculate the crime score for their walking segment.
   - Validation on the client forms to reject locations outside of allowed cities (data is currently available only for SF on our app).
  - Extend to more cities e.g. Chicago has a [crime statistics API](https://data.cityofchicago.org/api/views/ijzp-q8t2/rows.json?accessType=DOWNLOAD). Remember, the DB queries need to be in terms of distance on the Earth rather than latitude degrees because a 1 degree of latitude isn't the same Earth surface distance on the equator as it is at the poles.
-
-## Technical Challenges
-
-- **Android and iOS Compatibility**: We used ExponentJS, which allows us to get to an MVP quickly for both operating systems. However, features must be tested on actual iOS and Android devices to ensure compatibility. You might have to resolve device specific issues.
-- **Standalone apps**: If you want your family and friends to download the app directly through the app store, you would have to deploy a [standalone app](https://docs.getexponent.com/versions/v9.0.0/guides/building-standalone-apps.html). As of 5th November 2016, the build pipeline for standalone apps through ExponentJS is still relatively new, and you might run into issues. 
+- **Standalone apps**: If you want your family and friends to download the app directly through the app store, you would have to deploy a [standalone app](https://docs.getexponent.com/versions/v9.0.0/guides/building-standalone-apps.html)
 
 ## Contribution Guide
 
