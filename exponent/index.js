@@ -29,8 +29,12 @@ class App extends React.Component {
     super ();
     this.state = {
       currLocation: {
-        lat: 37.783697,
-        lng: -122.408966
+        lat: 37.764719,
+        lng: -122.398289
+      },
+      destLocation: {
+        lat: 37.7864958,
+        lng: -122.4036929
       },
       currAddress: null,
       view: 'Hippo',
@@ -44,6 +48,9 @@ class App extends React.Component {
   this.getInputView = this.getInputView.bind(this)
   this.destinationIsSync = this.destinationIsSync.bind(this);
   this.setDestinationSync = this.setDestinationSync.bind(this);
+  this.originIsSync = this.originIsSync.bind(this);
+  this.setOriginSync = this.setOriginSync.bind(this);
+  this.getCrimeStats = this.getCrimeStats.bind(this);
   }
 
   componentDidMount() {
@@ -103,13 +110,16 @@ class App extends React.Component {
     return function(text, coords) {
       if(type === 'current') {
         this.setState({currAddress: text, currLocation: coords, inputView: 'destination'});
-        console.log(this.state, 'SET CURRENT ADDRESS AND LOCATION')
+        this.setOriginSync(false);
+        console.log('SET CURRENT ADDRESS AND LOCATION')
       }
       if(type === 'destination') {
         this.setState({destAddress: text, destLocation: coords});
         this.setDestinationSync(false);
+
         console.log('SET DESTINATION ADDRESS AND LOCATION')
       }
+      console.log(this.state, 'in handleUserInput');
     }.bind(this);
   }
 
@@ -125,20 +135,43 @@ class App extends React.Component {
     }.bind(this)
   }
 
+  getCrimeStats (callback) {
+    let context = this;
+    let getUrl = 'http://138.68.62.73:3000/testDanger?';
+    axios.get(getUrl, {
+        params: {
+          long: this.props.originLng,
+          lat: this.props.originLat,
+          radius: 0.01
+        }
+      })
+      .then(function(res) {
+        let crimeData = res.data.map(function(dataPoint) {
+          return {longitude: dataPoint[0], latitude: dataPoint[1]}
+        })
+        this.setState({crimeData: crimeData})
+        context.setOriginSync(true);
+    })
+      .catch(function(err) {
+        console.log(err);
+      })
+  }
 
   getSafestRoute() {
-    console.log(this.state)
     let setDestinationSync = this.setDestinationSync;
+
     let originCoords = this.state.currLocation;
     let destinationCoords = this.state.destLocation;
-    let locationURL = 'http://138.68.62.73:3000/safestRoute?'
     let context = this;
-    let checkMobile = (mobile) => {
-      if (mobile) {
-        locationURL += ('&mobile=' + mobile)
-      }
-    }
-    console.log('GETTING SAFEST ROUTE', originCoords, destinationCoords)
+    // let checkMobile = (mobile) => {
+    //   if (mobile) {
+    //     locationURL += ('&mobile=' + mobile)
+    //   }
+    // }
+    // console.log('GETTING SAFEST ROUTE', originCoords, destinationCoords)
+    
+    let locationURL = 'http://138.68.62.73:3000/safestRoute?'
+
     axios.get(locationURL, {
         params: {
           originLat: originCoords.lat,
@@ -160,11 +193,18 @@ class App extends React.Component {
         console.log('ERROR :', err)
       })
     }
+
     destinationIsSync() {
       return this.state.destinationIsSync;
     }
     setDestinationSync(bool) {
       this.setState({destinationIsSync: bool })
+    }
+    originIsSync() {
+      return this.state.originIsSync;
+    }
+    setOriginSync(bool) {
+      this.setState({originIsSync: bool })
     }
 
 
@@ -181,7 +221,6 @@ class App extends React.Component {
       console.log('SETTING CURRENT ADDRESS')
     });
   }
-
 
   renderCurrAddressButton(key, fnOnPress, text) {
     return (
@@ -248,8 +287,8 @@ class App extends React.Component {
   }
 
   render() {
-    const {view, destLocation, currLocation, safeRoute} = this.state;
-    const {getSafestRoute, destinationIsSync} = this;
+    const {view, destLocation, currLocation, safeRoute, crimeData} = this.state;
+    const {getSafestRoute, destinationIsSync, originIsSync, getCrimeStats} = this;
     return (
       <View style={styles.container}>
         <StatusBar
@@ -262,12 +301,16 @@ class App extends React.Component {
           {this.getInputView()}
         </View>
         <View style={styles.map}>
-          <Overlays destinationIsSync={destinationIsSync} 
+          <Overlays 
+          destinationIsSync={destinationIsSync}
+          originIsSync={originIsSync}
           safeRoute={safeRoute} 
           getSafestRoute={getSafestRoute} 
+          getCrimeStats={getCrimeStats}
           provider={PROVIDER_DEFAULT} 
           destLocation={destLocation} 
-          currLocation={currLocation}/>
+          currLocation={currLocation} 
+          crimeData={crimeData} />
         </View>
       </View>
       );
