@@ -17,7 +17,6 @@ var Example = (props) => {
         onPress={(data, details = null) => { // 'details' is provided when fetchDetails = true
           props.handleUserInput(details.formatted_address, details.geometry.location)
           props.setDestinationSync(false);
-          console.log( details, 'PRESSING DESTINATION INPUT')
         }}
         query={{
           // available options: https://developers.google.com/places/web-service/autocomplete

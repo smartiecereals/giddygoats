@@ -179,13 +179,13 @@ class App extends React.Component {
         }
       })
       .then(function(jsonRoute) {
+        setDestinationSync(true);
         let wayPointData = jsonRoute.data.waypoints;
         console.log('WAYPOINT DATA', wayPointData)
         wayPointData = wayPointData.map(function(waypoint) {
           let newWP = {latitude: waypoint.lat , longitude: waypoint.lng}
           return newWP
         })
-        console.log('WOOORRRRKRKKKKK!!!!!!', jsonRoute)
         context.setState({
           safeRoute: wayPointData,
           googleMapsUrl: jsonRoute.data.url
