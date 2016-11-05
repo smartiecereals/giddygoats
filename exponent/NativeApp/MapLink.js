@@ -2,23 +2,28 @@ import React from 'react';
 import styles from '../styles.js';
 import * as Animatable from 'react-native-animatable';
 
-import {View, Text, TextInput, Image, TouchableOpacity, Linking} from 'react-native';
+import { View,
+  Text,
+  TextInput,
+  Image,
+  TouchableOpacity,
+  Linking } from 'react-native';
 
 let MapLink = (props) => {
-  var button;
-  var buttonWordMark = (
+  let button;
+  let buttonWordMark = (
     <Animatable.Image
-      source={require('../assets/images/safe-hippo-wordmark.png')} 
+      source={ require('../assets/images/safe-hippo-wordmark.png') } 
       animation="fadeInUp" 
-      style={styles.wordmark} 
-      duration={1500}
+      style={ styles.wordmark } 
+      duration={ 1500 }
     >
     </Animatable.Image>
   );
-  var buttonGoogleMapsLink = (
+  let buttonGoogleMapsLink = (
    <Animatable.Text 
      animation="fadeInUp" 
-     style={{color:'#FFF'}, styles.googleMapsLink} 
+     style={ { color:'#FFF' }, styles.googleMapsLink } 
      duration={1500}
    >
      Open in Google Maps  → 
@@ -33,24 +38,24 @@ let MapLink = (props) => {
 
   return (
     <Image
-      source={require('../assets/images/gradient90_1024_320.png')}
-      style={styles.gradient}
+      source={ require('../assets/images/gradient90_1024_320.png') }
+      style={ styles.gradient }
     >
       <Image 
-        source={require('../assets/images/app-icon-safe-hippo_96.png')} 
+        source={ require('../assets/images/app-icon-safe-hippo_96.png') } 
         style={styles.logo}
       />
       <TouchableOpacity
       key='googleMapsUrl'
-      style={styles.googleMapsTouch}
-      onPress={()=>Linking.openURL(props.googleMapsUrl)}
+      style={ styles.googleMapsTouch }
+      onPress={ ()=>Linking.openURL(props.googleMapsUrl) }
       >
       { button }
       </TouchableOpacity>
       <TouchableOpacity onPress={props.toggleCrime}>
         <Image 
-          source={require('../assets/images/toggle-crime_96.png')} 
-          style={styles.toggleCrime}
+          source={ require('../assets/images/toggle-crime_96.png') } 
+          style={ styles.toggleCrime }
         />
       </TouchableOpacity>  
    </Image>

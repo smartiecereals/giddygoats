@@ -1,3 +1,6 @@
+// THIS FILE HAS BEEN CUSTOMIZED SIGNIFICANTLY AND CANNOT BE EXPECTED
+// TO BEHAVE EXACTLY ACCORDING TO DOCS , ESPECIALLY WITH REGARDS TO SETTING LOCATION
+// LOCATION IS BEING PASSED IN FROM PARENT APP
 import React, { PropTypes } from 'react';
 import { TextInput, View, ListView, ScrollView, Image, Text, Dimensions, TouchableHighlight, TouchableWithoutFeedback, Platform, ActivityIndicator, PixelRatio } from 'react-native';
 import Qs from 'qs';

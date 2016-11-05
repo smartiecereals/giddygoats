@@ -5,7 +5,6 @@ const workPlace = {description: 'Tempest', formatted_address: '431 Natoma St, Sa
 const API_KEY = require ('../keys.js').default;
 
 let AutoComplete = (props) => {
-  //testing if input box can dispaly current address by default
     return (
       <GooglePlacesAutocomplete
         currentLocation={props.currLocation}
