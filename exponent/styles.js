@@ -24,19 +24,17 @@ const styles = StyleSheet.create({
     flexDirection: 'column', 
     justifyContent: 'space-between',
     alignItems: 'stretch',
-    backgroundColor: 'white',
   },
 
   inputContainer: {
-    flex: 1,
-    backgroundColor: 'powderblue',
+    flex: 1
   },
 
   textBox: {
     flex: 1,
     height: 20,
     textAlign: 'center',
-    marginBottom: 10,
+    marginBottom: 10
   },
 
   destinationBar: {
@@ -44,30 +42,35 @@ const styles = StyleSheet.create({
   },
 
   map: {
-    backgroundColor: 'skyblue',
-    flex: 7,    
+    flex: 7
   },
 
   gradient: {
     flex: 1,
     paddingTop: 13,
     flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
     width: undefined,
     height: undefined,
-    backgroundColor: '#0f5866'
+    backgroundColor: 'transparent'
   },
 
   logo: {
     width: 45,
-    height: 45,
+    height: 45
   },
 
-  logoText: {
+  googleMapsTouch: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    flex: 1
+  },
+
+  googleMapsLink: {
     justifyContent: 'center',
     textAlign: 'center',
     color: '#fff',
-    flex: 1,
     backgroundColor: 'transparent'
   },
 
