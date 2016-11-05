@@ -141,19 +141,20 @@ class App extends React.Component {
         locationURL += ('&mobile=' + mobile)
       }
     }
+    console.log('COOORDS ARE HEREERE', destinationCoords, originCoords)
     
     axios.get(locationURL, {
         params: {
           originLat: originCoords.lat,
           originLon: originCoords.lng,
           destLat: destinationCoords.lat,
-          destLat: destinationCoords.lng
+          destLon: destinationCoords.lng
         }
       })
       .then(function(jsonRoute) {
+        console.log('JSON ROUTE', jsonRoute);
         let wayPointData = jsonRoute.data.waypoints;
         wayPointData = wayPointData.map(function(waypoint) {
-          console.log(waypoint)
           let newWP = {latitude: waypoint.lat , longitude: waypoint.lng}
           return newWP
         })
