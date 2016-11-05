@@ -102,8 +102,8 @@ class App extends React.Component {
   handleUserInput (type) {
     return function(text, coords) {
       if(type === 'current') {
-        this.setState({currAddress: text, currLocation: coords});
-        console.log('SET CURRENT ADDRESS AND LOCATION')
+        this.setState({currAddress: text, currLocation: coords, inputView: 'destination'});
+        console.log(this.state, 'SET CURRENT ADDRESS AND LOCATION')
       }
       if(type === 'destination') {
         this.setState({destAddress: text, destLocation: coords});
@@ -235,7 +235,7 @@ class App extends React.Component {
       console.log('INPUT VIEW DESTINATION')
       let handleUserInput = this.handleUserInput('destination')
       let handleUserCoords = this.handleUserCoords('destination')
-      let currAddressShorten = currAddress.split(',')[0];
+      let currAddressShorten = currAddress.split(',')[0] || currAddress;
       let setCurrView = () => {this.setState({inputView: 'current'})}
 
       return (
