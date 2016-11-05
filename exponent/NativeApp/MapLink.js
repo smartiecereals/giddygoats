@@ -5,6 +5,31 @@ import * as Animatable from 'react-native-animatable';
 import {View, Text, TextInput, Image, TouchableOpacity, Linking} from 'react-native';
 
 let MapLink = (props) => {
+  var button;
+  var buttonWordMark = (
+    <Animatable.Image
+      source={require('../assets/images/safe-hippo-wordmark.png')} 
+      animation="fadeInUp" 
+      style={styles.wordmark} 
+      duration={1500}
+    >
+    </Animatable.Image>
+  );
+  var buttonGoogleMapsLink = (
+   <Animatable.Text 
+     animation="fadeInUp" 
+     style={{color:'#FFF'}, styles.googleMapsLink} 
+     duration={1500}
+   >
+     Open in Google Maps  → 
+   </Animatable.Text>
+  );
+
+ if (props.googleMapsUrl === 'https://www.google.com/') {
+  button = buttonWordMark;
+ } else {
+  button = buttonGoogleMapsLink;
+ } 
 
   return (
     <Image
@@ -20,13 +45,7 @@ let MapLink = (props) => {
       style={styles.googleMapsTouch}
       onPress={()=>Linking.openURL(props.googleMapsUrl)}
       >
-        <Animatable.Text 
-          animation="fadeInUp" 
-          style={{color:'#FFF'}, styles.googleMapsLink} 
-          duration={1500}
-        >
-          Open in Google Maps
-        </Animatable.Text>
+      { button }
       </TouchableOpacity>
       <TouchableOpacity onPress={props.toggleCrime}>
         <Image 
@@ -37,30 +56,5 @@ let MapLink = (props) => {
    </Image>
   );
 }
-
-// let MapLink = () => {
-//   return (
-//     <Image
-//       source={require('./assets/images/gradient90_1024_320.png')}
-//       style={styles.gradient}
-//     >
-//       <Image 
-//         source={require('./assets/images/app-icon-safe-hippo_96.png')} 
-//         style={styles.logo}
-//       />
-//       <Animatable.Text 
-//         animation="fadeInUp" 
-//         style={styles.logoText} 
-//         duration={1500}
-//       >
-//         Open in Google Maps
-//       </Animatable.Text>
-//       <Image 
-//         source={require('./assets/images/toggle-crime_96.png')} 
-//         style={styles.toggleCrime}
-//       />
-//     </Image>
-//   );
-// }
 
 export default MapLink;

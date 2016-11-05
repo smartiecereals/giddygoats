@@ -30,9 +30,6 @@ let AutoComplete = (props) => {
           textInput: {
             color: '#000'
           },
-          description: {
-            fontWeight: 'bold',
-          },
           predefinedPlacesDescription: {
             color: '#27a1ab'
           },
