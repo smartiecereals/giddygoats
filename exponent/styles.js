@@ -72,6 +72,13 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent'
   },
 
+  wordmark: {
+    width: 230,
+    height: 46,
+    justifyContent: 'center',
+    backgroundColor: 'transparent'
+  },
+
   toggleCrime: {
     width: 45,
     height: 45
