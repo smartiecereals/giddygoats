@@ -1,11 +1,11 @@
 import React from 'react';
 import Exponent from 'exponent';
 import MapLink from './MapLink.js';
+import axios from 'axios';
 import styles from '../styles.js';
 import AutoComplete from './AutoCompleteInputGoogle.js'
 import AirCrimeMap from './AirCrimeMap.js';
 import { PROVIDER_DEFAULT } from 'react-native-maps';
-import axios from 'axios';
 import API_KEY from '../keys.js';
 import {
   View,
@@ -16,8 +16,6 @@ import {
   TouchableOpacity,
   Image
 } from 'react-native';
-
-
 
 class App extends React.Component {
   constructor () {
@@ -33,13 +31,12 @@ class App extends React.Component {
       showCrime: false
     };
 
-    this.handleUserInput = this.handleUserInput.bind(this);
     this.getSafestRoute = this.getSafestRoute.bind(this);
-    this.getAddress = this.getAddress.bind(this);
-    this.getInputView = this.getInputView.bind(this)
+    this.handleUserInput = this.handleUserInput.bind(this);
     this.destinationIsSync = this.destinationIsSync.bind(this);
-    this.setDestinationSync = this.setDestinationSync.bind(this);
     this.originIsSync = this.originIsSync.bind(this);
+    this.setCurrLocation = this.setCurrLocation.bind(this)
+    this.setDestinationSync = this.setDestinationSync.bind(this);
     this.setOriginSync = this.setOriginSync.bind(this);
     this.getCrimeStats = this.getCrimeStats.bind(this);
     this.toggleCrime = this.toggleCrime.bind(this);
@@ -50,11 +47,11 @@ class App extends React.Component {
     this.alertIfLocationsDisabledAsync();
     this.getLocationPermissionsAsync();
   }
-  destinationIsSync() { return this.state.destinationIsSync }
-  setDestinationSync(bool) { this.setState({destinationIsSync: bool}) }
-  originIsSync() { return this.state.originIsSync }
-  setOriginSync(bool) { this.setState({originIsSync: bool}) }
+  setOriginSync(bool) { this.setState({ originIsSync: bool }) }
+  setDestinationSync(bool) { this.setState({ destinationIsSync: bool }) }
   toggleCrime () { this.setState({ showCrime: !this.state.showCrime })}
+  originIsSync() { return this.state.originIsSync }
+  destinationIsSync() { return this.state.destinationIsSync }
 
   handleUserInput (type) {
     return function(text, coords) {
@@ -68,18 +65,14 @@ class App extends React.Component {
   }
 
   async getLocationPermissionsAsync() {
+    const { setCurrLocation, setOriginSync } = this;
     const { Location, Permissions } = Exponent;
     const { status } = await Permissions.askAsync(Permissions.LOCATION);
     console.log(status);
     if (status === 'granted') {
-      console.log('LOCATION GOT')
-      return this.setCurrLocation();
-      this.setOriginSync(false);
+      setCurrLocation();
 
     } else {
-      console.log('in error');
-      console.log('LOCATION NOT GOT')
-
       throw new Error('Location permission not granted');
     }
   }
@@ -93,22 +86,21 @@ class App extends React.Component {
   }
 
   setCurrLocation() {
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        var initialPosition = {}
+    let context = this;
+    navigator.geolocation.getCurrentPosition( position => {
+        let initialPosition = {};
         initialPosition.lat = position.coords.latitude;
         initialPosition.lng = position.coords.longitude;
-        console.log(initialPosition, 'position in setCurr');
-        this.setState({
+        context.setState({
           currLocation: initialPosition, 
+          inputView: 'destination',
           defaultCurrLoc: {
-              description: 'Home', 
-                geometry: { 
-                  location: initialPosition 
-              }
-            },
-            inputView: 'destination'
-          });
+            description: 'Home', 
+            geometry: { 
+              location: initialPosition 
+            }
+          }
+        });
       },
       (error) => alert(JSON.stringify(error)),
     );
@@ -133,17 +125,16 @@ class App extends React.Component {
   }
 
   getSafestRoute() {
-    let originCoords = this.state.currLocation;
-    let destinationCoords = this.state.destLocation;
+    const { currLocation, destLocation } = this.state
     let context = this;
     let locationURL = 'http://138.68.62.73/safestRoute?'
 
     axios.get(locationURL, {
         params: {
-          originLat: originCoords.lat,
-          originLon: originCoords.lng,
-          destLat: destinationCoords.lat,
-          destLon: destinationCoords.lng
+          originLat: currLocation.lat,
+          originLon: currLocation.lng,
+          destLat: destLocation.lat,
+          destLon: destLocation.lng
         }
       })
       .then(function(jsonRoute) {
@@ -163,13 +154,11 @@ class App extends React.Component {
       })
     }
 
-
-
   getAddress (currOrDest) {
     const context = this;
     let url ='https://maps.googleapis.com/maps/api/geocode/json?latlng=';
-    let currLocation = this.state[ currOrDest ];
-    let coords = currLocation.lat.toString() +','+ currLocation.lng.toString();
+    let coords = this.state[ currOrDest ];
+    coords = coords.lat.toString() +','+ coords.lng.toString();
     let key = '&key=' + API_KEY;
     let getUrl = url+coords+key;
     axios.get(getUrl).then(function(geoLocation) {
@@ -177,8 +166,6 @@ class App extends React.Component {
       context.setState({ currAddress: formattedAddress })
     });
   }
-
-
 
   renderCurrAddressButton(key, fnOnPress, text) {
     return (
@@ -194,7 +181,6 @@ class App extends React.Component {
         source={ require('../assets/images/pencil_96.png') }/>
       </TouchableOpacity>
       </View>
-
     );
   }
 
@@ -207,7 +193,6 @@ class App extends React.Component {
     const {
       handleUserInput,
       setDestinationSync } = this;
-
 
     if(inputView === 'current') {
       return (
@@ -226,7 +211,6 @@ class App extends React.Component {
       console.log('INPUT VIEW DESTINATION')
       let currAddressShorten = currAddress.split(',')[0] || currAddress;
       let setCurrView = () => {this.setState({inputView: 'current'})}
-
       return (
         <View>
         {
@@ -246,35 +230,44 @@ class App extends React.Component {
   }
 
   render() {
+    const { destLocation,
+      currLocation,
+      safeRoute,
+      crimeData,
+      googleMapsUrl,
+      showCrime } = this.state;
+    const { getSafestRoute,
+      destinationIsSync,
+      originIsSync,
+      getCrimeStats,
+      toggleCrime } = this;
 
-    const {destLocation, currLocation, safeRoute, crimeData, googleMapsUrl, showCrime} = this.state;
-    const {getSafestRoute, destinationIsSync, originIsSync, getCrimeStats, toggleCrime} = this;
     return (
-      <View style={styles.container}>
+      <View style={ styles.container }>
         <StatusBar
           backgroundColor="#27a1ab"
           barStyle="default"
         />
         <MapLink
-        style={styles.mapLink}
-        toggleCrime={toggleCrime}
-        googleMapsUrl={googleMapsUrl} >
+        style={ styles.mapLink }
+        toggleCrime={ toggleCrime }
+        googleMapsUrl={ googleMapsUrl } >
         </MapLink>
         <View>
           {this.getInputView()}
         </View>
-        <View style={styles.map}>
+        <View style={ styles.map }>
           <AirCrimeMap
-          showCrime={showCrime}
-          destinationIsSync={destinationIsSync}
-          originIsSync={originIsSync}
-          safeRoute={safeRoute} 
-          getSafestRoute={getSafestRoute} 
-          getCrimeStats={getCrimeStats}
-          provider={PROVIDER_DEFAULT} 
-          destLocation={destLocation} 
-          currLocation={currLocation} 
-          crimeData={crimeData} />
+          provider={ PROVIDER_DEFAULT } 
+          destLocation={ destLocation } 
+          currLocation={ currLocation } 
+          safeRoute={ safeRoute } 
+          showCrime={ showCrime }
+          crimeData={ crimeData } 
+          getSafestRoute={ getSafestRoute } 
+          getCrimeStats={ getCrimeStats }
+          destinationIsSync={ destinationIsSync }
+          originIsSync={ originIsSync } />
         </View>
       </View>
       );
