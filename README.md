@@ -55,6 +55,7 @@ We think these improvements would make the app even more useful. Give us a shout
 - Installation: Open up the repo in your terminal and install packages. 
   - Install server-side packages: `npm install` in the root directory
   - Install client-side packages: `cd exponent. npm install`
+  - Create API keys for Google Maps and follow the instructions in keysPlaceholder.js to add your keys.
   - Download [Exponent client](https://docs.getexponent.com/versions/v9.0.0/introduction/index.html), which provides a simulator to preview your app during development. 
     - Go to "Open Project" and open the exponent folder
 
