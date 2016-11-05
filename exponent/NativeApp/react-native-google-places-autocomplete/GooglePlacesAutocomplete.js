@@ -1,7 +1,6 @@
 import React, { PropTypes } from 'react';
 import { TextInput, View, ListView, ScrollView, Image, Text, Dimensions, TouchableHighlight, TouchableWithoutFeedback, Platform, ActivityIndicator, PixelRatio } from 'react-native';
 import Qs from 'qs';
-import UserInput from '../userInput.js'
 const WINDOW = Dimensions.get('window');
 import {
   TouchableOpacity,
@@ -630,4 +629,4 @@ const create = function create(options = {}) {
 };
 
 
-module.exports = {GooglePlacesAutocomplete, create};
+export default GooglePlacesAutocomplete;

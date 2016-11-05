@@ -1,11 +1,10 @@
-var React = require('react');
-var {GooglePlacesAutocomplete} = require('./react-native-google-places-autocomplete/GooglePlacesAutocomplete.js');
+import GooglePlacesAutocomplete from './react-native-google-places-autocomplete/GooglePlacesAutocomplete.js';
+import React from 'react';
 const homePlace = {description: 'Home', formatted_address: '442 Natoma St, San Francisco, CA 94103, USA', geometry: { location: { lat: 37.7812941, lng: -122.406819 } }};
 const workPlace = {description: 'Tempest', formatted_address: '431 Natoma St, San Francisco, CA 94103', geometry: { location: { lat: 37.7811581, lng: -122.4062434 } }};
+const API_KEY = require ('../keys.js').default;
 
-var API_KEY = require ('./keys.js').default;
-
-var Example = (props) => {
+let AutoComplete = (props) => {
   console.log(props.currentAddress)
   //testing if input box can dispaly current address by default
     return (
@@ -17,7 +16,6 @@ var Example = (props) => {
         onPress={(data, details = null) => { // 'details' is provided when fetchDetails = true
           props.handleUserInput(details.formatted_address, details.geometry.location)
           props.setDestinationSync(false);
-          console.log( details, 'PRESSING DESTINATION INPUT')
         }}
         query={{
           // available options: https://developers.google.com/places/web-service/autocomplete
@@ -63,4 +61,4 @@ var Example = (props) => {
     );
 };
 
-module.exports = Example;
+export default AutoComplete

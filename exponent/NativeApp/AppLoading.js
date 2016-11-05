@@ -10,7 +10,7 @@ import {
   Components,
 } from 'exponent';
 
-class App extends React.Component {
+class AppLoading extends React.Component {
   state = {
     isReady: false,
   };
@@ -44,4 +44,4 @@ class App extends React.Component {
   }
 }
 
-AppRegistry.registerComponent('main', () => App);
+AppRegistry.registerComponent('main', () => AppLoading);
