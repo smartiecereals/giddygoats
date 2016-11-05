@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: undefined,
     height: undefined,
-    backgroundColor: 'transparent'
+    backgroundColor: '#0f5866'
   },
 
   logo: {
@@ -67,7 +67,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     textAlign: 'center',
     color: '#fff',
-    flex: 1
+    flex: 1,
+    backgroundColor: 'transparent'
   },
 
   toggleCrime: {
