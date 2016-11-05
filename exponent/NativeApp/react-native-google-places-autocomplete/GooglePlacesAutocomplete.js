@@ -210,16 +210,8 @@ const GooglePlacesAutocomplete = React.createClass({
   },
 
   getCurrentLocation() {
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        this._requestNearby(position.coords.latitude, position.coords.longitude);
-      },
-      (error) => {
-        this._disableRowLoaders();
-        alert(error.message);
-      },
-      {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
-    );
+    this._requestNearby(props.currentLocation.lat, props.currentLocation.lng);
+
   },
 
   _enableRowLoader(rowData) {

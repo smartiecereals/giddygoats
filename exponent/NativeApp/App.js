@@ -28,14 +28,12 @@ class App extends React.Component {
         lng: -122.398289
       },
       currAddress: null,
-      view: 'Hippo',
       inputView: 'current',
       googleMapsUrl: 'https://www.google.com/',
       showCrime: false
     };
 
     this.handleUserInput = this.handleUserInput.bind(this);
-    this.handleUserCoords = this.handleUserCoords.bind(this);
     this.getSafestRoute = this.getSafestRoute.bind(this);
     this.getAddress = this.getAddress.bind(this);
     this.getInputView = this.getInputView.bind(this)
@@ -48,10 +46,25 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    console.log('COMPONENT DID MOUNT');
     this.getAddress('currLocation');
     this.alertIfLocationsDisabledAsync();
     this.getLocationPermissionsAsync();
+  }
+  destinationIsSync() { return this.state.destinationIsSync }
+  setDestinationSync(bool) { this.setState({destinationIsSync: bool}) }
+  originIsSync() { return this.state.originIsSync }
+  setOriginSync(bool) { this.setState({originIsSync: bool}) }
+  toggleCrime () { this.setState({ showCrime: !this.state.showCrime })}
+
+  handleUserInput (type) {
+    return function(text, coords) {
+      if(type === 'current') {
+        this.setState({currAddress: text, currLocation: coords, inputView: 'destination', originIsSync: false});
+      }
+      if(type === 'destination') {
+        this.setState({destAddress: text, destLocation: coords, destinationIsSync: false});
+      }
+    }.bind(this);
   }
 
   async getLocationPermissionsAsync() {
@@ -78,10 +91,6 @@ class App extends React.Component {
       alert('Hey! You might want to enable locations for my app, they are useful.');
     }
   }
-    destinationIsSync() { return this.state.destinationIsSync }
-    setDestinationSync(bool) { this.setState({destinationIsSync: bool}) }
-    originIsSync() { return this.state.originIsSync }
-    setOriginSync(bool) { this.setState({originIsSync: bool}) }
 
   setCurrLocation() {
     navigator.geolocation.getCurrentPosition(
@@ -100,39 +109,9 @@ class App extends React.Component {
             },
             inputView: 'destination'
           });
-        console.log('SET CURRENT LOCATION');
       },
       (error) => alert(JSON.stringify(error)),
     );
-  }
-
-  handleUserInput (type) {
-    return function(text, coords) {
-      if(type === 'current') {
-        this.setState({currAddress: text, currLocation: coords, inputView: 'destination'});
-        this.setOriginSync(false);
-        console.log(this.state, 'SET CURRENT ADDRESS AND LOCATION')
-      }
-      if(type === 'destination') {
-        this.setState({destAddress: text, destLocation: coords});
-        this.setDestinationSync(false);
-
-        console.log('SET DESTINATION ADDRESS AND LOCATION')
-      }
-      console.log(this.state, 'in handleUserInput');
-    }.bind(this);
-  }
-
-  handleUserCoords(type) {
-    return function(coords) {
-      if(type === 'current') {
-        this.setState({currLocation: coords});
-      }
-      if(type === 'destination') {
-        this.setState({destLocation: coords});
-      }
-      console.log('SETTING USER COORDS');
-    }.bind(this)
   }
 
   getCrimeStats () {
@@ -147,26 +126,16 @@ class App extends React.Component {
       })
       .then(function(res) {
         let crimeData = res.data.map(function(dataPoint) {
-          return {longitude: dataPoint[0], latitude: dataPoint[1]}
+          return { longitude: dataPoint[0], latitude: dataPoint[1] }
         })
-        context.setState({crimeData: crimeData})
-        context.setOriginSync(true);
+        context.setState({ crimeData: crimeData, originIsSync: true })
     })
   }
 
   getSafestRoute() {
-    let setDestinationSync = this.setDestinationSync;
-
     let originCoords = this.state.currLocation;
     let destinationCoords = this.state.destLocation;
     let context = this;
-    // let checkMobile = (mobile) => {
-    //   if (mobile) {
-    //     locationURL += ('&mobile=' + mobile)
-    //   }
-    // }
-    // console.log('GETTING SAFEST ROUTE', originCoords, destinationCoords)
-    
     let locationURL = 'http://138.68.62.73:3000/safestRoute?'
 
     axios.get(locationURL, {
@@ -178,18 +147,17 @@ class App extends React.Component {
         }
       })
       .then(function(jsonRoute) {
-        setDestinationSync(true);
         let wayPointData = jsonRoute.data.waypoints;
         console.log('WAYPOINT DATA', wayPointData)
         wayPointData = wayPointData.map(function(waypoint) {
-          let newWP = {latitude: waypoint.lat , longitude: waypoint.lng}
-          return newWP
+          let newWP = { latitude: waypoint.lat , longitude: waypoint.lng };
+          return newWP;
         })
         context.setState({
           safeRoute: wayPointData,
-          googleMapsUrl: jsonRoute.data.url
+          googleMapsUrl: jsonRoute.data.url,
+          destinationIsSync: true
         });
-        setDestinationSync(true);
       }).catch(function(err) {
         console.log('ERROR :', err)
       })
@@ -200,35 +168,30 @@ class App extends React.Component {
   getAddress (currOrDest) {
     const context = this;
     let url ='https://maps.googleapis.com/maps/api/geocode/json?latlng=';
-    let currLocation = this.state[currOrDest];
+    let currLocation = this.state[ currOrDest ];
     let coords = currLocation.lat.toString() +','+ currLocation.lng.toString();
     let key = '&key=' + API_KEY;
     let getUrl = url+coords+key;
     axios.get(getUrl).then(function(geoLocation) {
       formattedAddress = geoLocation.data.results[1].formatted_address;
-      context.setState({currAddress: formattedAddress})
-      console.log('SETTING CURRENT ADDRESS')
+      context.setState({ currAddress: formattedAddress })
     });
   }
 
-  toggleCrime () {
-      this.setState({
-        showCrime: !this.state.showCrime
-      })
-  }
+
 
   renderCurrAddressButton(key, fnOnPress, text) {
     return (
-      <View style={styles.UserInput}>
+      <View style={ styles.UserInput }>
       <TouchableOpacity
-        key={key}
-        style={styles.UserInputCurrAddress}
-        onPress={fnOnPress}
+        key={ key }
+        style={ styles.UserInputCurrAddress }
+        onPress={ fnOnPress  }
       >
-        <Text style={{color:'#FFF', fontSize: 15}}>{text}</Text>
+        <Text style={{ color:'#FFF', fontSize: 15 }}>{text}</Text>
         <Image 
-        style={styles.UserInputCurrAddressIcon}
-        source={require('../assets/images/pencil_96.png')}/>
+        style={ styles.UserInputCurrAddressIcon }
+        source={ require('../assets/images/pencil_96.png') }/>
       </TouchableOpacity>
       </View>
 
@@ -236,22 +199,24 @@ class App extends React.Component {
   }
 
   getInputView() {
-    const {inputView, DefaultCurrentLocation, currAddress} = this.state;
-    const {handleUserInput, handleUserCoords, setDestinationSync} = this;
+    const { 
+      inputView,
+      DefaultCurrentLocation,
+      currAddress,
+      currLocation } = this.state;
+    const {
+      handleUserInput,
+      setDestinationSync } = this;
 
 
     if(inputView === 'current') {
-      console.log('INPUT VIEW CURRENT')
-      let handleUserInput = this.handleUserInput('current')
-      let handleUserCoords = this.handleUserCoords('current')
       return (
         <View style={styles.UserInput}>
         <AutoComplete 
-          handleUserCoords={handleUserCoords} 
-          handleUserInput={handleUserInput}
+          handleUserInput={handleUserInput('current')}
           placeHolder={'Enter Your Current Location'}
           currentAddress = {currAddress}
-          setDestinationSync = {() => {return;}}
+          currLocation={currLocation}
           />
         </View>
       );
@@ -259,22 +224,21 @@ class App extends React.Component {
 
     if(inputView === 'destination' && currAddress) {
       console.log('INPUT VIEW DESTINATION')
-      let handleUserInput = this.handleUserInput('destination')
-      let handleUserCoords = this.handleUserCoords('destination')
       let currAddressShorten = currAddress.split(',')[0] || currAddress;
       let setCurrView = () => {this.setState({inputView: 'current'})}
 
       return (
         <View>
-        {this.renderCurrAddressButton(
-          'currAddress', 
-          setCurrView, 
-          `Current Location: ${currAddressShorten}`)}
+        {
+          this.renderCurrAddressButton(
+          'currAddress',
+          setCurrView,
+          `Current Location: ${currAddressShorten}`)
+        }
         <AutoComplete 
-          handleUserCoords={handleUserCoords} 
-          handleUserInput={handleUserInput}
+          handleUserInput={handleUserInput('destination')}
           placeHolder={'Enter Your Destination'}
-          setDestinationSync = {setDestinationSync}
+          currLocation={currLocation}
           />
         </View>
       );
@@ -283,7 +247,7 @@ class App extends React.Component {
 
   render() {
 
-    const {view, destLocation, currLocation, safeRoute, crimeData, googleMapsUrl, showCrime} = this.state;
+    const {destLocation, currLocation, safeRoute, crimeData, googleMapsUrl, showCrime} = this.state;
     const {getSafestRoute, destinationIsSync, originIsSync, getCrimeStats, toggleCrime} = this;
     return (
       <View style={styles.container}>
