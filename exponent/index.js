@@ -41,16 +41,16 @@ class App extends React.Component {
       inputView: 'current'
     };
 
-  this.handleUserInput = this.handleUserInput.bind(this);
-  this.handleUserCoords = this.handleUserCoords.bind(this);
-  this.getSafestRoute = this.getSafestRoute.bind(this);
-  this.getAddress = this.getAddress.bind(this);
-  this.getInputView = this.getInputView.bind(this)
-  this.destinationIsSync = this.destinationIsSync.bind(this);
-  this.setDestinationSync = this.setDestinationSync.bind(this);
-  this.originIsSync = this.originIsSync.bind(this);
-  this.setOriginSync = this.setOriginSync.bind(this);
-  this.getCrimeStats = this.getCrimeStats.bind(this);
+    this.handleUserInput = this.handleUserInput.bind(this);
+    this.handleUserCoords = this.handleUserCoords.bind(this);
+    this.getSafestRoute = this.getSafestRoute.bind(this);
+    this.getAddress = this.getAddress.bind(this);
+    this.getInputView = this.getInputView.bind(this)
+    this.destinationIsSync = this.destinationIsSync.bind(this);
+    this.setDestinationSync = this.setDestinationSync.bind(this);
+    this.originIsSync = this.originIsSync.bind(this);
+    this.setOriginSync = this.setOriginSync.bind(this);
+    this.getCrimeStats = this.getCrimeStats.bind(this);
   }
 
   componentDidMount() {
@@ -67,6 +67,8 @@ class App extends React.Component {
     if (status === 'granted') {
       console.log('LOCATION GOT')
       return this.setCurrLocation();
+      this.setOriginSync(false);
+
     } else {
       console.log('in error');
       console.log('LOCATION NOT GOT')
@@ -111,7 +113,7 @@ class App extends React.Component {
       if(type === 'current') {
         this.setState({currAddress: text, currLocation: coords, inputView: 'destination'});
         this.setOriginSync(false);
-        console.log('SET CURRENT ADDRESS AND LOCATION')
+        console.log(this.state, 'SET CURRENT ADDRESS AND LOCATION')
       }
       if(type === 'destination') {
         this.setState({destAddress: text, destLocation: coords});
@@ -135,13 +137,13 @@ class App extends React.Component {
     }.bind(this)
   }
 
-  getCrimeStats (callback) {
-    let context = this;
+  getCrimeStats () {
+    let context = this
     let getUrl = 'http://138.68.62.73:3000/testDanger?';
     axios.get(getUrl, {
         params: {
-          long: this.props.originLng,
-          lat: this.props.originLat,
+          long: this.state.currLocation.lng,
+          lat: this.state.currLocation.lat,
           radius: 0.01
         }
       })
@@ -149,12 +151,9 @@ class App extends React.Component {
         let crimeData = res.data.map(function(dataPoint) {
           return {longitude: dataPoint[0], latitude: dataPoint[1]}
         })
-        this.setState({crimeData: crimeData})
+        context.setState({crimeData: crimeData})
         context.setOriginSync(true);
     })
-      .catch(function(err) {
-        console.log(err);
-      })
   }
 
   getSafestRoute() {
